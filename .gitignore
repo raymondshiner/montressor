@@ -1,0 +1,28 @@
+# Browser profiles and session data
+google-chrome/
+BraveSoftware/
+chromium/
+*.cookies
+*Cookies*
+*Login Data*
+*Web Data*
+
+# Credentials and secrets
+*.key
+*.pem
+*.p12
+*.pfx
+*secret*
+*credential*
+*password*
+*token*
+*.env
+.netrc
+
+# Obsidian (off-limits)
+obsidian/
+
+# Cache and runtime
+__pycache__/
+*.pyc
+.cache/

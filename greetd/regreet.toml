@@ -1,0 +1,20 @@
+[background]
+path = "/usr/share/wallpapers/cachyos-wallpapers/cachygalaxy99.jpg"
+fit = "Cover"
+
+[GTK]
+application_prefer_dark_theme = true
+cursor_theme_name = "Adwaita"
+cursor_blink = true
+font_name = "JetBrains Mono 14"
+
+[commands]
+reboot = ["systemctl", "reboot"]
+poweroff = ["systemctl", "poweroff"]
+
+[appearance]
+greeting_msg = ""
+
+[widget.clock]
+format = "%a %b %d   %I:%M %p"
+resolution = "1s"

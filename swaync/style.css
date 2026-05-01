@@ -1,0 +1,207 @@
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 13px;
+}
+
+.control-center {
+    background: rgba(28, 30, 38, 0.96);
+    border-radius: 12px;
+    border: 1px solid #2E303E;
+    color: #D5CED9;
+    padding: 12px;
+}
+
+/* WiFi / BT quick-action buttons */
+.widget-buttons-grid {
+    background: #23262E;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+    background: #2E303E;
+    border: 1px solid #3D4050;
+    border-radius: 8px;
+    color: #D5CED9;
+    padding: 10px 18px;
+    min-width: 120px;
+    transition: all 0.15s ease;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+    background: rgba(0, 232, 198, 0.12);
+    border-color: #00E8C6;
+    color: #00E8C6;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button.active {
+    background: rgba(0, 232, 198, 0.18);
+    border-color: #00E8C6;
+    color: #00E8C6;
+}
+
+/* Volume & Backlight sliders */
+.widget-volume,
+.widget-backlight {
+    background: #23262E;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+}
+
+.widget-volume label,
+.widget-backlight label {
+    color: #00E8C6;
+    font-size: 16px;
+    min-width: 24px;
+}
+
+scale trough {
+    background: #2E303E;
+    border-radius: 4px;
+    min-height: 6px;
+}
+
+scale highlight {
+    background: #00E8C6;
+    border-radius: 4px;
+}
+
+scale slider {
+    background: #D5CED9;
+    border-radius: 50%;
+    min-width: 16px;
+    min-height: 16px;
+    box-shadow: 0 0 6px rgba(0, 232, 198, 0.4);
+}
+
+/* MPRIS player */
+.widget-mpris {
+    background: #23262E;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+.widget-mpris-album-art {
+    border-radius: 8px;
+}
+
+.widget-mpris-title {
+    color: #D5CED9;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.widget-mpris-subtitle {
+    color: #677691;
+    font-size: 12px;
+}
+
+.widget-mpris button {
+    background: transparent;
+    border: none;
+    color: #00E8C6;
+    border-radius: 50%;
+    padding: 6px;
+}
+
+.widget-mpris button:hover {
+    background: rgba(0, 232, 198, 0.12);
+}
+
+/* DND toggle */
+.widget-dnd {
+    background: #23262E;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+}
+
+.widget-dnd label {
+    color: #D5CED9;
+}
+
+.widget-dnd switch {
+    background: #2E303E;
+    border-radius: 12px;
+    border: none;
+}
+
+.widget-dnd switch:checked {
+    background: #00E8C6;
+}
+
+/* Notifications */
+.notification-row {
+    margin-bottom: 6px;
+}
+
+.notification {
+    background: #23262E;
+    border-radius: 8px;
+    border: 1px solid #2E303E;
+    padding: 12px;
+    color: #D5CED9;
+}
+
+.notification.critical {
+    border-color: #EE5D43;
+}
+
+.notification-default-action {
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+}
+
+.notification-default-action:hover {
+    background: rgba(0, 232, 198, 0.06);
+}
+
+.notification-action {
+    background: #2E303E;
+    border: none;
+    border-radius: 6px;
+    color: #D5CED9;
+    padding: 4px 10px;
+    margin: 2px;
+}
+
+.notification-action:hover {
+    background: rgba(0, 232, 198, 0.15);
+    color: #00E8C6;
+}
+
+.summary {
+    font-weight: bold;
+    color: #D5CED9;
+}
+
+.body {
+    color: #9E9BB3;
+}
+
+.app-name {
+    color: #677691;
+    font-size: 11px;
+}
+
+.close-button {
+    background: transparent;
+    border: none;
+    color: #677691;
+    border-radius: 50%;
+    padding: 2px 6px;
+}
+
+.close-button:hover {
+    background: rgba(238, 93, 67, 0.15);
+    color: #EE5D43;
+}
+
+.notification-group-headers {
+    color: #677691;
+    font-size: 11px;
+}

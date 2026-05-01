@@ -1,0 +1,12 @@
+{
+    "workbench.colorTheme": "Andromeda",
+    "editor.fontFamily": "'JetBrains Mono', 'JetBrainsMono Nerd Font', monospace",
+    "editor.fontSize": 14,
+    "editor.fontLigatures": true,
+    "editor.lineHeight": 1.6,
+    "editor.cursorBlinking": "smooth",
+    "editor.smoothScrolling": true,
+    "workbench.smoothScrolling": true,
+    "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font'",
+    "terminal.integrated.fontSize": 13
+}
