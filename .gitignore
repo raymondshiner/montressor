@@ -26,3 +26,24 @@ obsidian/
 __pycache__/
 *.pyc
 .cache/
+
+# Claude runtime — never commit these
+claude/runtime/
+claude/sessions/
+claude/projects/
+claude/history.jsonl
+claude/.credentials.json
+claude/cache/
+claude/file-history/
+claude/shell-snapshots/
+claude/telemetry/
+claude/backups/
+claude/paste-cache/
+claude/session-env/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Backups created by bootstrap scripts
+*.bak.*
