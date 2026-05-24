@@ -6,10 +6,11 @@
     min-height: 0;
 }
 
+
 window#waybar {
     background-color: rgba(28, 30, 38, 0.92);
     color: #D5CED9;
-    border-bottom: 2px solid #00E8C6;
+    border-bottom: 2px solid rgba(220, 220, 220, 0.35);
 }
 
 #workspaces {
@@ -46,6 +47,7 @@ window#waybar {
 }
 
 #battery,
+#bluetooth,
 #cpu,
 #memory,
 #network,
@@ -60,10 +62,11 @@ window#waybar {
 #network.disconnected { color: #EE5D43; }
 #pulseaudio { color: #FFCC95; }
 #pulseaudio.muted { color: #677691; }
-#battery { color: #D5CED9; }
-#battery.warning { color: #FFE66D; }
+#battery          { color: #A8FF60; }
+#battery.warning  { color: #FFE66D; }
 #battery.critical { color: #EE5D43; }
-#battery.charging { color: #A8FF60; }
+#battery.charging { color: #00E8C6; }
+#battery.plugged  { color: #00E8C6; }
 #swaync { color: #677691; padding: 0 12px; }
 #swaync.notification { color: #FFE66D; }
 #swaync.dnd { color: #677691; }
@@ -71,3 +74,22 @@ window#waybar {
 #bluetooth.connected { color: #00E8C6; }
 #bluetooth.disabled { color: #677691; }
 #tray { color: #677691; }
+#custom-connectivity-toggle { color: #677691; padding: 0 12px; }
+#custom-connectivity-toggle.good { color: #A8FF60; }
+#custom-connectivity-toggle.off  { color: #EE5D43; }
+.connectivity-child { padding: 0 12px; }
+#custom-hardware-toggle { color: #677691; padding: 0 12px; }
+#custom-hardware-toggle.ok   { color: #A8FF60; }
+#custom-hardware-toggle.warn { color: #FFE66D; }
+#custom-hardware-toggle.crit { color: #EE5D43; }
+.hardware-child { padding: 0 12px; }
+#custom-vpn { color: #677691; padding: 0 12px; }
+#custom-vpn.connected { color: #00E8C6; }
+#custom-vpn.disconnected { color: #EE5D43; }
+#custom-music-ws { color: #677691; padding: 0 12px; font-size: 14px; }
+#custom-music-ws.visible { color: #00E8C6; }
+#custom-music-ws.hidden  { color: #B084EB; }
+#custom-vpn.connecting { color: #FFE66D; }
+#custom-kdeconnect { color: #677691; padding: 0 12px; }
+#custom-kdeconnect.connected { color: #00E8C6; }
+#custom-kdeconnect.disconnected { color: #677691; }

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Physical sandbox for claude: kernel-level path masking via bubblewrap.
+# Sensitive paths are replaced with empty tmpfs — they literally do not exist
+# inside the sandbox, regardless of permission mode (bypass included).
+
+set -e
+
+CLAUDE_BIN="/usr/bin/claude"
+
+# Paths to hide. Only mount tmpfs over paths that actually exist on the host
+# (bwrap can fail if asked to tmpfs over a missing dir from --dev-bind).
+HIDE_PATHS=(
+    "$HOME/.ssh"
+    "$HOME/.gnupg"
+    "$HOME/Documents"
+    "$HOME/.mozilla"
+    "$HOME/.config/BraveSoftware"
+    "$HOME/.config/google-chrome"
+    "$HOME/.config/chromium"
+    "$HOME/.password-store"
+    "$HOME/.aws"
+    "$HOME/.netrc"
+    "$HOME/.pgpass"
+)
+
+TMPFS_ARGS=()
+for p in "${HIDE_PATHS[@]}"; do
+    if [ -e "$p" ]; then
+        if [ -d "$p" ]; then
+            TMPFS_ARGS+=(--tmpfs "$p")
+        else
+            # mask files with /dev/null bind
+            TMPFS_ARGS+=(--bind /dev/null "$p")
+        fi
+    fi
+done
+
+exec bwrap \
+    --dev-bind / / \
+    --die-with-parent \
+    "${TMPFS_ARGS[@]}" \
+    "$CLAUDE_BIN" "$@"

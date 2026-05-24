@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Launch a Claude session with the Friday research agent. On exit, asks Claude
+# to review the conversation and persist any new context to memory files.
+# Portable across Linux + macOS.
+
+PROJECTS_DIR="$HOME/.claude/projects/$(echo "$HOME" | sed 's|/|-|g')"
+
+BEFORE=$(mktemp)
+claude --agent friday
+EXIT_CODE=$?
+
+SESSION_FILE=""
+if [[ -d "$PROJECTS_DIR" ]]; then
+  for f in $(ls -t "$PROJECTS_DIR"/*.jsonl 2>/dev/null); do
+    if [[ "$f" -nt "$BEFORE" ]]; then
+      SESSION_FILE="$f"
+      break
+    fi
+  done
+fi
+rm -f "$BEFORE"
+
+if [[ -n "$SESSION_FILE" ]]; then
+  UUID=$(basename "$SESSION_FILE" .jsonl)
+  (
+    claude --resume "$UUID" -p \
+      "Review our conversation. Save any important new context to the memory files in $PROJECTS_DIR/memory/ — feedback or preferences I expressed, project state changes, non-obvious facts about my setup. Skip anything already captured. Update MEMORY.md index for any new files. If nothing noteworthy happened, do nothing." \
+      --dangerously-skip-permissions 2>/dev/null
+    rm -f "$SESSION_FILE"
+    rm -rf "$PROJECTS_DIR/$UUID"
+  ) &
+fi
+
+exit $EXIT_CODE

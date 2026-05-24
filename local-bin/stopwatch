@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+import subprocess, time, sys, tty, termios, select
+
+CY = '\033[38;2;0;232;198m'
+PU = '\033[38;2;176;132;235m'
+GR = '\033[38;2;103;118;145m'
+YL = '\033[38;2;255;230;109m'
+B  = '\033[1m'
+R  = '\033[0m'
+
+def fmt(ms):
+    h  = ms // 3600000
+    m  = (ms // 60000) % 60
+    s  = (ms // 1000) % 60
+    cs = (ms // 10) % 100
+    return f"{h}:{m:02d}:{s:02d}.{cs:02d}" if h else f"{m:02d}:{s:02d}.{cs:02d}"
+
+def big(s, color):
+    lines = subprocess.check_output(['figlet', '-f', 'small', s], text=True).rstrip('\n').split('\n')
+    return '\n'.join(f' {color}{B}{l}{R}' for l in lines)
+
+def draw(ms, running, laps):
+    color = CY if running else (YL if ms > 0 else GR)
+    if running:
+        status = f' {CY}▶ running{R}  {GR}spc pause · l lap · r reset · q quit{R}'
+    elif ms > 0:
+        status = f' {YL}⏸ paused{R}  {GR}spc resume · r reset · q quit{R}'
+    else:
+        status = f' {GR}press space to start · q quit{R}'
+
+    out = '\033[H\033[2J\n'
+    out += big(fmt(ms), color) + '\n\n'
+    out += status
+    if laps:
+        out += f'\n\n {GR}laps:{R}'
+        for i, l in enumerate(laps[-4:], max(1, len(laps) - 3)):
+            out += f'\n {GR}{i}.{R}  {PU}{fmt(l)}{R}'
+    sys.stdout.write(out)
+    sys.stdout.flush()
+
+def main():
+    sys.stdout.write('\033[?25l')
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    running, start, elapsed, laps = False, None, 0, []
+    try:
+        tty.setraw(fd)
+        while True:
+            if select.select([sys.stdin], [], [], 0.08)[0]:
+                k = sys.stdin.read(1)
+                if k in ('q', '\x03', '\x1b'):
+                    break
+                elif k == ' ':
+                    if running:
+                        elapsed += int((time.time() - start) * 1000)
+                        running = False
+                    else:
+                        start = time.time()
+                        running = True
+                elif k == 'r':
+                    elapsed, running, laps = 0, False, []
+                elif k == 'l':
+                    ms = elapsed + (int((time.time() - start) * 1000) if running else 0)
+                    if ms > 0:
+                        laps.append(ms)
+            ms = elapsed + (int((time.time() - start) * 1000) if running else 0)
+            draw(ms, running, laps)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+        sys.stdout.write('\033[?25h\033[H\033[2J')
+        sys.stdout.flush()
+
+if __name__ == '__main__':
+    main()

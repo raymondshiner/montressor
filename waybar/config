@@ -4,8 +4,8 @@
     "height": 38,
     "spacing": 4,
     "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["clock"],
-    "modules-right": ["tray", "swaync", "bluetooth", "pulseaudio", "network", "battery", "cpu", "memory"],
+    "modules-center": ["custom/music-ws", "clock"],
+    "modules-right": ["tray", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware"],
 
     "hyprland/workspaces": {
         "format": "{id}",
@@ -13,9 +13,33 @@
         "sort-by-number": true
     },
 
+    "custom/music-ws": {
+        "exec": "~/.config/waybar/music-ws.sh",
+        "return-type": "json",
+        "on-click": "hyprctl dispatch togglespecialworkspace music",
+        "tooltip": true
+    },
+
     "clock": {
         "format": "{:%a %b %d   %I:%M %p}",
         "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+
+    "group/hardware": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 300,
+            "transition-left-to-right": false,
+            "children-class": "hardware-child"
+        },
+        "modules": ["custom/hardware-toggle", "memory", "cpu"]
+    },
+
+    "custom/hardware-toggle": {
+        "exec": "~/.config/waybar/hardware-status.sh",
+        "return-type": "json",
+        "interval": 3,
+        "tooltip": false
     },
 
     "cpu": {
@@ -30,17 +54,20 @@
     },
 
     "battery": {
-        "states": { "warning": 30, "critical": 15 },
+        "states": { "warning": 50, "critical": 20 },
         "format": "{icon} {capacity}%",
         "format-charging": "󰂄 {capacity}%",
         "format-plugged": "󰚥 {capacity}%",
         "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-        "interval": 30
+        "interval": 30,
+        "tooltip": false,
+        "on-click": "python3 ~/.config/waybar/battery-popup.py"
     },
 
     "network": {
         "format-wifi": "󰤨 {signalStrength}%",
         "format-ethernet": "󰈀 {ipaddr}",
+        "interval": 5,
         "format-disconnected": "󰤭 ",
         "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
         "tooltip-format-ethernet": "{ifname}\n{ipaddr}"
@@ -63,18 +90,26 @@
         "format": "{icon} {volume}%",
         "format-muted": "󰝟 ",
         "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
-        "on-click": "swaync-client -t",
+        "on-click": "pavucontrol",
         "scroll-step": 5
     },
 
     "bluetooth": {
-        "format": "󰂯",
+        "format": "󰂯 0",
         "format-connected": "󰂱 {num_connections}",
         "format-disabled": "󰂲",
         "tooltip-format": "{controller_alias} — {controller_address}",
         "tooltip-format-connected": "{controller_alias}\n\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}  {device_address}",
         "on-click": "blueman-manager"
+    },
+
+    "custom/vpn": {
+        "exec": "~/.config/waybar/vpn.sh",
+        "return-type": "json",
+        "interval": 5,
+        "on-click": "bash -c 'mullvad status | grep -q Connected && mullvad disconnect || mullvad connect'",
+        "tooltip": true
     },
 
     "tray": {
