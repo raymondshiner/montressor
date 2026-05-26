@@ -27,8 +27,7 @@ window {{
     box-shadow:
         0 0 28px rgba(0, 0, 0, 0.8),
         0 0 20px rgba(220, 220, 220, 0.55),
-        0 0 40px rgba(220, 220, 220, 0.25),
-        0 0 0 1px rgba(220, 220, 220, 0.35);
+        0 0 40px rgba(220, 220, 220, 0.25);
 }}
 .time-value {{
     color: #D5CED9;
