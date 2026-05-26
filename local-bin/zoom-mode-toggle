@@ -1,28 +1,99 @@
-#!/usr/bin/env bash
-# Toggle "zoom mode" — scales all monitors up so the desktop is usable from across the room.
+#!/usr/bin/env python3
+# Toggle "zoom mode" — scales all monitors up, preserving relative layout.
+# On enable: snapshot each monitor's mode/position/scale, then reflow with new scale.
+# On disable: restore each monitor exactly from snapshot.
 
-STATE_FILE=/tmp/zoom-mode.state
-ZOOM_SCALE=1.8
-NORMAL_SCALE=1.0
+import json
+import os
+import subprocess
+import sys
 
-if [[ -f "$STATE_FILE" ]]; then
-    target=$NORMAL_SCALE
-    label="OFF"
-    icon="zoom-out"
-    rm -f "$STATE_FILE"
-else
-    target=$ZOOM_SCALE
-    label="ON"
-    icon="zoom-in"
-    touch "$STATE_FILE"
-fi
+STATE_FILE = "/tmp/zoom-mode.state"
+ZOOM_SCALE = 1.8
 
-hyprctl monitors -j | python3 -c "
-import json, sys
-for m in json.load(sys.stdin):
-    print(m['name'])
-" | while read -r mon; do
-    hyprctl keyword monitor "$mon,preferred,auto,$target" >/dev/null
-done
 
-notify-send -i "$icon" -t 1500 "Zoom mode: $label" "All monitors @ ${target}x"
+def monitors():
+    out = subprocess.check_output(["hyprctl", "monitors", "-j"])
+    return [m for m in json.loads(out) if not m.get("disabled", False)]
+
+
+def apply(name, mode, x, y, scale):
+    subprocess.run(
+        ["hyprctl", "keyword", "monitor", f"{name},{mode},{int(x)}x{int(y)},{scale}"],
+        check=True,
+        stdout=subprocess.DEVNULL,
+    )
+
+
+def notify(label, detail):
+    icon = "zoom-in" if label == "ON" else "zoom-out"
+    subprocess.run(
+        ["notify-send", "-i", icon, "-t", "1500", f"Zoom mode: {label}", detail],
+        check=False,
+    )
+
+
+def enable():
+    mons = monitors()
+    if not mons:
+        sys.exit(0)
+
+    # Snapshot current state.
+    with open(STATE_FILE, "w") as f:
+        for m in mons:
+            mode = f"{m['width']}x{m['height']}@{m['refreshRate']}"
+            f.write(f"{m['name']}|{mode}|{m['x']},{m['y']}|{m['scale']}\n")
+
+    # Detect arrangement axis from current positions.
+    xs = [m["x"] for m in mons]
+    ys = [m["y"] for m in mons]
+    horizontal = (max(xs) - min(xs)) >= (max(ys) - min(ys))
+
+    # Order monitors along the primary axis, then reflow with new scale's logical sizes.
+    mons.sort(key=lambda m: m["x"] if horizontal else m["y"])
+    cursor = 0
+    for m in mons:
+        mode = f"{m['width']}x{m['height']}@{m['refreshRate']}"
+        if horizontal:
+            apply(m["name"], mode, cursor, 0, ZOOM_SCALE)
+            cursor += round(m["width"] / ZOOM_SCALE)
+        else:
+            apply(m["name"], mode, 0, cursor, ZOOM_SCALE)
+            cursor += round(m["height"] / ZOOM_SCALE)
+
+    notify("ON", f"All monitors @ {ZOOM_SCALE}x")
+
+
+def disable():
+    try:
+        with open(STATE_FILE) as f:
+            lines = [l.strip() for l in f if l.strip()]
+    except FileNotFoundError:
+        lines = []
+
+    if lines:
+        for line in lines:
+            name, mode, pos, scale = line.split("|")
+            x, y = pos.split(",")
+            apply(name, mode, x, y, scale)
+    else:
+        # No snapshot — fall back to Hyprland defaults.
+        for m in monitors():
+            subprocess.run(
+                ["hyprctl", "keyword", "monitor", f"{m['name']},preferred,auto,auto"],
+                check=False,
+                stdout=subprocess.DEVNULL,
+            )
+
+    try:
+        os.remove(STATE_FILE)
+    except FileNotFoundError:
+        pass
+
+    notify("OFF", "Restored original layout")
+
+
+if os.path.exists(STATE_FILE):
+    disable()
+else:
+    enable()
