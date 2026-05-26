@@ -77,7 +77,8 @@ mkdir -p "$HOME/.claude/agents" \
          "$HOME/.config/swaync" \
          "$HOME/.config/dunst" \
          "$HOME/.config/fish" \
-         "$HOME/.config/Code/User"
+         "$HOME/.config/Code/User" \
+         "$HOME/.kodi/userdata"
 
 # ----------------------------------------------------------------------
 # 3. Symlinks
@@ -107,8 +108,9 @@ link "$REPO_DIR/claude/machine.linux.md"           "$HOME/.config/claude/machine
 [[ -d "$REPO_DIR/swaync"   ]] && for f in "$REPO_DIR"/swaync/*;  do link "$f" "$HOME/.config/swaync/$(basename "$f")";  done
 [[ -d "$REPO_DIR/dunst"    ]] && for f in "$REPO_DIR"/dunst/*;   do link "$f" "$HOME/.config/dunst/$(basename "$f")";   done
 [[ -d "$REPO_DIR/fish"     ]] && for f in "$REPO_DIR"/fish/*;    do link "$f" "$HOME/.config/fish/$(basename "$f")";    done
-[[ -f "$REPO_DIR/kitty/kitty.conf"      ]] && link "$REPO_DIR/kitty/kitty.conf"      "$HOME/.config/kitty/kitty.conf"
-[[ -f "$REPO_DIR/vscode/settings.json"  ]] && link "$REPO_DIR/vscode/settings.json"  "$HOME/.config/Code/User/settings.json"
+[[ -f "$REPO_DIR/kitty/kitty.conf"             ]] && link "$REPO_DIR/kitty/kitty.conf"             "$HOME/.config/kitty/kitty.conf"
+[[ -f "$REPO_DIR/vscode/settings.json"         ]] && link "$REPO_DIR/vscode/settings.json"         "$HOME/.config/Code/User/settings.json"
+[[ -f "$REPO_DIR/kodi/playercorefactory.xml"   ]] && link "$REPO_DIR/kodi/playercorefactory.xml"   "$HOME/.kodi/userdata/playercorefactory.xml"
 
 chmod +x "$REPO_DIR/claude/hooks/notify-stop-linux.sh" \
          "$REPO_DIR/claude/bin/cc-statusline.sh" \
