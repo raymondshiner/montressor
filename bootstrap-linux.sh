@@ -111,6 +111,7 @@ link "$REPO_DIR/claude/machine.linux.md"           "$HOME/.config/claude/machine
 [[ -f "$REPO_DIR/kitty/kitty.conf"             ]] && link "$REPO_DIR/kitty/kitty.conf"             "$HOME/.config/kitty/kitty.conf"
 [[ -f "$REPO_DIR/vscode/settings.json"         ]] && link "$REPO_DIR/vscode/settings.json"         "$HOME/.config/Code/User/settings.json"
 [[ -f "$REPO_DIR/kodi/playercorefactory.xml"   ]] && link "$REPO_DIR/kodi/playercorefactory.xml"   "$HOME/.kodi/userdata/playercorefactory.xml"
+[[ -f "$REPO_DIR/zsh/zshrc"                    ]] && link "$REPO_DIR/zsh/zshrc"                    "$HOME/.zshrc"
 
 chmod +x "$REPO_DIR/claude/hooks/notify-stop-linux.sh" \
          "$REPO_DIR/claude/bin/cc-statusline.sh" \

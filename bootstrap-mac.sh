@@ -61,7 +61,7 @@ fi
 # 3. Packages
 # ----------------------------------------------------------------------
 say "Installing seed CLI tools..."
-BREW_CLI=(gh git jq fzf ripgrep fd node neovim zsh terminal-notifier)
+BREW_CLI=(gh git jq fzf ripgrep fd node neovim zsh terminal-notifier zsh-syntax-highlighting zsh-autosuggestions zsh-history-substring-search spaceship)
 for pkg in "${BREW_CLI[@]}"; do
   if brew list --formula "$pkg" >/dev/null 2>&1; then
     ok "$pkg"
@@ -123,6 +123,13 @@ else
   ok "sketchybar"
 fi
 
+say "Installing oh-my-zsh..."
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+  RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+  ok "oh-my-zsh"
+fi
+
 say "Installing Claude Code..."
 if ! command -v claude >/dev/null 2>&1; then
   note "Installing via npm..."
@@ -168,6 +175,7 @@ link "$REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/friday"
 link "$REPO_DIR/claude/machine.mac.md"             "$HOME/.config/claude/machine.md"
 link "$REPO_DIR/kitty/kitty.conf"                  "$HOME/.config/kitty/kitty.conf"
 link "$REPO_DIR/vscode/settings.json"              "$HOME/Library/Application Support/Code/User/settings.json"
+[[ -f "$REPO_DIR/zsh/zshrc" ]] && link "$REPO_DIR/zsh/zshrc" "$HOME/.zshrc"
 
 # Mac-specific scaffolds (only if present in repo)
 [[ -f "$REPO_DIR/mac/aerospace/.aerospace.toml"     ]] && link "$REPO_DIR/mac/aerospace/.aerospace.toml"     "$HOME/.aerospace.toml"
