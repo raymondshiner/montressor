@@ -264,12 +264,14 @@ class BatteryPopup(Gtk.Window):
         self._bright_timer = None
 
         if externals:
+            # Share width across all row labels so sliders align.
+            label_group = Gtk.SizeGroup(mode=Gtk.SizeGroupMode.HORIZONTAL)
             # Label rows so it's obvious which slider is which.
             internal_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
             int_lbl = Gtk.Label(label='Built-in')
             int_lbl.get_style_context().add_class('slider-label')
             int_lbl.set_xalign(0)
-            int_lbl.set_size_request(64, -1)
+            label_group.add_widget(int_lbl)
             internal_row.pack_start(int_lbl, False, False, 0)
             internal_row.pack_start(self._slider, True, True, 0)
             root.pack_start(internal_row, False, False, 0)
@@ -286,7 +288,7 @@ class BatteryPopup(Gtk.Window):
             lbl = Gtk.Label(label=mon['model'][:14])
             lbl.get_style_context().add_class('slider-label')
             lbl.set_xalign(0)
-            lbl.set_size_request(64, -1)
+            label_group.add_widget(lbl)
             row.pack_start(lbl, False, False, 0)
 
             ext_slider = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, mx, 1)
