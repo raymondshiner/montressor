@@ -5,6 +5,7 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 import subprocess
 import threading
+import json
 import os
 import sys
 
@@ -15,6 +16,7 @@ PID_FILE = '/tmp/battery-popup.pid'
 POPUP_WIDTH = 260 + 16  # size_request + .popup-inner CSS margin*2
 
 BACKLIGHT = '/sys/class/backlight/intel_backlight'
+DDC_CACHE = '/tmp/battery-popup-ddc.json'
 
 CSS_TEMPLATE = """
 window {{
@@ -173,6 +175,21 @@ def read_external_brightness(display):
         pass
     return None
 
+def read_ddc_cache():
+    """Return cached monitor list (possibly empty) or None if no cache."""
+    try:
+        with open(DDC_CACHE) as f:
+            return json.load(f).get('monitors')
+    except Exception:
+        return None
+
+def write_ddc_cache(monitors):
+    try:
+        with open(DDC_CACHE, 'w') as f:
+            json.dump({'monitors': monitors}, f)
+    except Exception:
+        pass
+
 def write_external_brightness(display, pct):
     val = max(0, min(100, int(pct)))
     try:
@@ -277,10 +294,18 @@ class BatteryPopup(Gtk.Window):
         internal_row.pack_start(self._slider, True, True, 0)
         root.pack_start(internal_row, False, False, 0)
 
-        # External sliders are populated asynchronously to keep open instant.
+        # External sliders: render synchronously from cache when available;
+        # always kick off a background refresh that re-renders on change.
         self._ext_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         root.pack_start(self._ext_container, False, False, 0)
         self._ext_sliders = []
+
+        cached = read_ddc_cache()
+        if cached:
+            self._render_externals([
+                ({'display': m['display'], 'model': m['model']}, (m['current'], m['max']))
+                for m in cached
+            ])
         threading.Thread(target=self._load_externals, daemon=True).start()
 
         # --- Power mode ---
@@ -321,15 +346,37 @@ class BatteryPopup(Gtk.Window):
 
     def _load_externals(self):
         data = []
+        monitors_for_cache = []
         for mon in detect_external_monitors():
             br = read_external_brightness(mon['display'])
-            if br is not None:
-                data.append((mon, br))
-        if data:
+            if br is None:
+                continue
+            data.append((mon, br))
+            monitors_for_cache.append({
+                'display': mon['display'],
+                'model': mon['model'],
+                'current': br[0],
+                'max': br[1],
+            })
+        write_ddc_cache(monitors_for_cache)
+
+        rendered_keys = {(e['display'], e['model']) for e in self._ext_sliders}
+        fresh_keys = {(m['display'], m['model']) for m, _ in data}
+        if rendered_keys != fresh_keys:
             GLib.idle_add(self._render_externals, data)
 
     def _render_externals(self, data):
-        self._int_label.set_visible(True)
+        # Clear any existing rows so we can rebuild idempotently.
+        for child in self._ext_container.get_children():
+            self._ext_container.remove(child)
+        self._ext_sliders = []
+
+        self._int_label.set_visible(bool(data))
+
+        # Fresh size group so destroyed labels don't haunt sizing.
+        self._label_group = Gtk.SizeGroup(mode=Gtk.SizeGroupMode.HORIZONTAL)
+        self._label_group.add_widget(self._int_label)
+
         for mon, (cur, mx) in data:
             row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
             lbl = Gtk.Label(label=mon['model'][:14])
@@ -344,7 +391,8 @@ class BatteryPopup(Gtk.Window):
             ext_slider.set_value_pos(Gtk.PositionType.RIGHT)
             ext_slider.set_hexpand(True)
             ext_slider.connect('format-value', lambda s, v: f'{int(v)}%')
-            entry = {'display': mon['display'], 'slider': ext_slider, 'timer': None}
+            entry = {'display': mon['display'], 'model': mon['model'],
+                     'slider': ext_slider, 'timer': None}
             ext_slider.connect('value-changed', self._on_external_brightness, entry)
             row.pack_start(ext_slider, True, True, 0)
             self._ext_container.pack_start(row, False, False, 0)
