@@ -41,6 +41,11 @@ window {{
     font-size: 11px;
     margin-top: 6px;
 }}
+.slider-label {{
+    color: #677691;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 11px;
+}}
 scale trough {{
     background-color: #2A2D3A;
     border-radius: 3px;
@@ -127,6 +132,57 @@ def write_brightness(pct, mx):
         subprocess.run(['sudo', 'tee', f'{BACKLIGHT}/brightness'],
                        input=str(val).encode(), capture_output=True)
 
+def detect_external_monitors():
+    """Return list of dicts: {'display': N, 'model': str} for DDC/CI-capable external displays."""
+    try:
+        out = subprocess.run(
+            ['ddcutil', 'detect', '--terse'],
+            capture_output=True, text=True, timeout=4,
+        ).stdout
+    except Exception:
+        return []
+    monitors = []
+    cur = None
+    for raw in out.splitlines():
+        line = raw.strip()
+        if line.startswith('Display '):
+            if cur and 'display' in cur:
+                monitors.append(cur)
+            try:
+                cur = {'display': int(line.split()[1])}
+            except Exception:
+                cur = None
+        elif cur is not None and line.startswith('Monitor:'):
+            parts = [p for p in line.split(':', 1)[1].split(':') if p]
+            cur['model'] = parts[1].strip() if len(parts) >= 2 else 'External'
+    if cur and 'display' in cur:
+        monitors.append(cur)
+    return [m for m in monitors if m.get('model')]
+
+def read_external_brightness(display):
+    try:
+        out = subprocess.run(
+            ['ddcutil', '--display', str(display), '--terse', 'getvcp', '10'],
+            capture_output=True, text=True, timeout=3,
+        ).stdout.strip()
+        parts = out.split()
+        if len(parts) >= 5 and parts[0] == 'VCP':
+            return int(parts[3]), int(parts[4])
+    except Exception:
+        pass
+    return None
+
+def write_external_brightness(display, pct):
+    val = max(0, min(100, int(pct)))
+    try:
+        subprocess.run(
+            ['ddcutil', '--display', str(display), '--noverify',
+             'setvcp', '10', str(val)],
+            capture_output=True, timeout=3,
+        )
+    except Exception:
+        pass
+
 def get_profile():
     try:
         return subprocess.check_output(['powerprofilesctl', 'get'], text=True).strip()
@@ -190,6 +246,8 @@ class BatteryPopup(Gtk.Window):
         root.pack_start(time_lbl, False, False, 0)
 
         # --- Brightness ---
+        externals = detect_external_monitors()
+
         brt_hdr = Gtk.Label(label='Brightness')
         brt_hdr.get_style_context().add_class('section-label')
         brt_hdr.set_xalign(0)
@@ -204,7 +262,44 @@ class BatteryPopup(Gtk.Window):
         self._slider.connect('format-value', lambda s, v: f'{int(v)}%')
         self._slider.connect('value-changed', self._on_brightness)
         self._bright_timer = None
-        root.pack_start(self._slider, False, False, 0)
+
+        if externals:
+            # Label rows so it's obvious which slider is which.
+            internal_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+            int_lbl = Gtk.Label(label='Built-in')
+            int_lbl.get_style_context().add_class('slider-label')
+            int_lbl.set_xalign(0)
+            int_lbl.set_size_request(64, -1)
+            internal_row.pack_start(int_lbl, False, False, 0)
+            internal_row.pack_start(self._slider, True, True, 0)
+            root.pack_start(internal_row, False, False, 0)
+        else:
+            root.pack_start(self._slider, False, False, 0)
+
+        self._ext_sliders = []
+        for mon in externals:
+            br = read_external_brightness(mon['display'])
+            if br is None:
+                continue
+            cur, mx = br
+            row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+            lbl = Gtk.Label(label=mon['model'][:14])
+            lbl.get_style_context().add_class('slider-label')
+            lbl.set_xalign(0)
+            lbl.set_size_request(64, -1)
+            row.pack_start(lbl, False, False, 0)
+
+            ext_slider = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, mx, 1)
+            ext_slider.set_value(cur)
+            ext_slider.set_draw_value(True)
+            ext_slider.set_value_pos(Gtk.PositionType.RIGHT)
+            ext_slider.set_hexpand(True)
+            ext_slider.connect('format-value', lambda s, v: f'{int(v)}%')
+            entry = {'display': mon['display'], 'slider': ext_slider, 'timer': None}
+            ext_slider.connect('value-changed', self._on_external_brightness, entry)
+            row.pack_start(ext_slider, True, True, 0)
+            root.pack_start(row, False, False, 0)
+            self._ext_sliders.append(entry)
 
         # --- Power mode ---
         pwr_hdr = Gtk.Label(label='Power Mode')
@@ -241,6 +336,15 @@ class BatteryPopup(Gtk.Window):
             GLib.source_remove(self._bright_timer)
         pct = int(scale.get_value())
         self._bright_timer = GLib.timeout_add(40, lambda: write_brightness(pct, self._max_b) or False)
+
+    def _on_external_brightness(self, scale, entry):
+        if entry['timer']:
+            GLib.source_remove(entry['timer'])
+        val = int(scale.get_value())
+        entry['timer'] = GLib.timeout_add(
+            250,
+            lambda: write_external_brightness(entry['display'], val) or False,
+        )
 
     def _on_profile(self, btn, pid):
         set_profile(pid)
