@@ -113,7 +113,10 @@ def wrap_with_click_outside(window, popup_width):
 
     positioner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
     positioner.set_valign(Gtk.Align.START)
-    positioner.set_margin_top(WAYBAR_HEIGHT)
+    # WAYBAR_HEIGHT - 12: positioner sits 12px below bar top, then the
+    # .popup-inner CSS margin (8px) lifts the visible body to y=34, giving
+    # a 4px overlap with the bar so the popup feels attached.
+    positioner.set_margin_top(WAYBAR_HEIGHT - 12)
 
     if cursor_x is None:
         positioner.set_halign(Gtk.Align.END)
@@ -140,12 +143,19 @@ def wrap_with_click_outside(window, popup_width):
         if not mon:
             return False
         g = mon.get_geometry()
-        # Input region = entire monitor BELOW the waybar. Clicks on the
-        # waybar strip itself pass through to waybar so other popup icons
-        # still work in one click.
-        rect = cairo.RectangleInt(0, WAYBAR_HEIGHT, g.width,
-                                  max(1, g.height - WAYBAR_HEIGHT))
-        gdkwin.input_shape_combine_region(cairo.Region(rect), 0, 0)
+        # Below-bar strip: catches dismissals from clicks on the desktop.
+        # Waybar strip itself is excluded so other icons still work.
+        region = cairo.Region(
+            cairo.RectangleInt(0, WAYBAR_HEIGHT, g.width,
+                               max(1, g.height - WAYBAR_HEIGHT))
+        )
+        # Add the popup body — without this, the 4px popup→bar overlap
+        # wouldn't accept clicks and they'd fall through to waybar.
+        alloc = blocker.get_allocation()
+        if alloc.width > 0 and alloc.height > 0:
+            region.union(cairo.RectangleInt(alloc.x, alloc.y,
+                                            alloc.width, alloc.height))
+        gdkwin.input_shape_combine_region(region, 0, 0)
         return False
 
     window.connect('map-event', _apply_input_region)
