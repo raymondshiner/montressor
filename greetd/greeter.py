@@ -138,6 +138,28 @@ class Greeter:
         return False
 
 
+def _pick_monitor():
+    """Prefer first external (HDMI/DP) output; fall back to internal."""
+    display = Gdk.Display.get_default()
+    if display is None:
+        return 0
+    n = display.get_n_monitors()
+    external_idx = None
+    internal_idx = 0
+    for i in range(n):
+        mon = display.get_monitor(i)
+        name = (mon.get_model() or '') + ' ' + (mon.get_manufacturer() or '')
+        # GDK doesn't expose connector names directly; use plug name via get_model
+        # which on Wayland is typically the connector (e.g. "HDMI-A-1", "eDP-1").
+        plug = (mon.get_model() or '').upper()
+        if plug.startswith(('HDMI', 'DP-', 'DISPLAYPORT')):
+            external_idx = i
+            break
+        if plug.startswith('EDP') or plug.startswith('LVDS'):
+            internal_idx = i
+    return external_idx if external_idx is not None else internal_idx
+
+
 def build_ui(greeter):
     css = Gtk.CssProvider()
     css.load_from_data(CSS)
@@ -147,7 +169,7 @@ def build_ui(greeter):
 
     win = Gtk.Window()
     win.set_decorated(False)
-    win.fullscreen()
+    win.fullscreen_on_monitor(Gdk.Screen.get_default(), _pick_monitor())
 
     box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
     box.set_halign(Gtk.Align.CENTER)
