@@ -2,14 +2,17 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
-gi.require_version('GtkLayerShell', '0.1')
-from gi.repository import Gtk, Gdk, GLib, GtkLayerShell
+from gi.repository import Gtk, Gdk, GLib
 import subprocess
 import os
 import re
-import signal
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import popup_lib
 
 PID_FILE = '/tmp/sound-popup.pid'
+POPUP_WIDTH = 300 + 16
 SINK = '@DEFAULT_SINK@'
 
 CSS = """
@@ -122,21 +125,7 @@ class SoundPopup(Gtk.Window):
     def __init__(self):
         super().__init__()
 
-        GtkLayerShell.init_for_window(self)
-        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.OVERLAY)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.BOTTOM, True)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.LEFT, True)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, -4)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 2)
-        GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
-
-        self.set_decorated(False)
-        screen = self.get_screen()
-        visual = screen.get_rgba_visual()
-        if visual:
-            self.set_visual(visual)
+        popup_lib.setup_window(self)
 
         provider = Gtk.CssProvider()
         provider.load_from_data(CSS.encode())
@@ -145,19 +134,7 @@ class SoundPopup(Gtk.Window):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
 
-        # Click-outside-close scaffold
-        catcher = Gtk.EventBox()
-        catcher.connect('button-press-event', lambda *_: self.destroy() or True)
-        self.add(catcher)
-
-        positioner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        positioner.set_halign(Gtk.Align.END)
-        positioner.set_valign(Gtk.Align.START)
-        catcher.add(positioner)
-
-        blocker = Gtk.EventBox()
-        blocker.connect('button-press-event', lambda *_: True)
-        positioner.pack_start(blocker, False, False, 0)
+        blocker = popup_lib.wrap_with_click_outside(self, POPUP_WIDTH)
 
         self._muted = get_mute()
 
@@ -224,29 +201,5 @@ class SoundPopup(Gtk.Window):
         self._mute_btn.set_label('󰝟' if self._muted else '󰕾')
 
 
-def cleanup():
-    if os.path.exists(PID_FILE):
-        try: os.remove(PID_FILE)
-        except: pass
-
-
-def main():
-    if os.path.exists(PID_FILE):
-        try:
-            pid = int(open(PID_FILE).read().strip())
-            os.kill(pid, signal.SIGTERM)
-            cleanup()
-            return
-        except (ProcessLookupError, ValueError, OSError):
-            cleanup()
-
-    with open(PID_FILE, 'w') as f:
-        f.write(str(os.getpid()))
-
-    win = SoundPopup()
-    win.connect('destroy', lambda _w: cleanup() or Gtk.main_quit())
-    Gtk.main()
-
-
 if __name__ == '__main__':
-    main()
+    popup_lib.run_popup(PID_FILE, SoundPopup)

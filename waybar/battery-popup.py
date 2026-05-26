@@ -2,13 +2,16 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
-gi.require_version('GtkLayerShell', '0.1')
-from gi.repository import Gtk, Gdk, GLib, GtkLayerShell
+from gi.repository import Gtk, Gdk, GLib
 import subprocess
 import os
-import signal
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import popup_lib
 
 PID_FILE = '/tmp/battery-popup.pid'
+POPUP_WIDTH = 260 + 16  # size_request + .popup-inner CSS margin*2
 
 BACKLIGHT = '/sys/class/backlight/intel_backlight'
 
@@ -164,22 +167,7 @@ class BatteryPopup(Gtk.Window):
     def __init__(self):
         super().__init__()
 
-        # Layer shell — full-screen overlay so clicks outside dismiss
-        GtkLayerShell.init_for_window(self)
-        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.OVERLAY)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.BOTTOM, True)
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.LEFT, True)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, -4)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 2)
-        GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
-
-        self.set_decorated(False)
-        screen = self.get_screen()
-        visual = screen.get_rgba_visual()
-        if visual:
-            self.set_visual(visual)
+        popup_lib.setup_window(self)
 
         # CSS
         provider = Gtk.CssProvider()
@@ -189,22 +177,8 @@ class BatteryPopup(Gtk.Window):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
 
-        # Click-outside-close scaffold: catcher fills the screen, blocker stops
-        # bubble-up from clicks inside the popup body.
-        catcher = Gtk.EventBox()
-        catcher.connect('button-press-event', lambda *_: self.destroy() or True)
-        self.add(catcher)
+        blocker = popup_lib.wrap_with_click_outside(self, POPUP_WIDTH)
 
-        positioner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        positioner.set_halign(Gtk.Align.END)
-        positioner.set_valign(Gtk.Align.START)
-        catcher.add(positioner)
-
-        blocker = Gtk.EventBox()
-        blocker.connect('button-press-event', lambda *_: True)
-        positioner.pack_start(blocker, False, False, 0)
-
-        # Layout
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         root.get_style_context().add_class('popup-inner')
         root.set_size_request(260, -1)
@@ -279,27 +253,5 @@ class BatteryPopup(Gtk.Window):
                 ctx.remove_class('profile-active')
 
 
-def cleanup():
-    if os.path.exists(PID_FILE):
-        os.remove(PID_FILE)
-
-def main():
-    # Toggle: if already running, kill it and exit
-    if os.path.exists(PID_FILE):
-        try:
-            pid = int(open(PID_FILE).read().strip())
-            os.kill(pid, signal.SIGTERM)
-            cleanup()
-            return
-        except (ProcessLookupError, ValueError, OSError):
-            cleanup()
-
-    with open(PID_FILE, 'w') as f:
-        f.write(str(os.getpid()))
-
-    win = BatteryPopup()
-    win.connect('destroy', lambda w: cleanup() or Gtk.main_quit())
-    Gtk.main()
-
 if __name__ == '__main__':
-    main()
+    popup_lib.run_popup(PID_FILE, BatteryPopup)
