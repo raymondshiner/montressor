@@ -16,7 +16,7 @@ import socket
 import getpass
 
 USER = 'sirlexicon'
-CMD = ['Hyprland']
+CMD = ['start-hyprland']
 
 
 def chat(sock, payload):
