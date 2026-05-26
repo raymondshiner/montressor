@@ -164,11 +164,13 @@ class BatteryPopup(Gtk.Window):
     def __init__(self):
         super().__init__()
 
-        # Layer shell setup — anchored top-right, just below the bar
+        # Layer shell — full-screen overlay so clicks outside dismiss
         GtkLayerShell.init_for_window(self)
-        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.TOP)
+        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.OVERLAY)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.BOTTOM, True)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.LEFT, True)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, -4)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 2)
         GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
@@ -187,11 +189,26 @@ class BatteryPopup(Gtk.Window):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
 
+        # Click-outside-close scaffold: catcher fills the screen, blocker stops
+        # bubble-up from clicks inside the popup body.
+        catcher = Gtk.EventBox()
+        catcher.connect('button-press-event', lambda *_: self.destroy() or True)
+        self.add(catcher)
+
+        positioner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        positioner.set_halign(Gtk.Align.END)
+        positioner.set_valign(Gtk.Align.START)
+        catcher.add(positioner)
+
+        blocker = Gtk.EventBox()
+        blocker.connect('button-press-event', lambda *_: True)
+        positioner.pack_start(blocker, False, False, 0)
+
         # Layout
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         root.get_style_context().add_class('popup-inner')
         root.set_size_request(260, -1)
-        self.add(root)
+        blocker.add(root)
 
         # --- Battery time ---
         time_lbl = Gtk.Label(label=get_battery_time())

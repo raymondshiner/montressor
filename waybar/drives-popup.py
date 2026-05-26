@@ -150,9 +150,11 @@ class DrivesPopup(Gtk.Window):
         super().__init__()
 
         GtkLayerShell.init_for_window(self)
-        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.TOP)
+        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.OVERLAY)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.BOTTOM, True)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.LEFT, True)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, -4)
         GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 2)
         GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.ON_DEMAND)
@@ -170,10 +172,24 @@ class DrivesPopup(Gtk.Window):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
 
+        # Click-outside-close scaffold
+        catcher = Gtk.EventBox()
+        catcher.connect('button-press-event', lambda *_: self.destroy() or True)
+        self.add(catcher)
+
+        positioner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        positioner.set_halign(Gtk.Align.END)
+        positioner.set_valign(Gtk.Align.START)
+        catcher.add(positioner)
+
+        blocker = Gtk.EventBox()
+        blocker.connect('button-press-event', lambda *_: True)
+        positioner.pack_start(blocker, False, False, 0)
+
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         root.get_style_context().add_class('popup-inner')
         root.set_size_request(320, -1)
-        self.add(root)
+        blocker.add(root)
 
         hdr = Gtk.Label(label='Removable Drives')
         hdr.get_style_context().add_class('header')
