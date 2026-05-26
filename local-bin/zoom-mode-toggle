@@ -2,7 +2,7 @@
 # Toggle "zoom mode" — scales all monitors up so the desktop is usable from across the room.
 
 STATE_FILE=/tmp/zoom-mode.state
-ZOOM_SCALE=2.0
+ZOOM_SCALE=1.7
 NORMAL_SCALE=1.0
 
 if [[ -f "$STATE_FILE" ]]; then
