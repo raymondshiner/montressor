@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Toggle "zoom mode" — scales all monitors up so the desktop is usable from across the room.
+
+STATE_FILE=/tmp/zoom-mode.state
+ZOOM_SCALE=2.0
+NORMAL_SCALE=1.0
+
+if [[ -f "$STATE_FILE" ]]; then
+    target=$NORMAL_SCALE
+    label="OFF"
+    icon="zoom-out"
+    rm -f "$STATE_FILE"
+else
+    target=$ZOOM_SCALE
+    label="ON"
+    icon="zoom-in"
+    touch "$STATE_FILE"
+fi
+
+hyprctl monitors -j | python3 -c "
+import json, sys
+for m in json.load(sys.stdin):
+    print(m['name'])
+" | while read -r mon; do
+    hyprctl keyword monitor "$mon,preferred,auto,$target" >/dev/null
+done
+
+notify-send -i "$icon" -t 1500 "Zoom mode: $label" "All monitors @ ${target}x"
