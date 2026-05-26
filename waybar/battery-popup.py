@@ -4,6 +4,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 import subprocess
+import threading
 import os
 import sys
 
@@ -246,8 +247,6 @@ class BatteryPopup(Gtk.Window):
         root.pack_start(time_lbl, False, False, 0)
 
         # --- Brightness ---
-        externals = detect_external_monitors()
-
         brt_hdr = Gtk.Label(label='Brightness')
         brt_hdr.get_style_context().add_class('section-label')
         brt_hdr.set_xalign(0)
@@ -263,45 +262,26 @@ class BatteryPopup(Gtk.Window):
         self._slider.connect('value-changed', self._on_brightness)
         self._bright_timer = None
 
-        if externals:
-            # Share width across all row labels so sliders align.
-            label_group = Gtk.SizeGroup(mode=Gtk.SizeGroupMode.HORIZONTAL)
-            # Label rows so it's obvious which slider is which.
-            internal_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-            int_lbl = Gtk.Label(label='Built-in')
-            int_lbl.get_style_context().add_class('slider-label')
-            int_lbl.set_xalign(0)
-            label_group.add_widget(int_lbl)
-            internal_row.pack_start(int_lbl, False, False, 0)
-            internal_row.pack_start(self._slider, True, True, 0)
-            root.pack_start(internal_row, False, False, 0)
-        else:
-            root.pack_start(self._slider, False, False, 0)
+        # Pre-build the internal row with a hidden "Built-in" label;
+        # it's revealed only if an external monitor is later detected.
+        self._label_group = Gtk.SizeGroup(mode=Gtk.SizeGroupMode.HORIZONTAL)
+        self._int_label = Gtk.Label(label='Built-in')
+        self._int_label.get_style_context().add_class('slider-label')
+        self._int_label.set_xalign(0)
+        self._int_label.set_no_show_all(True)
+        self._int_label.set_visible(False)
+        self._label_group.add_widget(self._int_label)
 
+        internal_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        internal_row.pack_start(self._int_label, False, False, 0)
+        internal_row.pack_start(self._slider, True, True, 0)
+        root.pack_start(internal_row, False, False, 0)
+
+        # External sliders are populated asynchronously to keep open instant.
+        self._ext_container = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        root.pack_start(self._ext_container, False, False, 0)
         self._ext_sliders = []
-        for mon in externals:
-            br = read_external_brightness(mon['display'])
-            if br is None:
-                continue
-            cur, mx = br
-            row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-            lbl = Gtk.Label(label=mon['model'][:14])
-            lbl.get_style_context().add_class('slider-label')
-            lbl.set_xalign(0)
-            label_group.add_widget(lbl)
-            row.pack_start(lbl, False, False, 0)
-
-            ext_slider = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, mx, 1)
-            ext_slider.set_value(cur)
-            ext_slider.set_draw_value(True)
-            ext_slider.set_value_pos(Gtk.PositionType.RIGHT)
-            ext_slider.set_hexpand(True)
-            ext_slider.connect('format-value', lambda s, v: f'{int(v)}%')
-            entry = {'display': mon['display'], 'slider': ext_slider, 'timer': None}
-            ext_slider.connect('value-changed', self._on_external_brightness, entry)
-            row.pack_start(ext_slider, True, True, 0)
-            root.pack_start(row, False, False, 0)
-            self._ext_sliders.append(entry)
+        threading.Thread(target=self._load_externals, daemon=True).start()
 
         # --- Power mode ---
         pwr_hdr = Gtk.Label(label='Power Mode')
@@ -338,6 +318,39 @@ class BatteryPopup(Gtk.Window):
             GLib.source_remove(self._bright_timer)
         pct = int(scale.get_value())
         self._bright_timer = GLib.timeout_add(40, lambda: write_brightness(pct, self._max_b) or False)
+
+    def _load_externals(self):
+        data = []
+        for mon in detect_external_monitors():
+            br = read_external_brightness(mon['display'])
+            if br is not None:
+                data.append((mon, br))
+        if data:
+            GLib.idle_add(self._render_externals, data)
+
+    def _render_externals(self, data):
+        self._int_label.set_visible(True)
+        for mon, (cur, mx) in data:
+            row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+            lbl = Gtk.Label(label=mon['model'][:14])
+            lbl.get_style_context().add_class('slider-label')
+            lbl.set_xalign(0)
+            self._label_group.add_widget(lbl)
+            row.pack_start(lbl, False, False, 0)
+
+            ext_slider = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, mx, 1)
+            ext_slider.set_value(cur)
+            ext_slider.set_draw_value(True)
+            ext_slider.set_value_pos(Gtk.PositionType.RIGHT)
+            ext_slider.set_hexpand(True)
+            ext_slider.connect('format-value', lambda s, v: f'{int(v)}%')
+            entry = {'display': mon['display'], 'slider': ext_slider, 'timer': None}
+            ext_slider.connect('value-changed', self._on_external_brightness, entry)
+            row.pack_start(ext_slider, True, True, 0)
+            self._ext_container.pack_start(row, False, False, 0)
+            self._ext_sliders.append(entry)
+        self._ext_container.show_all()
+        return False
 
     def _on_external_brightness(self, scale, entry):
         if entry['timer']:
