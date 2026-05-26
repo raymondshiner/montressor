@@ -87,6 +87,10 @@ def setup_window(window):
     for edge in (GtkLayerShell.Edge.TOP, GtkLayerShell.Edge.RIGHT,
                  GtkLayerShell.Edge.BOTTOM, GtkLayerShell.Edge.LEFT):
         GtkLayerShell.set_anchor(window, edge, True)
+    # -1 = ignore other surfaces' exclusive zones, so our overlay actually
+    # spans y=0 → screen height (otherwise waybar's exclusive zone shifts
+    # everything down by WAYBAR_HEIGHT and the popup floats below the bar).
+    GtkLayerShell.set_exclusive_zone(window, -1)
     GtkLayerShell.set_keyboard_mode(window, GtkLayerShell.KeyboardMode.ON_DEMAND)
 
 
