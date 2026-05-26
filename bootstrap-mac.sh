@@ -60,7 +60,7 @@ fi
 # ----------------------------------------------------------------------
 # 3. Packages
 # ----------------------------------------------------------------------
-say "Installing CLI tools..."
+say "Installing seed CLI tools..."
 BREW_CLI=(gh git jq fzf ripgrep fd node neovim zsh terminal-notifier)
 for pkg in "${BREW_CLI[@]}"; do
   if brew list --formula "$pkg" >/dev/null 2>&1; then
@@ -71,7 +71,20 @@ for pkg in "${BREW_CLI[@]}"; do
   fi
 done
 
-say "Installing desktop stack (casks)..."
+if [[ -s "$REPO_DIR/packages/mac-brew.txt" ]]; then
+  say "Installing brew formulae from packages/mac-brew.txt..."
+  while IFS= read -r pkg; do
+    [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*# ]] && continue
+    if brew list --formula "$pkg" >/dev/null 2>&1; then
+      ok "$pkg"
+    else
+      note "Installing $pkg..."
+      brew install "$pkg" || warn "failed: $pkg"
+    fi
+  done < "$REPO_DIR/packages/mac-brew.txt"
+fi
+
+say "Installing seed desktop stack (casks)..."
 BREW_CASK=(kitty raycast karabiner-elements)
 for pkg in "${BREW_CASK[@]}"; do
   if brew list --cask "$pkg" >/dev/null 2>&1; then
@@ -81,6 +94,19 @@ for pkg in "${BREW_CASK[@]}"; do
     brew install --cask "$pkg"
   fi
 done
+
+if [[ -s "$REPO_DIR/packages/mac-cask.txt" ]]; then
+  say "Installing brew casks from packages/mac-cask.txt..."
+  while IFS= read -r pkg; do
+    [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*# ]] && continue
+    if brew list --cask "$pkg" >/dev/null 2>&1; then
+      ok "$pkg"
+    else
+      note "Installing $pkg..."
+      brew install --cask "$pkg" || warn "failed: $pkg"
+    fi
+  done < "$REPO_DIR/packages/mac-cask.txt"
+fi
 
 say "Installing AeroSpace (tiling WM)..."
 if ! brew list --cask aerospace >/dev/null 2>&1; then

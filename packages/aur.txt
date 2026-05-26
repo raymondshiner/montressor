@@ -1,0 +1,8 @@
+claude-desktop-bin
+epson-inkjet-printer-escpr2
+google-chrome
+mullvad-vpn-bin
+spaceship-prompt
+spotify
+todoist-appimage
+visual-studio-code-bin

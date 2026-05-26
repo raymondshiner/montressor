@@ -28,9 +28,33 @@ fi
 # ----------------------------------------------------------------------
 # 1. Packages
 # ----------------------------------------------------------------------
-say "Installing CLI tools (pacman)..."
-PKGS=(git github-cli jq fzf ripgrep fd nodejs npm neovim zsh libnotify)
-sudo pacman -S --needed --noconfirm "${PKGS[@]}"
+say "Installing seed CLI tools (pacman)..."
+SEED_PKGS=(git github-cli jq fzf ripgrep fd nodejs npm neovim zsh libnotify base-devel)
+sudo pacman -S --needed --noconfirm "${SEED_PKGS[@]}"
+
+if [[ -s "$REPO_DIR/packages/pacman.txt" ]]; then
+  say "Installing native packages from packages/pacman.txt..."
+  # shellcheck disable=SC2046
+  sudo pacman -S --needed --noconfirm $(grep -v '^\s*\(#\|$\)' "$REPO_DIR/packages/pacman.txt") || \
+    warn "some pacman packages failed — check above"
+fi
+
+say "Ensuring yay (AUR helper) is installed..."
+if ! command -v yay >/dev/null 2>&1; then
+  tmp="$(mktemp -d)"
+  git clone https://aur.archlinux.org/yay-bin.git "$tmp/yay-bin"
+  ( cd "$tmp/yay-bin" && makepkg -si --noconfirm )
+  rm -rf "$tmp"
+else
+  ok "yay"
+fi
+
+if [[ -s "$REPO_DIR/packages/aur.txt" ]]; then
+  say "Installing AUR packages from packages/aur.txt..."
+  # shellcheck disable=SC2046
+  yay -S --needed --noconfirm $(grep -v '^\s*\(#\|$\)' "$REPO_DIR/packages/aur.txt") || \
+    warn "some AUR packages failed — check above"
+fi
 
 say "Installing Claude Code..."
 if ! command -v claude >/dev/null 2>&1; then
