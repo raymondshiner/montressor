@@ -25,9 +25,9 @@ window {{
     margin: 8px;
     padding: 16px;
     box-shadow:
-        0 0 28px rgba(0, 0, 0, 0.8),
-        0 0 20px rgba(220, 220, 220, 0.55),
-        0 0 40px rgba(220, 220, 220, 0.25);
+        0 28px 28px rgba(0, 0, 0, 0.8),
+        0 20px 20px rgba(220, 220, 220, 0.55),
+        0 40px 40px rgba(220, 220, 220, 0.25);
 }}
 .time-value {{
     color: #D5CED9;
