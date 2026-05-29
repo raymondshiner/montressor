@@ -196,11 +196,9 @@ sed "s|__HOME__|$HOME|g" "$REPO_DIR/claude/settings.template.json" > "$HOME/.cla
 ok "$HOME/.claude/settings.json"
 
 # ----------------------------------------------------------------------
-# 6b. Wire ~/src workspace MCPs (shadcn / playwright / chrome-devtools)
+# 6b. Ensure ~/src exists (Watson's home; per-agent MCPs live in watson.md)
 # ----------------------------------------------------------------------
-say "Linking Claude workspace MCPs for ~/src..."
 mkdir -p "$HOME/src"
-link "$REPO_DIR/claude/src.mcp.json" "$HOME/src/.mcp.json"
 
 # ----------------------------------------------------------------------
 # 7. Seed memory files
