@@ -130,6 +130,7 @@ ok "$HOME/.claude/settings.json"
 # 4b. Ensure ~/src exists (Watson's home; per-agent MCPs live in watson.md)
 # ----------------------------------------------------------------------
 mkdir -p "$HOME/src"
+link "$REPO_DIR/claude/SRC.md" "$HOME/src/CLAUDE.md"
 
 # ----------------------------------------------------------------------
 # 5. Seed memory files
