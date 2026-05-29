@@ -7,7 +7,7 @@
 PROJECTS_DIR="$HOME/.claude/projects/$(echo "$HOME" | sed 's|/|-|g')"
 
 BEFORE=$(mktemp)
-claude --agent jeeves --dangerously-skip-permissions
+claude --agent jeeves
 EXIT_CODE=$?
 
 # Find the most recently modified .jsonl that's newer than BEFORE.
@@ -28,7 +28,7 @@ if [[ -n "$SESSION_FILE" ]]; then
   (
     claude --resume "$UUID" -p \
       "Review our conversation. Save any important new context to the memory files in $PROJECTS_DIR/memory/ — feedback or preferences I expressed, project state changes, non-obvious facts about my setup. Skip anything already captured. Update MEMORY.md index for any new files. If nothing noteworthy happened, do nothing." \
-      --dangerously-skip-permissions 2>/dev/null
+      2>/dev/null
     rm -f "$SESSION_FILE"
     rm -rf "$PROJECTS_DIR/$UUID"
   ) &
