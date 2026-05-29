@@ -97,6 +97,7 @@ link() {
 link "$REPO_DIR/claude/CLAUDE.md"                  "$HOME/CLAUDE.md"
 link "$REPO_DIR/claude/agents/jeeves.md"           "$HOME/.claude/agents/jeeves.md"
 link "$REPO_DIR/claude/agents/friday.md"           "$HOME/.claude/agents/friday.md"
+link "$REPO_DIR/claude/agents/watson.md"           "$HOME/.claude/agents/watson.md"
 link "$REPO_DIR/claude/hooks/notify-stop-linux.sh" "$HOME/.claude/hooks/notify-stop.sh"
 link "$REPO_DIR/claude/bin/cc-statusline.sh"       "$HOME/.local/bin/cc-statusline.sh"
 link "$REPO_DIR/claude/bin/jeeves"                 "$HOME/.local/bin/jeeves"
@@ -126,24 +127,11 @@ sed "s|__HOME__|$HOME|g" "$REPO_DIR/claude/settings.template.json" > "$HOME/.cla
 ok "$HOME/.claude/settings.json"
 
 # ----------------------------------------------------------------------
-# 4b. Register user-scope MCP servers (idempotent)
+# 4b. Wire ~/src workspace MCPs (shadcn / playwright / chrome-devtools)
 # ----------------------------------------------------------------------
-say "Registering Claude MCP servers..."
-declare -A MCP_CMDS=(
-  [shadcn]="npx shadcn@latest mcp"
-  [playwright]="npx -y @playwright/mcp@latest --isolated"
-  [chrome-devtools]="npx -y chrome-devtools-mcp@latest --executablePath /usr/bin/google-chrome-stable --isolated"
-)
-for name in "${!MCP_CMDS[@]}"; do
-  if claude mcp list 2>/dev/null | grep -q "^${name}:"; then
-    note "MCP '${name}' already registered"
-  else
-    # shellcheck disable=SC2086
-    claude mcp add --scope user "${name}" -- ${MCP_CMDS[$name]} >/dev/null \
-      && ok "MCP '${name}'" \
-      || warn "Failed to register MCP '${name}' — re-run after \`claude --login\`"
-  fi
-done
+say "Linking Claude workspace MCPs for ~/src..."
+mkdir -p "$HOME/src"
+link "$REPO_DIR/claude/src.mcp.json" "$HOME/src/.mcp.json"
 
 # ----------------------------------------------------------------------
 # 5. Seed memory files
