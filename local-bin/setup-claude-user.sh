@@ -110,7 +110,7 @@ echo "==> Generating SSH key for claude user..."
 if [ ! -f "$CLAUDE_HOME/.ssh/id_ed25519" ]; then
     sudo -u claude mkdir -p "$CLAUDE_HOME/.ssh"
     sudo -u claude chmod 700 "$CLAUDE_HOME/.ssh"
-    sudo -u claude ssh-keygen -t ed25519 -f "$CLAUDE_HOME/.ssh/id_ed25519" -N "" -C "claude@sirlexicon-laptop"
+    sudo -u claude ssh-keygen -t ed25519 -f "$CLAUDE_HOME/.ssh/id_ed25519" -N "" -C "claude@$(hostname)"
     echo ""
     echo "    Public key (add to GitHub for dotfiles + Projects access):"
     echo "    ----------------------------------------------------------"
