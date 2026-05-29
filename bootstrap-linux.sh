@@ -126,6 +126,26 @@ sed "s|__HOME__|$HOME|g" "$REPO_DIR/claude/settings.template.json" > "$HOME/.cla
 ok "$HOME/.claude/settings.json"
 
 # ----------------------------------------------------------------------
+# 4b. Register user-scope MCP servers (idempotent)
+# ----------------------------------------------------------------------
+say "Registering Claude MCP servers..."
+declare -A MCP_CMDS=(
+  [shadcn]="npx shadcn@latest mcp"
+  [playwright]="npx -y @playwright/mcp@latest --isolated"
+  [chrome-devtools]="npx -y chrome-devtools-mcp@latest --executablePath /usr/bin/google-chrome-stable --isolated"
+)
+for name in "${!MCP_CMDS[@]}"; do
+  if claude mcp list 2>/dev/null | grep -q "^${name}:"; then
+    note "MCP '${name}' already registered"
+  else
+    # shellcheck disable=SC2086
+    claude mcp add --scope user "${name}" -- ${MCP_CMDS[$name]} >/dev/null \
+      && ok "MCP '${name}'" \
+      || warn "Failed to register MCP '${name}' — re-run after \`claude --login\`"
+  fi
+done
+
+# ----------------------------------------------------------------------
 # 5. Seed memory files
 # ----------------------------------------------------------------------
 say "Seeding Claude memory..."
