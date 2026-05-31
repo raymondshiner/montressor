@@ -79,14 +79,14 @@ esac
 # ---------- claude wrapper ----------
 claude() { ~/.local/bin/claude-wrapped "$@"; }
 
-# ---------- dots: auto-sync ~/dotfiles to GitHub ----------
+# ---------- dots: auto-sync ~/crew-quarters to GitHub ----------
 # Usage: `dots` or `dots "fix waybar padding"`. Jeeves calls this after any
-# edit inside ~/dotfiles/ — see ~/CLAUDE.md.
+# edit inside ~/crew-quarters/ — see ~/CLAUDE.md.
 dots() {
-  ( cd ~/dotfiles || return 1
+  ( cd ~/crew-quarters || return 1
     git add -A
     if git diff --cached --quiet; then
-      echo "dotfiles: clean, nothing to commit"
+      echo "crew-quarters: clean, nothing to commit"
       return 0
     fi
     git commit -m "${1:-update: $(date +%Y-%m-%d\ %H:%M)}"
@@ -94,10 +94,10 @@ dots() {
   )
 }
 
-# Refresh the package snapshots in ~/dotfiles/packages/ for the current OS,
+# Refresh the package snapshots in ~/crew-quarters/packages/ for the current OS,
 # then commit + push via `dots`. No-op if the lists haven't changed.
 dots-sync-pkgs() {
-  local pkgdir=~/dotfiles/packages
+  local pkgdir=~/crew-quarters/packages
   mkdir -p "$pkgdir"
   case "$(uname -s)" in
     Linux)

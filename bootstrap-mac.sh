@@ -3,8 +3,8 @@
 # Idempotent — safe to re-run. Run from inside the cloned dotfiles repo.
 #
 # Usage:
-#   git clone git@github.com:<you>/dotfiles.git ~/dotfiles
-#   cd ~/dotfiles && ./bootstrap-mac.sh
+#   git clone git@github.com:<you>/crew-quarters.git ~/crew-quarters
+#   cd ~/crew-quarters && ./bootstrap-mac.sh
 
 set -euo pipefail
 

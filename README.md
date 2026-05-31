@@ -1,6 +1,6 @@
-# dotfiles
+# crew-quarters
 
-Personal config + Claude Code (Jeeves + Friday) setup. Portable across **Arch Linux / Hyprland** and **macOS**. Andromeda theme throughout.
+Personal dotfiles + Claude Code agent crew (Jeeves, Watson, Friday). Portable across **Arch Linux / Hyprland** and **macOS**. Andromeda theme throughout.
 
 ---
 
@@ -8,16 +8,16 @@ Personal config + Claude Code (Jeeves + Friday) setup. Portable across **Arch Li
 
 ### macOS
 ```bash
-git clone git@github.com:raymondshiner/dotfiles.git ~/dotfiles
-cd ~/dotfiles
+git clone git@github.com:raymondshiner/crew-quarters.git ~/crew-quarters
+cd ~/crew-quarters
 ./bootstrap-mac.sh
 claude --login
 ```
 
 ### Arch / CachyOS
 ```bash
-git clone git@github.com:raymondshiner/dotfiles.git ~/dotfiles
-cd ~/dotfiles
+git clone git@github.com:raymondshiner/crew-quarters.git ~/crew-quarters
+cd ~/crew-quarters
 ./bootstrap-linux.sh
 claude --login
 ```
@@ -47,12 +47,12 @@ Both scripts are idempotent — safe to re-run.
 ## Layout
 
 ```
-dotfiles/
+crew-quarters/
 ├── bootstrap-mac.sh           # macOS installer
 ├── bootstrap-linux.sh         # Arch installer
 ├── claude/                    # Claude Code config (portable)
 │   ├── CLAUDE.md
-│   ├── agents/{jeeves,friday}.md
+│   ├── agents/{jeeves,watson,friday}.md
 │   ├── hooks/notify-stop-{linux,mac}.sh
 │   ├── bin/{jeeves,friday,cc-statusline.sh}
 │   ├── machine.{linux,mac}.md
@@ -67,18 +67,18 @@ dotfiles/
 
 ## How edits flow
 
-Live system files are **symlinks into this repo**. Edit inside `~/dotfiles/`, reload the relevant service, commit, push.
+Live system files are **symlinks into this repo**. Edit inside `~/crew-quarters/`, reload the relevant service, commit, push.
 
 ```bash
 # Edit
-nvim ~/dotfiles/hypr/hyprland.conf
+nvim ~/crew-quarters/hypr/hyprland.conf
 
 # Reload (per machine.md)
 hyprctl reload                     # Linux
 # or: aerospace reload-config      # macOS
 
 # Commit
-cd ~/dotfiles && git add -A && git commit -m "tweak: ..." && git push
+cd ~/crew-quarters && git add -A && git commit -m "tweak: ..." && git push
 ```
 
 ---
@@ -86,7 +86,7 @@ cd ~/dotfiles && git add -A && git commit -m "tweak: ..." && git push
 ## Adding a new machine
 
 1. SSH key → GitHub (`ssh-keygen -t ed25519 && gh ssh-key add ~/.ssh/id_ed25519.pub`)
-2. `git clone git@github.com:raymondshiner/dotfiles.git ~/dotfiles`
+2. `git clone git@github.com:raymondshiner/crew-quarters.git ~/crew-quarters`
 3. Run the appropriate bootstrap script
 4. `claude --login`
 
