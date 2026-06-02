@@ -3,8 +3,12 @@
     "position": "top",
     "height": 38,
     "spacing": 4,
-    "modules-left": ["hyprland/workspaces", "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next"],
-    "modules-center": ["clock"],
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": [
+        "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
+        "clock",
+        "custom/np-next-m", "custom/np-playpause-m", "custom/np-prev-m", "custom/now-playing-m", "custom/music-ws-m"
+    ],
     "modules-right": ["tray", "custom/drives", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware"],
 
     "hyprland/workspaces": {
@@ -47,6 +51,12 @@
         "on-click": "playerctl -p spotify next",
         "tooltip": true
     },
+
+    "custom/music-ws-m":   { "exec": "~/.config/waybar/music-ws.sh",   "return-type": "json", "tooltip": false },
+    "custom/now-playing-m":{ "exec": "~/.config/waybar/now-playing.sh","return-type": "json", "tooltip": false },
+    "custom/np-prev-m":    { "exec": "~/.config/waybar/np-prev.sh",    "return-type": "json", "tooltip": false },
+    "custom/np-playpause-m":{"exec": "~/.config/waybar/np-playpause.sh","return-type": "json", "tooltip": false },
+    "custom/np-next-m":    { "exec": "~/.config/waybar/np-next.sh",    "return-type": "json", "tooltip": false },
 
     "clock": {
         "format": "{:%a %b %d   %I:%M %p}",

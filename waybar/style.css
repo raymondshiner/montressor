@@ -87,25 +87,25 @@ window#waybar {
 #custom-vpn { color: #677691; padding: 0 12px; }
 #custom-vpn.connected { color: #00E8C6; }
 #custom-vpn.disconnected { color: #EE5D43; }
-#custom-now-playing,
-#custom-np-prev,
-#custom-np-playpause,
-#custom-np-next,
-#custom-music-ws {
+#custom-now-playing,   #custom-now-playing-m,
+#custom-np-prev,       #custom-np-prev-m,
+#custom-np-playpause,  #custom-np-playpause-m,
+#custom-np-next,       #custom-np-next-m,
+#custom-music-ws,      #custom-music-ws-m {
     background: #23262E;
     color: #D5CED9;
     padding: 0 8px;
     margin: 4px 0;
     font-size: 14px;
 }
-#custom-music-ws {
+#custom-music-ws, #custom-music-ws-m {
     padding: 0 10px 0 14px;
     border-radius: 12px 0 0 12px;
     color: #B084EB;
 }
 #custom-music-ws.visible { color: #00E8C6; }
 #custom-music-ws.closed  { color: #B084EB; }
-#custom-now-playing {
+#custom-now-playing, #custom-now-playing-m {
     padding: 0 12px;
     color: #00E8C6;
     font-weight: bold;
@@ -113,16 +113,28 @@ window#waybar {
 #custom-now-playing.paused { color: #677691; }
 #custom-np-playpause.paused { color: #FFE66D; }
 #custom-np-playpause.playing { color: #00E8C6; }
-#custom-np-next {
+#custom-np-next, #custom-np-next-m {
     padding: 0 14px 0 8px;
     border-radius: 0 12px 12px 0;
 }
 
-#custom-now-playing.hidden,
-#custom-np-prev.hidden,
-#custom-np-playpause.hidden,
-#custom-np-next.hidden,
-#custom-music-ws.hidden { background: transparent; padding: 0; margin: 0; }
+#custom-now-playing.hidden,   #custom-now-playing-m.hidden,
+#custom-np-prev.hidden,       #custom-np-prev-m.hidden,
+#custom-np-playpause.hidden,  #custom-np-playpause-m.hidden,
+#custom-np-next.hidden,       #custom-np-next-m.hidden,
+#custom-music-ws.hidden,      #custom-music-ws-m.hidden {
+    background: transparent; padding: 0; margin: 0;
+}
+
+/* Mirror spacers: same width, no visible ink */
+#custom-music-ws-m,
+#custom-now-playing-m,
+#custom-np-prev-m,
+#custom-np-playpause-m,
+#custom-np-next-m {
+    background: transparent;
+    color: transparent;
+}
 #custom-vpn.connecting { color: #FFE66D; }
 #custom-kdeconnect { color: #677691; padding: 0 12px; }
 #custom-kdeconnect.connected { color: #00E8C6; }
