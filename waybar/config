@@ -4,7 +4,7 @@
     "height": 38,
     "spacing": 4,
     "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["custom/music-ws", "clock"],
+    "modules-center": ["custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next", "custom/music-ws", "clock"],
     "modules-right": ["tray", "custom/drives", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware"],
 
     "hyprland/workspaces": {
@@ -17,6 +17,34 @@
         "exec": "~/.config/waybar/music-ws.sh",
         "return-type": "json",
         "on-click": "hyprctl dispatch togglespecialworkspace music",
+        "tooltip": true
+    },
+
+    "custom/now-playing": {
+        "exec": "~/.config/waybar/now-playing.sh",
+        "return-type": "json",
+        "on-click": "playerctl -p spotify play-pause",
+        "tooltip": true
+    },
+
+    "custom/np-prev": {
+        "exec": "~/.config/waybar/np-prev.sh",
+        "return-type": "json",
+        "on-click": "playerctl -p spotify previous",
+        "tooltip": true
+    },
+
+    "custom/np-playpause": {
+        "exec": "~/.config/waybar/np-playpause.sh",
+        "return-type": "json",
+        "on-click": "playerctl -p spotify play-pause",
+        "tooltip": true
+    },
+
+    "custom/np-next": {
+        "exec": "~/.config/waybar/np-next.sh",
+        "return-type": "json",
+        "on-click": "playerctl -p spotify next",
         "tooltip": true
     },
 
