@@ -3,8 +3,8 @@
     "position": "top",
     "height": 38,
     "spacing": 4,
-    "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next", "custom/music-ws", "clock"],
+    "modules-left": ["hyprland/workspaces", "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next"],
+    "modules-center": ["clock"],
     "modules-right": ["tray", "custom/drives", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware"],
 
     "hyprland/workspaces": {
@@ -23,7 +23,7 @@
     "custom/now-playing": {
         "exec": "~/.config/waybar/now-playing.sh",
         "return-type": "json",
-        "on-click": "playerctl -p spotify play-pause",
+        "on-click": "hyprctl dispatch togglespecialworkspace music",
         "tooltip": true
     },
 

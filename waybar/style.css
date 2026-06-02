@@ -98,22 +98,25 @@ window#waybar {
     margin: 4px 0;
     font-size: 14px;
 }
-#custom-now-playing {
-    padding: 0 12px 0 14px;
+#custom-music-ws {
+    padding: 0 10px 0 14px;
     border-radius: 12px 0 0 12px;
+    color: #B084EB;
+}
+#custom-music-ws.visible { color: #00E8C6; }
+#custom-music-ws.closed  { color: #B084EB; }
+#custom-now-playing {
+    padding: 0 12px;
     color: #00E8C6;
     font-weight: bold;
 }
 #custom-now-playing.paused { color: #677691; }
 #custom-np-playpause.paused { color: #FFE66D; }
 #custom-np-playpause.playing { color: #00E8C6; }
-#custom-music-ws {
-    padding: 0 14px 0 10px;
+#custom-np-next {
+    padding: 0 14px 0 8px;
     border-radius: 0 12px 12px 0;
-    color: #B084EB;
 }
-#custom-music-ws.visible { color: #00E8C6; }
-#custom-music-ws.closed  { color: #B084EB; }
 
 #custom-now-playing.hidden,
 #custom-np-prev.hidden,
