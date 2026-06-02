@@ -90,11 +90,13 @@ window#waybar {
 #custom-now-playing,
 #custom-np-prev,
 #custom-np-playpause,
-#custom-np-next {
+#custom-np-next,
+#custom-music-ws {
     background: #23262E;
     color: #D5CED9;
     padding: 0 8px;
     margin: 4px 0;
+    font-size: 14px;
 }
 #custom-now-playing {
     padding: 0 12px 0 14px;
@@ -103,23 +105,21 @@ window#waybar {
     font-weight: bold;
 }
 #custom-now-playing.paused { color: #677691; }
+#custom-np-playpause.paused { color: #FFE66D; }
+#custom-np-playpause.playing { color: #00E8C6; }
+#custom-music-ws {
+    padding: 0 14px 0 10px;
+    border-radius: 0 12px 12px 0;
+    color: #B084EB;
+}
+#custom-music-ws.visible { color: #00E8C6; }
+#custom-music-ws.closed  { color: #B084EB; }
+
 #custom-now-playing.hidden,
 #custom-np-prev.hidden,
 #custom-np-playpause.hidden,
-#custom-np-next.hidden { background: transparent; padding: 0; margin: 0; }
-#custom-np-next {
-    padding: 0 14px 0 8px;
-    border-radius: 0 12px 12px 0;
-}
-#custom-np-prev,
-#custom-np-playpause,
-#custom-np-next { color: #D5CED9; font-size: 14px; }
-#custom-np-playpause.paused { color: #FFE66D; }
-#custom-np-playpause.playing { color: #00E8C6; }
-
-#custom-music-ws { color: #677691; padding: 0 12px; font-size: 14px; }
-#custom-music-ws.visible { color: #00E8C6; }
-#custom-music-ws.hidden  { color: #B084EB; }
+#custom-np-next.hidden,
+#custom-music-ws.hidden { background: transparent; padding: 0; margin: 0; }
 #custom-vpn.connecting { color: #FFE66D; }
 #custom-kdeconnect { color: #677691; padding: 0 12px; }
 #custom-kdeconnect.connected { color: #00E8C6; }
