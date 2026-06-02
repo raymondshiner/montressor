@@ -114,6 +114,11 @@ link "$REPO_DIR/claude/machine.linux.md"           "$HOME/.config/claude/machine
 [[ -f "$REPO_DIR/kodi/playercorefactory.xml"   ]] && link "$REPO_DIR/kodi/playercorefactory.xml"   "$HOME/.kodi/userdata/playercorefactory.xml"
 [[ -f "$REPO_DIR/zsh/zshrc"                    ]] && link "$REPO_DIR/zsh/zshrc"                    "$HOME/.zshrc"
 
+[[ -f "$REPO_DIR/walker/config.toml"           ]] && link "$REPO_DIR/walker/config.toml"           "$HOME/.config/walker/config.toml"
+[[ -d "$REPO_DIR/walker/themes/andromeda"      ]] && link "$REPO_DIR/walker/themes/andromeda"      "$HOME/.config/walker/themes/andromeda"
+[[ -f "$REPO_DIR/systemd-user/elephant.service" ]] && link "$REPO_DIR/systemd-user/elephant.service" "$HOME/.config/systemd/user/elephant.service"
+[[ -f "$REPO_DIR/systemd-user/walker.service"  ]] && link "$REPO_DIR/systemd-user/walker.service"  "$HOME/.config/systemd/user/walker.service"
+
 chmod +x "$REPO_DIR/claude/hooks/notify-stop-linux.sh" \
          "$REPO_DIR/claude/bin/cc-statusline.sh" \
          "$REPO_DIR/claude/bin/jeeves" \

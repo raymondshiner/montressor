@@ -1,0 +1,134 @@
+/* Andromeda — matches waybar + GTK popups */
+
+@define-color bg          #1C1E26;
+@define-color bg_alt      #23262E;
+@define-color fg          #D5CED9;
+@define-color muted       #677691;
+@define-color cyan        #00E8C6;
+@define-color green       #A8FF60;
+@define-color yellow      #FFE66D;
+@define-color red         #EE5D43;
+@define-color purple      #B084EB;
+
+* {
+  all: unset;
+  font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace;
+  font-size: 14px;
+}
+
+window {
+  background: transparent;
+}
+
+scrollbar { opacity: 0; }
+
+.normal-icons { -gtk-icon-size: 18px; }
+.large-icons  { -gtk-icon-size: 32px; }
+
+.box-wrapper {
+  background: @bg;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid alpha(@cyan, 0.25);
+  box-shadow:
+    0 0 0 1px alpha(@cyan, 0.25),
+    0 0 24px alpha(@cyan, 0.18),
+    0 12px 32px rgba(0, 0, 0, 0.55);
+  min-width: 560px;
+}
+
+.search-container {
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.input {
+  caret-color: @cyan;
+  background: @bg_alt;
+  color: @fg;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid alpha(@muted, 0.25);
+  font-size: 15px;
+}
+
+.input placeholder { color: @muted; opacity: 1; }
+.input:focus, .input:active { border-color: alpha(@cyan, 0.55); }
+
+.list { color: @fg; }
+
+.item-box {
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 1px 0;
+}
+
+child:selected .item-box,
+row:selected .item-box {
+  background: alpha(@cyan, 0.14);
+}
+
+.item-text { color: @fg; }
+.item-subtext { font-size: 12px; color: @muted; }
+
+.item-quick-activation {
+  background: alpha(@purple, 0.18);
+  color: @purple;
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+
+.providerlist .item-subtext { font-size: unset; color: @muted; }
+
+.preview {
+  border: 1px solid alpha(@muted, 0.25);
+  border-radius: 10px;
+  color: @fg;
+  padding: 10px;
+}
+.preview .large-icons { -gtk-icon-size: 64px; }
+
+.calc .item-text  { font-size: 24px; color: @cyan; }
+.calc .item-subtext { color: @muted; }
+
+.symbols .item-image { font-size: 24px; }
+
+.todo.done .item-text-box { opacity: 0.35; }
+.todo.urgent { color: @red; font-weight: bold; }
+.todo.active { font-weight: bold; color: @cyan; }
+
+.bluetooth.disconnected { opacity: 0.5; }
+
+.keybinds {
+  padding-top: 10px;
+  margin-top: 8px;
+  border-top: 1px solid alpha(@muted, 0.2);
+  font-size: 11px;
+  color: @muted;
+}
+
+.keybind-bind { text-transform: lowercase; color: @muted; }
+.keybind-label {
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid alpha(@muted, 0.45);
+  color: @fg;
+}
+.keybind-button { opacity: 0.6; }
+.keybind-button:hover { opacity: 1; color: @cyan; }
+
+.error {
+  padding: 10px;
+  background: alpha(@red, 0.15);
+  color: @red;
+  border-radius: 8px;
+}
+
+:not(.calc).current { font-style: italic; color: @cyan; }
+
+.preview-content.archlinuxpkgs,
+.preview-content.dnfpackages {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+}
+
+.elephant-hint, .placeholder { color: @muted; }

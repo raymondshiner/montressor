@@ -1,0 +1,43 @@
+theme = "andromeda"
+close_when_open = true
+single_click_activation = true
+keybind_symbols = true
+
+[shell]
+layer = "overlay"
+anchor_top = true
+anchor_bottom = true
+anchor_left = true
+anchor_right = true
+
+[[providers.prefixes]]
+provider = "providerlist"
+prefix = ";"
+
+[[providers.prefixes]]
+provider = "runner"
+prefix = ">"
+
+[[providers.prefixes]]
+provider = "files"
+prefix = "/"
+
+[[providers.prefixes]]
+provider = "websearch"
+prefix = "@"
+
+[[providers.prefixes]]
+provider = "clipboard"
+prefix = ":"
+
+[[providers.prefixes]]
+provider = "calc"
+prefix = "="
+
+[[providers.prefixes]]
+provider = "symbols"
+prefix = "."
+
+[[providers.prefixes]]
+provider = "archlinuxpkgs"
+prefix = "!"
