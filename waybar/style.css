@@ -101,10 +101,10 @@ window#waybar {
 #custom-music-ws, #custom-music-ws-m {
     padding: 0 10px 0 14px;
     border-radius: 12px 0 0 12px;
-    color: #B084EB;
+    color: #D5CED9;
 }
-#custom-music-ws.visible { color: #00E8C6; }
-#custom-music-ws.closed  { color: #B084EB; }
+#custom-music-ws.visible,
+#custom-music-ws.closed  { color: #D5CED9; }
 #custom-now-playing, #custom-now-playing-m {
     padding: 0 12px;
     color: #00E8C6;
