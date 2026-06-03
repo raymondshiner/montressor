@@ -84,6 +84,29 @@ scale value {
 .mute-btn.muted:hover {
     background-color: rgba(103, 118, 145, 0.10);
 }
+.settings-btn {
+    background: transparent;
+    background-image: none;
+    color: #00E8C6;
+    border: 1px solid #00E8C6;
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin-top: 14px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12px;
+    box-shadow: none;
+    text-shadow: none;
+}
+.settings-btn:hover {
+    background-color: rgba(0, 232, 198, 0.10);
+}
+.settings-btn.muted {
+    color: #677691;
+    border-color: #2A2D3A;
+}
+.settings-btn.muted:hover {
+    background-color: rgba(103, 118, 145, 0.10);
+}
 """
 
 
@@ -166,6 +189,13 @@ class SoundPopup(Gtk.Window):
 
         root.pack_start(row, False, False, 0)
 
+        self._settings_btn = Gtk.Button(label='  Sound Settings')
+        self._settings_btn.get_style_context().add_class('settings-btn')
+        if self._muted:
+            self._settings_btn.get_style_context().add_class('muted')
+        self._settings_btn.connect('clicked', self._on_settings)
+        root.pack_start(self._settings_btn, False, False, 0)
+
         self.connect('key-press-event', self._on_key)
         self.show_all()
         self.present()
@@ -185,12 +215,17 @@ class SoundPopup(Gtk.Window):
         self._muted = get_mute()
         for ctx in (self._root.get_style_context(),
                     self._mute_btn.get_style_context(),
-                    self._slider.get_style_context()):
+                    self._slider.get_style_context(),
+                    self._settings_btn.get_style_context()):
             if self._muted:
                 ctx.add_class('muted')
             else:
                 ctx.remove_class('muted')
         self._mute_btn.set_label('󰝟' if self._muted else '󰕾')
+
+    def _on_settings(self, _btn):
+        subprocess.Popen(['pavucontrol'], start_new_session=True)
+        self.destroy()
 
 
 if __name__ == '__main__':
