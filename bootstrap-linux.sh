@@ -5,6 +5,8 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PRIVATE_REPO_DIR="${PRIVATE_REPO_DIR:-$HOME/crew-quarters-private}"
+PRIVATE_REPO_URL="git@github.com:raymondshiner/crew-quarters-private.git"
 CYAN=$'\033[38;2;0;232;198m'
 MUTED=$'\033[38;2;103;118;145m'
 GREEN=$'\033[38;2;168;255;96m'
@@ -64,6 +66,20 @@ else
 fi
 
 # ----------------------------------------------------------------------
+# 1b. Private companion repo (agents, prompts, hooks, memory)
+# ----------------------------------------------------------------------
+say "Ensuring private repo at $PRIVATE_REPO_DIR..."
+if [[ ! -d "$PRIVATE_REPO_DIR/.git" ]]; then
+  if ! git clone "$PRIVATE_REPO_URL" "$PRIVATE_REPO_DIR"; then
+    warn "Failed to clone $PRIVATE_REPO_URL"
+    warn "Add your SSH key to GitHub (gh ssh-key add ~/.ssh/id_ed25519.pub) and re-run."
+    exit 1
+  fi
+else
+  ok "$PRIVATE_REPO_DIR"
+fi
+
+# ----------------------------------------------------------------------
 # 2. Directories
 # ----------------------------------------------------------------------
 say "Creating config directories..."
@@ -94,15 +110,15 @@ link() {
   ok "$dst"
 }
 
-link "$REPO_DIR/claude/CLAUDE.md"                  "$HOME/CLAUDE.md"
-link "$REPO_DIR/claude/agents/jeeves.md"           "$HOME/.claude/agents/jeeves.md"
-link "$REPO_DIR/claude/agents/friday.md"           "$HOME/.claude/agents/friday.md"
-link "$REPO_DIR/claude/agents/watson.md"           "$HOME/.claude/agents/watson.md"
-link "$REPO_DIR/claude/hooks/notify-stop-linux.sh" "$HOME/.claude/hooks/notify-stop.sh"
-link "$REPO_DIR/claude/bin/cc-statusline.sh"       "$HOME/.local/bin/cc-statusline.sh"
-link "$REPO_DIR/claude/bin/jeeves"                 "$HOME/.local/bin/jeeves"
-link "$REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/friday"
-link "$REPO_DIR/claude/machine.linux.md"           "$HOME/.config/claude/machine.md"
+link "$PRIVATE_REPO_DIR/claude/CLAUDE.md"                  "$HOME/CLAUDE.md"
+link "$PRIVATE_REPO_DIR/claude/agents/jeeves.md"           "$HOME/.claude/agents/jeeves.md"
+link "$PRIVATE_REPO_DIR/claude/agents/friday.md"           "$HOME/.claude/agents/friday.md"
+link "$PRIVATE_REPO_DIR/claude/agents/watson.md"           "$HOME/.claude/agents/watson.md"
+link "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-linux.sh" "$HOME/.claude/hooks/notify-stop.sh"
+link "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh"       "$HOME/.local/bin/cc-statusline.sh"
+link "$PRIVATE_REPO_DIR/claude/bin/jeeves"                 "$HOME/.local/bin/jeeves"
+link "$PRIVATE_REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/friday"
+link "$PRIVATE_REPO_DIR/claude/machine.linux.md"           "$HOME/.config/claude/machine.md"
 
 [[ -d "$REPO_DIR/hypr"     ]] && for f in "$REPO_DIR"/hypr/*;    do link "$f" "$HOME/.config/hypr/$(basename "$f")";    done
 [[ -d "$REPO_DIR/waybar"   ]] && for f in "$REPO_DIR"/waybar/*;  do link "$f" "$HOME/.config/waybar/$(basename "$f")";  done
@@ -119,23 +135,23 @@ link "$REPO_DIR/claude/machine.linux.md"           "$HOME/.config/claude/machine
 [[ -f "$REPO_DIR/systemd-user/elephant.service" ]] && link "$REPO_DIR/systemd-user/elephant.service" "$HOME/.config/systemd/user/elephant.service"
 [[ -f "$REPO_DIR/systemd-user/walker.service"  ]] && link "$REPO_DIR/systemd-user/walker.service"  "$HOME/.config/systemd/user/walker.service"
 
-chmod +x "$REPO_DIR/claude/hooks/notify-stop-linux.sh" \
-         "$REPO_DIR/claude/bin/cc-statusline.sh" \
-         "$REPO_DIR/claude/bin/jeeves" \
-         "$REPO_DIR/claude/bin/friday"
+chmod +x "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-linux.sh" \
+         "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh" \
+         "$PRIVATE_REPO_DIR/claude/bin/jeeves" \
+         "$PRIVATE_REPO_DIR/claude/bin/friday"
 
 # ----------------------------------------------------------------------
 # 4. Render settings.json template
 # ----------------------------------------------------------------------
 say "Rendering Claude settings.json..."
-sed "s|__HOME__|$HOME|g" "$REPO_DIR/claude/settings.template.json" > "$HOME/.claude/settings.json"
+sed "s|__HOME__|$HOME|g" "$PRIVATE_REPO_DIR/claude/settings.template.json" > "$HOME/.claude/settings.json"
 ok "$HOME/.claude/settings.json"
 
 # ----------------------------------------------------------------------
 # 4b. Ensure ~/src exists (Watson's home; per-agent MCPs live in watson.md)
 # ----------------------------------------------------------------------
 mkdir -p "$HOME/src"
-link "$REPO_DIR/claude/SRC.md" "$HOME/src/CLAUDE.md"
+link "$PRIVATE_REPO_DIR/claude/SRC.md" "$HOME/src/CLAUDE.md"
 
 # ----------------------------------------------------------------------
 # 5. Seed memory files
@@ -143,7 +159,7 @@ link "$REPO_DIR/claude/SRC.md" "$HOME/src/CLAUDE.md"
 say "Seeding Claude memory..."
 MEM_DIR="$HOME/.claude/projects/$(echo "$HOME" | sed 's|/|-|g')/memory"
 mkdir -p "$MEM_DIR"
-for f in "$REPO_DIR"/claude/memory/*.md; do
+for f in "$PRIVATE_REPO_DIR"/claude/memory/*.md; do
   cp -n "$f" "$MEM_DIR/" 2>/dev/null || true
 done
 ok "$MEM_DIR"

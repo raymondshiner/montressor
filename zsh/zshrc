@@ -79,20 +79,40 @@ esac
 # ---------- claude wrapper ----------
 claude() { ~/.local/bin/claude-wrapped "$@"; }
 
-# ---------- dots: auto-sync ~/crew-quarters to GitHub ----------
-# Usage: `dots` or `dots "fix waybar padding"`. Jeeves calls this after any
-# edit inside ~/crew-quarters/ — see ~/CLAUDE.md.
-dots() {
-  ( cd ~/crew-quarters || return 1
+# ---------- dots: auto-sync crew-quarters repos to GitHub ----------
+# Two repos:
+#   ~/crew-quarters         (public-able dotfiles)
+#   ~/crew-quarters-private (agent prompts, CLAUDE.md, memory, hooks)
+#
+# `dots` figures out which repo to act on:
+#   - If $PWD is inside one of the two repos → use that one.
+#   - Otherwise → default to ~/crew-quarters.
+# Override explicitly: `dots-private "msg"` always hits the private repo.
+#
+# Usage: `dots` or `dots "fix waybar padding"`.
+_dots_commit() {
+  local repo="$1" msg="$2"
+  ( cd "$repo" || return 1
     git add -A
     if git diff --cached --quiet; then
-      echo "crew-quarters: clean, nothing to commit"
+      echo "$(basename "$repo"): clean, nothing to commit"
       return 0
     fi
-    git commit -m "${1:-update: $(date +%Y-%m-%d\ %H:%M)}"
+    git commit -m "${msg:-update: $(date +%Y-%m-%d\ %H:%M)}"
     git push
   )
 }
+
+dots() {
+  local toplevel repo=~/crew-quarters
+  toplevel="$(git rev-parse --show-toplevel 2>/dev/null)"
+  case "$toplevel" in
+    "$HOME/crew-quarters"|"$HOME/crew-quarters-private") repo="$toplevel" ;;
+  esac
+  _dots_commit "$repo" "$1"
+}
+
+dots-private() { _dots_commit ~/crew-quarters-private "$1"; }
 
 # Refresh the package snapshots in ~/crew-quarters/packages/ for the current OS,
 # then commit + push via `dots`. No-op if the lists haven't changed.
