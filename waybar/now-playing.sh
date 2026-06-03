@@ -16,7 +16,7 @@ emit() {
         echo '{"text": "", "tooltip": "", "class": "hidden"}'
         return
     fi
-    text="$title  $artist"
+    text="$title — $artist"
     if [ ${#text} -gt $MAX_LEN ]; then
         text="${text:0:$((MAX_LEN-1))}…"
     fi

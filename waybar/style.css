@@ -101,17 +101,20 @@ window#waybar {
 #custom-music-ws, #custom-music-ws-m {
     padding: 0 10px 0 14px;
     border-radius: 12px 0 0 12px;
-    color: #D5CED9;
+    color: #00E8C6;
 }
 #custom-music-ws.visible,
-#custom-music-ws.closed  { color: #D5CED9; }
+#custom-music-ws.closed  { color: #00E8C6; }
 #custom-now-playing, #custom-now-playing-m {
     padding: 0 12px;
     color: #00E8C6;
     font-weight: bold;
 }
-#custom-now-playing.paused { color: #677691; }
-#custom-np-playpause.paused { color: #FFE66D; }
+#custom-now-playing.paused { color: #00E8C6; }
+#custom-np-prev, #custom-np-prev-m,
+#custom-np-playpause, #custom-np-playpause-m,
+#custom-np-next, #custom-np-next-m { color: #00E8C6; }
+#custom-np-playpause.paused { color: #00E8C6; }
 #custom-np-playpause.playing { color: #00E8C6; }
 #custom-np-next, #custom-np-next-m {
     padding: 0 14px 0 8px;
