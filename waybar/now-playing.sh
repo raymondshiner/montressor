@@ -32,6 +32,6 @@ emit() {
 
 emit
 
-playerctl -p spotify --follow metadata --format '{{status}}' 2>/dev/null | while IFS= read -r _; do
+playerctl -p spotify --follow metadata --format '{{status}}|{{title}}|{{artist}}' 2>/dev/null | while IFS= read -r _; do
     emit
 done
