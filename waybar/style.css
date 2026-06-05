@@ -129,14 +129,14 @@ window#waybar {
     background: transparent; padding: 0; margin: 0;
 }
 
-#custom-music-ws.offline,     #custom-music-ws-m.offline,
-#custom-now-playing.offline,  #custom-now-playing-m.offline,
-#custom-np-prev.offline,      #custom-np-prev-m.offline,
-#custom-np-playpause.offline, #custom-np-playpause-m.offline,
-#custom-np-next.offline,      #custom-np-next-m.offline {
+#custom-music-ws.offline,
+#custom-now-playing.offline,
+#custom-np-prev.offline,
+#custom-np-playpause.offline,
+#custom-np-next.offline {
     color: #677691;
 }
-#custom-now-playing.offline, #custom-now-playing-m.offline {
+#custom-now-playing.offline {
     font-weight: normal;
 }
 
