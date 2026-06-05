@@ -20,14 +20,14 @@
     "custom/music-ws": {
         "exec": "~/.config/waybar/music-ws.sh",
         "return-type": "json",
-        "on-click": "hyprctl dispatch togglespecialworkspace music",
+        "on-click": "~/.local/bin/music-launch.sh",
         "tooltip": true
     },
 
     "custom/now-playing": {
         "exec": "~/.config/waybar/now-playing.sh",
         "return-type": "json",
-        "on-click": "hyprctl dispatch togglespecialworkspace music",
+        "on-click": "~/.local/bin/music-launch.sh",
         "tooltip": true
     },
 
