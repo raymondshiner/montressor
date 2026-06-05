@@ -6,7 +6,7 @@
 emit() {
     local class
     if [ -z "$(playerctl -p spotify status 2>/dev/null)" ]; then
-        echo '{"text": "", "tooltip": "", "class": "hidden"}'
+        echo '{"text": "♪", "tooltip": "Spotify not running", "class": "offline"}'
         return
     fi
     if hyprctl -j monitors 2>/dev/null | jq -e '.[] | select(.specialWorkspace.name == "special:music")' >/dev/null; then
@@ -23,7 +23,13 @@ SOCK="${XDG_RUNTIME_DIR}/hypr/${HYPRLAND_INSTANCE_SIGNATURE}/.socket2.sock"
 
 {
     socat -U - "UNIX-CONNECT:${SOCK}" 2>/dev/null | grep --line-buffered -E '^(activespecial|openwindow|closewindow|movewindow|movewindowv2|createworkspace|destroyworkspace|workspace)' &
-    playerctl -p spotify --follow status 2>/dev/null &
+    while true; do
+        if [ -n "$(playerctl -p spotify status 2>/dev/null)" ]; then
+            playerctl -p spotify --follow status 2>/dev/null
+        fi
+        sleep 2
+        echo tick
+    done &
     wait
 } | while IFS= read -r _; do
     emit

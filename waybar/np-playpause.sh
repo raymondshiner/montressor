@@ -7,12 +7,18 @@ emit() {
     case "$status" in
         Playing) echo '{"text": "󰏤", "tooltip": "Pause", "class": "playing"}' ;;
         Paused)  echo '{"text": "󰐊", "tooltip": "Play",  "class": "paused"}' ;;
-        *)       echo '{"text": "", "tooltip": "", "class": "hidden"}' ;;
+        *)       echo '{"text": "󰐊", "tooltip": "Launch Spotify", "class": "offline"}' ;;
     esac
 }
 
 emit
 
-playerctl -p spotify --follow status 2>/dev/null | while IFS= read -r _; do
+while true; do
+    if [ -n "$(playerctl -p spotify status 2>/dev/null)" ]; then
+        playerctl -p spotify --follow status 2>/dev/null | while IFS= read -r _; do
+            emit
+        done
+    fi
+    sleep 2
     emit
 done

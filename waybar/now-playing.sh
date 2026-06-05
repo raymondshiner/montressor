@@ -7,13 +7,13 @@ emit() {
     local status title artist text class
     status=$(playerctl -p spotify status 2>/dev/null)
     if [ -z "$status" ]; then
-        echo '{"text": "", "tooltip": "", "class": "hidden"}'
+        echo '{"text": "Not playing", "tooltip": "Spotify not running", "class": "offline"}'
         return
     fi
     title=$(playerctl -p spotify metadata title 2>/dev/null)
     artist=$(playerctl -p spotify metadata artist 2>/dev/null)
     if [ -z "$title" ]; then
-        echo '{"text": "", "tooltip": "", "class": "hidden"}'
+        echo '{"text": "Not playing", "tooltip": "No track loaded", "class": "offline"}'
         return
     fi
     text="$title — $artist"
@@ -32,6 +32,12 @@ emit() {
 
 emit
 
-playerctl -p spotify --follow metadata --format '{{status}}|{{title}}|{{artist}}' 2>/dev/null | while IFS= read -r _; do
+while true; do
+    if [ -n "$(playerctl -p spotify status 2>/dev/null)" ]; then
+        playerctl -p spotify --follow metadata --format '{{status}}|{{title}}|{{artist}}' 2>/dev/null | while IFS= read -r _; do
+            emit
+        done
+    fi
+    sleep 2
     emit
 done

@@ -41,7 +41,7 @@
     "custom/np-playpause": {
         "exec": "~/.config/waybar/np-playpause.sh",
         "return-type": "json",
-        "on-click": "playerctl -p spotify play-pause",
+        "on-click": "playerctl -p spotify status >/dev/null 2>&1 && playerctl -p spotify play-pause || setsid spotify >/dev/null 2>&1 < /dev/null &",
         "tooltip": true
     },
 
