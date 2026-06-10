@@ -32,8 +32,8 @@ sudo chmod 700 "$REAL_HOME"
 echo "==> Creating mount-point directories in $CLAUDE_HOME..."
 SHARED_DIRS=(
     "Projects"
-    "crew-quarters"
-    "crew-quarters-private"
+    "montressor"
+    "montressor-private"
     "Downloads"
     "Media"
     "Music"
@@ -57,8 +57,8 @@ if ! grep -q "$FSTAB_MARK" /etc/fstab; then
 
 $FSTAB_MARK
 $REAL_HOME/Projects        $CLAUDE_HOME/Projects        none bind 0 0
-$REAL_HOME/crew-quarters        $CLAUDE_HOME/crew-quarters        none bind 0 0
-$REAL_HOME/crew-quarters-private $CLAUDE_HOME/crew-quarters-private none bind 0 0
+$REAL_HOME/montressor        $CLAUDE_HOME/montressor        none bind 0 0
+$REAL_HOME/montressor-private $CLAUDE_HOME/montressor-private none bind 0 0
 $REAL_HOME/Downloads       $CLAUDE_HOME/Downloads       none bind 0 0
 $REAL_HOME/Media           $CLAUDE_HOME/Media           none bind 0 0
 $REAL_HOME/Music           $CLAUDE_HOME/Music           none bind 0 0
@@ -82,8 +82,8 @@ sudo mount -a
 echo "==> Setting group ownership and write perms on shared paths..."
 SHARED_PATHS=(
     "$REAL_HOME/Projects"
-    "$REAL_HOME/crew-quarters"
-    "$REAL_HOME/crew-quarters-private"
+    "$REAL_HOME/montressor"
+    "$REAL_HOME/montressor-private"
     "$REAL_HOME/Downloads"
     "$REAL_HOME/Media"
     "$REAL_HOME/Music"

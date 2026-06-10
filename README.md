@@ -1,4 +1,4 @@
-# crew-quarters
+# montressor
 
 Personal dotfiles. Portable across **Arch Linux / Hyprland** and **macOS**. Andromeda theme throughout.
 
@@ -8,15 +8,15 @@ Personal dotfiles. Portable across **Arch Linux / Hyprland** and **macOS**. Andr
 
 ### macOS
 ```bash
-git clone git@github.com:raymondshiner/crew-quarters.git ~/crew-quarters
-cd ~/crew-quarters
+git clone git@github.com:raymondshiner/montressor.git ~/montressor
+cd ~/montressor
 ./bootstrap-mac.sh
 ```
 
 ### Arch / CachyOS
 ```bash
-git clone git@github.com:raymondshiner/crew-quarters.git ~/crew-quarters
-cd ~/crew-quarters
+git clone git@github.com:raymondshiner/montressor.git ~/montressor
+cd ~/montressor
 ./bootstrap-linux.sh
 ```
 
@@ -37,7 +37,7 @@ Both scripts are idempotent — safe to re-run.
 ## Layout
 
 ```
-crew-quarters/
+montressor/
 ├── bootstrap-mac.sh           # macOS installer
 ├── bootstrap-linux.sh         # Arch installer
 ├── hypr/, waybar/, swaync/, dunst/, fish/, greetd/, walker/   # Linux configs
@@ -52,14 +52,14 @@ crew-quarters/
 
 ## How edits flow
 
-Live system files are **symlinks into this repo**. Edit inside `~/crew-quarters/`, reload the relevant service, commit, push.
+Live system files are **symlinks into this repo**. Edit inside `~/montressor/`, reload the relevant service, commit, push.
 
 ```bash
-nvim ~/crew-quarters/hypr/hyprland.conf
+nvim ~/montressor/hypr/hyprland.conf
 hyprctl reload                     # Linux
 # or: aerospace reload-config      # macOS
 
-cd ~/crew-quarters && git add -A && git commit -m "tweak: ..." && git push
+cd ~/montressor && git add -A && git commit -m "tweak: ..." && git push
 ```
 
 ---
@@ -67,5 +67,5 @@ cd ~/crew-quarters && git add -A && git commit -m "tweak: ..." && git push
 ## Adding a new machine
 
 1. SSH key → GitHub (`ssh-keygen -t ed25519 && gh ssh-key add ~/.ssh/id_ed25519.pub`)
-2. `git clone git@github.com:raymondshiner/crew-quarters.git ~/crew-quarters`
+2. `git clone git@github.com:raymondshiner/montressor.git ~/montressor`
 3. Run the appropriate bootstrap script

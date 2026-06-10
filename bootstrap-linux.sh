@@ -5,8 +5,8 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PRIVATE_REPO_DIR="${PRIVATE_REPO_DIR:-$HOME/crew-quarters-private}"
-PRIVATE_REPO_URL="git@github.com:raymondshiner/crew-quarters-private.git"
+PRIVATE_REPO_DIR="${PRIVATE_REPO_DIR:-$HOME/montressor-private}"
+PRIVATE_REPO_URL="git@github.com:raymondshiner/montressor-private.git"
 CYAN=$'\033[38;2;0;232;198m'
 MUTED=$'\033[38;2;103;118;145m'
 GREEN=$'\033[38;2;168;255;96m'

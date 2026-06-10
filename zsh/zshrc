@@ -79,14 +79,14 @@ esac
 # ---------- claude wrapper ----------
 claude() { ~/.local/bin/claude-wrapped "$@"; }
 
-# ---------- dots: auto-sync crew-quarters repos to GitHub ----------
+# ---------- dots: auto-sync montressor repos to GitHub ----------
 # Two repos:
-#   ~/crew-quarters         (public-able dotfiles)
-#   ~/crew-quarters-private (agent prompts, CLAUDE.md, memory, hooks)
+#   ~/montressor         (public-able dotfiles)
+#   ~/montressor-private (agent prompts, CLAUDE.md, memory, hooks)
 #
 # `dots` figures out which repo to act on:
 #   - If $PWD is inside one of the two repos → use that one.
-#   - Otherwise → default to ~/crew-quarters.
+#   - Otherwise → default to ~/montressor.
 # Override explicitly: `dots-private "msg"` always hits the private repo.
 #
 # Usage: `dots` or `dots "fix waybar padding"`.
@@ -104,20 +104,20 @@ _dots_commit() {
 }
 
 dots() {
-  local toplevel repo=~/crew-quarters
+  local toplevel repo=~/montressor
   toplevel="$(git rev-parse --show-toplevel 2>/dev/null)"
   case "$toplevel" in
-    "$HOME/crew-quarters"|"$HOME/crew-quarters-private") repo="$toplevel" ;;
+    "$HOME/montressor"|"$HOME/montressor-private") repo="$toplevel" ;;
   esac
   _dots_commit "$repo" "$1"
 }
 
-dots-private() { _dots_commit ~/crew-quarters-private "$1"; }
+dots-private() { _dots_commit ~/montressor-private "$1"; }
 
-# Refresh the package snapshots in ~/crew-quarters/packages/ for the current OS,
+# Refresh the package snapshots in ~/montressor/packages/ for the current OS,
 # then commit + push via `dots`. No-op if the lists haven't changed.
 dots-sync-pkgs() {
-  local pkgdir=~/crew-quarters/packages
+  local pkgdir=~/montressor/packages
   mkdir -p "$pkgdir"
   case "$(uname -s)" in
     Linux)
