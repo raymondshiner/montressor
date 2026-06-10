@@ -184,11 +184,14 @@ link() {
 link "$PRIVATE_REPO_DIR/claude/CLAUDE.md"                  "$HOME/CLAUDE.md"
 link "$PRIVATE_REPO_DIR/claude/agents/jeeves.md"           "$HOME/.claude/agents/jeeves.md"
 link "$PRIVATE_REPO_DIR/claude/agents/friday.md"           "$HOME/.claude/agents/friday.md"
-link "$PRIVATE_REPO_DIR/claude/agents/watson.md"           "$HOME/.claude/agents/watson.md"
+link "$PRIVATE_REPO_DIR/claude/agents/smith.md"            "$HOME/.claude/agents/smith.md"
 link "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-mac.sh"   "$HOME/.claude/hooks/notify-stop.sh"
 link "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh"       "$HOME/.local/bin/cc-statusline.sh"
 link "$PRIVATE_REPO_DIR/claude/bin/jeeves"                 "$HOME/.local/bin/jeeves"
 link "$PRIVATE_REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/friday"
+link "$PRIVATE_REPO_DIR/claude/bin/smith"                  "$HOME/.local/bin/smith"
+link "$PRIVATE_REPO_DIR/claude/bin/smith-init"             "$HOME/.local/bin/smith-init"
+link "$PRIVATE_REPO_DIR/claude/bin/smith-deploy"           "$HOME/.local/bin/smith-deploy"
 link "$PRIVATE_REPO_DIR/claude/machine.mac.md"             "$HOME/.config/claude/machine.md"
 link "$REPO_DIR/kitty/kitty.conf"                  "$HOME/.config/kitty/kitty.conf"
 link "$REPO_DIR/vscode/settings.json"              "$HOME/Library/Application Support/Code/User/settings.json"
@@ -202,7 +205,10 @@ link "$REPO_DIR/vscode/settings.json"              "$HOME/Library/Application Su
 chmod +x "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-mac.sh" \
          "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh" \
          "$PRIVATE_REPO_DIR/claude/bin/jeeves" \
-         "$PRIVATE_REPO_DIR/claude/bin/friday"
+         "$PRIVATE_REPO_DIR/claude/bin/friday" \
+         "$PRIVATE_REPO_DIR/claude/bin/smith" \
+         "$PRIVATE_REPO_DIR/claude/bin/smith-init" \
+         "$PRIVATE_REPO_DIR/claude/bin/smith-deploy"
 
 # ----------------------------------------------------------------------
 # 6. Render settings.json template
@@ -212,7 +218,7 @@ sed "s|__HOME__|$HOME|g" "$PRIVATE_REPO_DIR/claude/settings.template.json" > "$H
 ok "$HOME/.claude/settings.json"
 
 # ----------------------------------------------------------------------
-# 6b. Ensure ~/src exists (Watson's home; per-agent MCPs live in watson.md)
+# 6b. Ensure ~/src exists (Smith's home; per-agent MCPs live in smith.md)
 # ----------------------------------------------------------------------
 mkdir -p "$HOME/src"
 link "$PRIVATE_REPO_DIR/claude/SRC.md" "$HOME/src/CLAUDE.md"
