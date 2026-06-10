@@ -12,6 +12,9 @@ COMPLETION_WAITING_DOTS="true"
 [[ -z "${plugins[*]}" ]] && plugins=(git fzf extract)
 [[ -n "$ZSH" && -f "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
+# ---------- PATH ----------
+[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"
+
 # ---------- history ----------
 export HISTCONTROL=ignoreboth
 export HISTORY_IGNORE="(\&|[bf]g|c|clear|history|exit|q|pwd|* --help)"
