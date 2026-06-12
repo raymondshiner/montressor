@@ -191,7 +191,8 @@ link "$PRIVATE_REPO_DIR/claude/bin/jeeves"                 "$HOME/.local/bin/jee
 link "$PRIVATE_REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/friday"
 link "$PRIVATE_REPO_DIR/claude/bin/smith"                  "$HOME/.local/bin/smith"
 link "$PRIVATE_REPO_DIR/claude/bin/smith-init"             "$HOME/.local/bin/smith-init"
-link "$PRIVATE_REPO_DIR/claude/bin/smith-deploy"           "$HOME/.local/bin/smith-deploy"
+link "$PRIVATE_REPO_DIR/claude/bin/launch"                 "$HOME/.local/bin/launch"
+link "$PRIVATE_REPO_DIR/claude/bin/launch"                 "$HOME/.local/bin/smith-deploy"
 link "$PRIVATE_REPO_DIR/claude/machine.mac.md"             "$HOME/.config/claude/machine.md"
 link "$REPO_DIR/kitty/kitty.conf"                  "$HOME/.config/kitty/kitty.conf"
 link "$REPO_DIR/vscode/settings.json"              "$HOME/Library/Application Support/Code/User/settings.json"
@@ -208,7 +209,7 @@ chmod +x "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-mac.sh" \
          "$PRIVATE_REPO_DIR/claude/bin/friday" \
          "$PRIVATE_REPO_DIR/claude/bin/smith" \
          "$PRIVATE_REPO_DIR/claude/bin/smith-init" \
-         "$PRIVATE_REPO_DIR/claude/bin/smith-deploy"
+         "$PRIVATE_REPO_DIR/claude/bin/launch"
 
 # ----------------------------------------------------------------------
 # 6. Render settings.json template

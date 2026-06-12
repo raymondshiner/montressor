@@ -82,6 +82,29 @@ esac
 # ---------- claude wrapper ----------
 claude() { ~/.local/bin/claude-wrapped "$@"; }
 
+# ---------- last-project tracker (for resume-project hotkey) ----------
+# Records the most recent project from ~/src/ that you cd into.
+# Handles both real projects (~/src/<name>) and Smith worktrees
+# (~/src/.smiths/smith-N/<name>) — both resolve to <name>.
+_track_last_project() {
+  local p="$PWD" rest name=""
+  if [[ "$p" == "$HOME/src/.smiths/"* ]]; then
+    rest="${p#$HOME/src/.smiths/}"   # smith-N/<proj>/...
+    rest="${rest#*/}"                # <proj>/...
+    name="${rest%%/*}"
+  elif [[ "$p" == "$HOME/src/"* ]]; then
+    rest="${p#$HOME/src/}"
+    name="${rest%%/*}"
+  fi
+  [[ -z "$name" || "$name" == .* ]] && return
+  [[ -d "$HOME/src/$name" ]] || return
+  mkdir -p "$HOME/.cache/jeeves"
+  print -r -- "$name" > "$HOME/.cache/jeeves/last-project"
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd _track_last_project
+_track_last_project   # seed on shell start
+
 # ---------- dots: auto-sync montressor repos to GitHub ----------
 # Two repos:
 #   ~/montressor         (public-able dotfiles)

@@ -29,8 +29,11 @@ compile: link
 	 (echo "could not locate built .bin at $(BUILT_BIN)"; exit 1)
 	@echo "built -> $(OUT_BIN)"
 
-flash: compile
-	kontroll flash $(OUT_BIN)
+flash: link
+	cd $(QMK_HOME) && qmk flash -kb $(KB) -km $(KEYMAP_NAME)
+	@mkdir -p firmware
+	@cp $(BUILT_BIN) $(OUT_BIN) 2>/dev/null || true
+	@echo "flashed: $(OUT_BIN)"
 
 all: compile
 
