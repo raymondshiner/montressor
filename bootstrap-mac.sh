@@ -192,7 +192,6 @@ link "$PRIVATE_REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/fri
 link "$PRIVATE_REPO_DIR/claude/bin/smith"                  "$HOME/.local/bin/smith"
 link "$PRIVATE_REPO_DIR/claude/bin/smith-init"             "$HOME/.local/bin/smith-init"
 link "$PRIVATE_REPO_DIR/claude/bin/launch"                 "$HOME/.local/bin/launch"
-link "$PRIVATE_REPO_DIR/claude/bin/launch"                 "$HOME/.local/bin/smith-deploy"
 link "$PRIVATE_REPO_DIR/claude/machine.mac.md"             "$HOME/.config/claude/machine.md"
 link "$REPO_DIR/kitty/kitty.conf"                  "$HOME/.config/kitty/kitty.conf"
 link "$REPO_DIR/vscode/settings.json"              "$HOME/Library/Application Support/Code/User/settings.json"
