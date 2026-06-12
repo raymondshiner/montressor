@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bootstrap a fresh Arch/CachyOS machine to "Jeeves + Friday ready".
+# Bootstrap a fresh Arch/CachyOS machine to "Jarvis + Friday ready".
 # Mirror of bootstrap-mac.sh — same agent setup, native Linux tooling.
 
 set -euo pipefail
@@ -111,12 +111,12 @@ link() {
 }
 
 link "$PRIVATE_REPO_DIR/claude/CLAUDE.md"                  "$HOME/CLAUDE.md"
-link "$PRIVATE_REPO_DIR/claude/agents/jeeves.md"           "$HOME/.claude/agents/jeeves.md"
+link "$PRIVATE_REPO_DIR/claude/agents/jarvis.md"           "$HOME/.claude/agents/jarvis.md"
 link "$PRIVATE_REPO_DIR/claude/agents/friday.md"           "$HOME/.claude/agents/friday.md"
 link "$PRIVATE_REPO_DIR/claude/agents/smith.md"            "$HOME/.claude/agents/smith.md"
 link "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-linux.sh" "$HOME/.claude/hooks/notify-stop.sh"
 link "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh"       "$HOME/.local/bin/cc-statusline.sh"
-link "$PRIVATE_REPO_DIR/claude/bin/jeeves"                 "$HOME/.local/bin/jeeves"
+link "$PRIVATE_REPO_DIR/claude/bin/jarvis"                 "$HOME/.local/bin/jarvis"
 link "$PRIVATE_REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/friday"
 link "$PRIVATE_REPO_DIR/claude/bin/smith"                  "$HOME/.local/bin/smith"
 link "$PRIVATE_REPO_DIR/claude/bin/smith-init"             "$HOME/.local/bin/smith-init"
@@ -140,7 +140,7 @@ link "$PRIVATE_REPO_DIR/claude/machine.linux.md"           "$HOME/.config/claude
 
 chmod +x "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-linux.sh" \
          "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh" \
-         "$PRIVATE_REPO_DIR/claude/bin/jeeves" \
+         "$PRIVATE_REPO_DIR/claude/bin/jarvis" \
          "$PRIVATE_REPO_DIR/claude/bin/friday" \
          "$PRIVATE_REPO_DIR/claude/bin/smith" \
          "$PRIVATE_REPO_DIR/claude/bin/smith-init" \
@@ -179,5 +179,5 @@ note "1. Run:    claude --login"
 note "2. Run:    gh auth login"
 note "3. Reload Hyprland:    hyprctl reload"
 note "4. Restart waybar:     pkill waybar && waybar &"
-note "5. Type 'claude' — Jeeves is ready."
+note "5. Type 'claude' — Jarvis is ready."
 echo

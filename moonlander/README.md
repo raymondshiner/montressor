@@ -17,7 +17,7 @@ The keymap directory is symlinked into `~/qmk_firmware/keyboards/zsa/moonlander/
 
 ## One-time setup
 
-Already done by Jeeves on this machine:
+Already done by Jarvis on this machine:
 
 - `pacman -S qmk` — CLI + toolchain
 - `yay -S zsa-kontroll-bin` — `kontroll` CLI for flashing
@@ -45,9 +45,9 @@ make flash      # build + flash
 make clean      # nuke build artefacts
 ```
 
-When Jeeves edits `keymap/keymap.c` (keys) or `keymap/rgb.c` (per-layer colors), the flow is:
+When Jarvis edits `keymap/keymap.c` (keys) or `keymap/rgb.c` (per-layer colors), the flow is:
 
-1. Jeeves edits the file, runs `make compile`, confirms it builds.
+1. Jarvis edits the file, runs `make compile`, confirms it builds.
 2. You hit the reset combo on the board and `make flash`.
 3. `dots "<short msg>"` autosyncs.
 

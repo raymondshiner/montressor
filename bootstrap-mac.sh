@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bootstrap a fresh macOS machine to "Jeeves + Friday ready".
+# Bootstrap a fresh macOS machine to "Jarvis + Friday ready".
 # Idempotent — safe to re-run. Run from inside the cloned dotfiles repo.
 #
 # Usage:
@@ -182,12 +182,12 @@ link() {
 }
 
 link "$PRIVATE_REPO_DIR/claude/CLAUDE.md"                  "$HOME/CLAUDE.md"
-link "$PRIVATE_REPO_DIR/claude/agents/jeeves.md"           "$HOME/.claude/agents/jeeves.md"
+link "$PRIVATE_REPO_DIR/claude/agents/jarvis.md"           "$HOME/.claude/agents/jarvis.md"
 link "$PRIVATE_REPO_DIR/claude/agents/friday.md"           "$HOME/.claude/agents/friday.md"
 link "$PRIVATE_REPO_DIR/claude/agents/smith.md"            "$HOME/.claude/agents/smith.md"
 link "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-mac.sh"   "$HOME/.claude/hooks/notify-stop.sh"
 link "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh"       "$HOME/.local/bin/cc-statusline.sh"
-link "$PRIVATE_REPO_DIR/claude/bin/jeeves"                 "$HOME/.local/bin/jeeves"
+link "$PRIVATE_REPO_DIR/claude/bin/jarvis"                 "$HOME/.local/bin/jarvis"
 link "$PRIVATE_REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/friday"
 link "$PRIVATE_REPO_DIR/claude/bin/smith"                  "$HOME/.local/bin/smith"
 link "$PRIVATE_REPO_DIR/claude/bin/smith-init"             "$HOME/.local/bin/smith-init"
@@ -204,7 +204,7 @@ link "$REPO_DIR/vscode/settings.json"              "$HOME/Library/Application Su
 
 chmod +x "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-mac.sh" \
          "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh" \
-         "$PRIVATE_REPO_DIR/claude/bin/jeeves" \
+         "$PRIVATE_REPO_DIR/claude/bin/jarvis" \
          "$PRIVATE_REPO_DIR/claude/bin/friday" \
          "$PRIVATE_REPO_DIR/claude/bin/smith" \
          "$PRIVATE_REPO_DIR/claude/bin/smith-init" \
@@ -255,5 +255,5 @@ note "2. Run:    gh auth login         (if not already)"
 note "3. Start AeroSpace: open /Applications/AeroSpace.app  (grant Accessibility access)"
 note "4. Start SketchyBar:  brew services start sketchybar"
 note "5. Launch Karabiner-Elements once to grant Input Monitoring permission"
-note "6. Type 'claude' — Jeeves is ready."
+note "6. Type 'claude' — Jarvis is ready."
 echo

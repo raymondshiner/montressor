@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SketchyBar — Andromeda palette. Jeeves will expand modules over time.
+# SketchyBar — Andromeda palette. Jarvis will expand modules over time.
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 

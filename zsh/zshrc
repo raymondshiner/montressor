@@ -98,8 +98,8 @@ _track_last_project() {
   fi
   [[ -z "$name" || "$name" == .* ]] && return
   [[ -d "$HOME/src/$name" ]] || return
-  mkdir -p "$HOME/.cache/jeeves"
-  print -r -- "$name" > "$HOME/.cache/jeeves/last-project"
+  mkdir -p "$HOME/.cache/jarvis"
+  print -r -- "$name" > "$HOME/.cache/jarvis/last-project"
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd _track_last_project

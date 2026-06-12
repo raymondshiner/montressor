@@ -25,7 +25,7 @@
  *   _DEFAULT:
  *     Close App    RGUI(KC_C)        sends Cmd+C → Hyprland: smart-close.sh on Super+C
  *     Smith        LGUI(KC_W)        Super+W → kitty Smith (Oryx label says "Watson" — stale, ignore)
- *     Jeeves       LGUI(KC_J)        Super+J → kitty Jeeves
+ *     Jarvis       LGUI(KC_J)        Super+J → kitty Jarvis
  *     App Launch   LGUI(KC_R)        Super+R → walker launcher ($menu)
  *     Friday       LGUI(KC_F)        Super+F → kitty Friday
  *     Quit         LCTL(KC_C)        Ctrl+C  → universal SIGINT (terminal kill)
