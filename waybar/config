@@ -3,7 +3,7 @@
     "position": "top",
     "height": 38,
     "spacing": 4,
-    "modules-left": ["hyprland/workspaces"],
+    "modules-left": ["hyprland/workspaces", "custom/workspace-menu"],
     "modules-center": [
         "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
         "clock",
@@ -14,8 +14,13 @@
     "hyprland/workspaces": {
         "format": "{name}",
         "on-click": "activate",
-        "on-click-right": "~/.config/waybar/workspace-popup.py",
         "sort-by-number": true
+    },
+
+    "custom/workspace-menu": {
+        "format": "󱂬",
+        "tooltip": false,
+        "on-click": "~/.config/waybar/workspace-popup.py"
     },
 
     "custom/music-ws": {

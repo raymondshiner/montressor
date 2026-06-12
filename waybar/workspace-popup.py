@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import popup_lib
 
 PID_FILE = '/tmp/workspace-popup.pid'
-POPUP_WIDTH = 280 + 16
+POPUP_WIDTH = 300 + 16
 
 CSS = """
 window { background: transparent; }
@@ -33,12 +33,10 @@ window { background: transparent; }
     margin-bottom: 6px;
 }
 .ws-header {
-    color: #D5CED9;
     font-family: "JetBrainsMono Nerd Font";
     font-size: 13px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
-.ws-header .accent { color: #B084EB; }
 entry {
     background-color: #23262E;
     color: #D5CED9;
@@ -58,7 +56,7 @@ entry:focus {
     color: #B084EB;
     border: 1px solid #B084EB;
     border-radius: 4px;
-    padding: 4px 10px;
+    padding: 4px 12px;
     margin-left: 8px;
     font-family: "JetBrainsMono Nerd Font";
     font-size: 12px;
@@ -67,6 +65,43 @@ entry:focus {
 }
 .action-btn:hover {
     background-color: rgba(176, 132, 235, 0.12);
+}
+combobox {
+    background-color: #23262E;
+    color: #D5CED9;
+    border: 1px solid #2A2D3A;
+    border-radius: 4px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12px;
+}
+combobox button {
+    background: transparent;
+    background-image: none;
+    color: #D5CED9;
+    border: none;
+    padding: 4px 8px;
+    box-shadow: none;
+    text-shadow: none;
+}
+combobox button:hover {
+    background-color: rgba(176, 132, 235, 0.10);
+}
+combobox arrow {
+    color: #B084EB;
+    min-width: 12px;
+    min-height: 12px;
+}
+combobox window.popup {
+    background-color: #1C1E26;
+    border: 1px solid #2A2D3A;
+}
+combobox menuitem {
+    color: #D5CED9;
+    padding: 4px 10px;
+}
+combobox menuitem:hover {
+    background-color: rgba(176, 132, 235, 0.18);
+    color: #D5CED9;
 }
 .monitor-btn {
     background: transparent;
@@ -84,14 +119,15 @@ entry:focus {
 .monitor-btn:hover {
     background-color: rgba(0, 232, 198, 0.12);
 }
-.monitor-btn.current {
-    color: #677691;
-    border-color: #2A2D3A;
+.monitor-btn.active {
+    background-color: rgba(0, 232, 198, 0.18);
+    color: #00E8C6;
+    border-color: #00E8C6;
 }
 .divider {
     background-color: #2A2D3A;
     min-height: 1px;
-    margin-top: 12px;
+    margin-top: 14px;
     margin-bottom: 12px;
 }
 """
@@ -119,25 +155,27 @@ class WorkspacePopup(Gtk.Window):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
 
-        # Position under the cursor (left-anchored override since workspaces
-        # are on the left of the bar).
-        blocker = self._wrap_left_anchored(POPUP_WIDTH)
+        blocker = popup_lib.wrap_with_click_outside(self, POPUP_WIDTH)
 
         ws = hyprctl_json('activeworkspace')
         self._ws_id = ws['id']
         self._ws_name = ws['name']
         self._ws_monitor = ws['monitor']
         monitors = hyprctl_json('monitors')
+        all_workspaces = sorted(
+            hyprctl_json('workspaces'),
+            key=lambda w: w['id'],
+        )
 
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         root.get_style_context().add_class('popup-inner')
-        root.set_size_request(280, -1)
+        root.set_size_request(300, -1)
         blocker.add(root)
 
         hdr = Gtk.Label()
         hdr.set_markup(
             f'<span foreground="#D5CED9">Workspace </span>'
-            f'<span foreground="#B084EB">{self._ws_name}</span>'
+            f'<span foreground="#B084EB"><b>{self._ws_name}</b></span>'
             f'<span foreground="#677691">  on  </span>'
             f'<span foreground="#00E8C6">{self._ws_monitor}</span>'
         )
@@ -145,6 +183,7 @@ class WorkspacePopup(Gtk.Window):
         hdr.set_xalign(0)
         root.pack_start(hdr, False, False, 0)
 
+        # --- Renumber ---
         ren_lbl = Gtk.Label(label='Renumber')
         ren_lbl.get_style_context().add_class('section-label')
         ren_lbl.set_xalign(0)
@@ -163,12 +202,40 @@ class WorkspacePopup(Gtk.Window):
         ren_row.pack_start(ren_btn, False, False, 0)
         root.pack_start(ren_row, False, False, 0)
 
-        # Divider
-        div = Gtk.Box()
-        div.get_style_context().add_class('divider')
-        root.pack_start(div, False, False, 0)
+        # divider
+        div1 = Gtk.Box()
+        div1.get_style_context().add_class('divider')
+        root.pack_start(div1, False, False, 0)
 
-        mon_lbl = Gtk.Label(label='Move to monitor')
+        # --- Move active window to workspace ---
+        mv_lbl = Gtk.Label(label='Move active window to workspace')
+        mv_lbl.get_style_context().add_class('section-label')
+        mv_lbl.set_xalign(0)
+        root.pack_start(mv_lbl, False, False, 0)
+
+        self._combo = Gtk.ComboBoxText()
+        existing_ids = {w['id'] for w in all_workspaces if w['id'] > 0}
+        ids = sorted(existing_ids | set(range(1, 11)))
+        for wid in ids:
+            label = str(wid)
+            if wid == self._ws_id:
+                label += '  (current)'
+            self._combo.append(str(wid), label)
+        # Default selection: first non-current
+        for wid in ids:
+            if wid != self._ws_id:
+                self._combo.set_active_id(str(wid))
+                break
+        self._combo.connect('changed', self._on_move_window)
+        root.pack_start(self._combo, False, False, 0)
+
+        # divider
+        div2 = Gtk.Box()
+        div2.get_style_context().add_class('divider')
+        root.pack_start(div2, False, False, 0)
+
+        # --- Move workspace to monitor ---
+        mon_lbl = Gtk.Label(label='Move workspace to monitor')
         mon_lbl.get_style_context().add_class('section-label')
         mon_lbl.set_xalign(0)
         root.pack_start(mon_lbl, False, False, 0)
@@ -178,85 +245,18 @@ class WorkspacePopup(Gtk.Window):
             desc = m.get('description', '') or ''
             label = f'  {name}'
             if desc:
-                label += f'   {desc[:32]}'
+                label += f'   {desc[:30]}'
             btn = Gtk.Button(label=label)
             btn.get_style_context().add_class('monitor-btn')
             btn.set_alignment(0, 0.5)
             if name == self._ws_monitor:
-                btn.get_style_context().add_class('current')
-                btn.set_sensitive(False)
-            else:
-                btn.connect('clicked', self._on_move_monitor, name)
+                btn.get_style_context().add_class('active')
+            btn.connect('clicked', self._on_move_monitor, name)
             root.pack_start(btn, False, False, 0)
 
         self.connect('key-press-event', self._on_key)
         self.show_all()
         self.present()
-
-    def _wrap_left_anchored(self, popup_width):
-        """Variant of popup_lib.wrap_with_click_outside that anchors to the
-        cursor but biases toward the LEFT edge of the screen, since the
-        workspaces module lives on the left of the bar."""
-        import cairo
-        from gi.repository import GtkLayerShell
-        cursor_x = popup_lib.get_cursor_x()
-        monitor = popup_lib._monitor_for_cursor(cursor_x)
-        if monitor:
-            geo = monitor.get_geometry()
-            screen_x0 = geo.x
-            screen_w = geo.width
-        else:
-            screen_x0 = 0
-            screen_w = 1920
-
-        catcher = Gtk.EventBox()
-        catcher.connect('button-press-event',
-                        lambda *_: self.destroy() or True)
-        self.add(catcher)
-
-        positioner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        positioner.set_valign(Gtk.Align.START)
-        positioner.set_margin_top(popup_lib.WAYBAR_HEIGHT - 12)
-
-        if cursor_x is None:
-            positioner.set_halign(Gtk.Align.START)
-            positioner.set_margin_start(2)
-        else:
-            local_x = cursor_x - screen_x0
-            margin_left = max(2, min(screen_w - popup_width - 2,
-                                     local_x - popup_width // 2))
-            positioner.set_halign(Gtk.Align.START)
-            positioner.set_margin_start(margin_left)
-        catcher.add(positioner)
-
-        blocker = Gtk.EventBox()
-        blocker.connect('button-press-event', lambda *_: True)
-        positioner.pack_start(blocker, False, False, 0)
-
-        def _apply_input_region(*_):
-            gdkwin = self.get_window()
-            if not gdkwin:
-                return False
-            mon = (Gdk.Display.get_default().get_monitor_at_window(gdkwin)
-                   or monitor)
-            if not mon:
-                return False
-            g = mon.get_geometry()
-            region = cairo.Region(
-                cairo.RectangleInt(0, popup_lib.WAYBAR_HEIGHT, g.width,
-                                   max(1, g.height - popup_lib.WAYBAR_HEIGHT))
-            )
-            alloc = blocker.get_allocation()
-            if alloc.width > 0 and alloc.height > 0:
-                region.union(cairo.RectangleInt(alloc.x, alloc.y,
-                                                alloc.width, alloc.height))
-            gdkwin.input_shape_combine_region(region, 0, 0)
-            return False
-
-        self.connect('map-event', _apply_input_region)
-        self.connect('size-allocate', _apply_input_region)
-
-        return blocker
 
     def _on_key(self, _w, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -276,7 +276,23 @@ class WorkspacePopup(Gtk.Window):
         hypr_dispatch('renameworkspace', str(self._ws_id), str(new_id))
         self.destroy()
 
+    def _on_move_window(self, combo):
+        wid = combo.get_active_id()
+        if not wid:
+            return
+        try:
+            target = int(wid)
+        except ValueError:
+            return
+        if target == self._ws_id:
+            return
+        hypr_dispatch('movetoworkspace', str(target))
+        self.destroy()
+
     def _on_move_monitor(self, _btn, monitor_name):
+        if monitor_name == self._ws_monitor:
+            self.destroy()
+            return
         hypr_dispatch('moveworkspacetomonitor',
                       str(self._ws_id), monitor_name)
         self.destroy()

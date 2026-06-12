@@ -40,6 +40,16 @@ window#waybar {
     color: #D5CED9;
 }
 
+#custom-workspace-menu {
+    color: #B084EB;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+#custom-workspace-menu:hover {
+    color: #D5CED9;
+}
+
 #clock {
     color: #D5CED9;
     font-weight: bold;
