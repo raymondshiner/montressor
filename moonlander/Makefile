@@ -1,11 +1,14 @@
 KEYMAP_NAME := sirlexicon
 # Moonlander has two hardware revisions: reva (original) and revb (newer).
-# If you're not sure which board you have, revb covers most units sold after 2021.
-KB          := zsa/moonlander/revb
+# Confirmed reva from the Oryx source export filename on 2026-06-12.
+KB          := zsa/moonlander/reva
 QMK_HOME    := $(HOME)/qmk_firmware
 # Keymaps are shared across revisions — live at the parent moonlander/keymaps/ dir.
 KEYMAP_DIR  := $(QMK_HOME)/keyboards/zsa/moonlander/keymaps/$(KEYMAP_NAME)
 SRC_KEYMAP  := $(CURDIR)/keymap
+# QMK names built bins with underscores: zsa_moonlander_<rev>_<keymap>.bin
+KB_FILESAFE := $(subst /,_,$(KB))
+BUILT_BIN   := $(QMK_HOME)/$(KB_FILESAFE)_$(KEYMAP_NAME).bin
 OUT_BIN     := $(CURDIR)/firmware/$(KEYMAP_NAME).bin
 
 .PHONY: link compile flash all clean status
@@ -21,11 +24,9 @@ link:
 compile: link
 	cd $(QMK_HOME) && qmk compile -kb $(KB) -km $(KEYMAP_NAME)
 	@mkdir -p firmware
-	@cp $(QMK_HOME)/.build/zsa_moonlander_revb_$(KEYMAP_NAME).bin $(OUT_BIN) 2>/dev/null || \
-	 cp $(QMK_HOME)/.build/zsa_moonlander_$(KEYMAP_NAME).bin $(OUT_BIN) 2>/dev/null || \
-	 cp $(QMK_HOME)/zsa_moonlander_revb_$(KEYMAP_NAME).bin $(OUT_BIN) 2>/dev/null || \
-	 cp $(QMK_HOME)/zsa_moonlander_$(KEYMAP_NAME).bin $(OUT_BIN) 2>/dev/null || \
-	 (echo "could not locate built .bin"; exit 1)
+	@cp $(BUILT_BIN) $(OUT_BIN) 2>/dev/null || \
+	 cp $(QMK_HOME)/.build/$(KB_FILESAFE)_$(KEYMAP_NAME).bin $(OUT_BIN) 2>/dev/null || \
+	 (echo "could not locate built .bin at $(BUILT_BIN)"; exit 1)
 	@echo "built -> $(OUT_BIN)"
 
 flash: compile
