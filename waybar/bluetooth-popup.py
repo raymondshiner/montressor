@@ -15,13 +15,16 @@ POPUP_WIDTH = 340 + 16
 
 
 def _set_pointer_cursor(widget):
-    def on_realize(w):
-        win = w.get_window()
-        if win:
-            win.set_cursor(Gdk.Cursor.new_from_name(w.get_display(), 'pointer'))
-    widget.connect('realize', on_realize)
-    if widget.get_realized():
-        on_realize(widget)
+    def on_enter(w, _e):
+        top = w.get_toplevel().get_window()
+        if top:
+            top.set_cursor(Gdk.Cursor.new_from_name(w.get_display(), 'pointer'))
+    def on_leave(w, _e):
+        top = w.get_toplevel().get_window()
+        if top:
+            top.set_cursor(None)
+    widget.connect('enter-notify-event', on_enter)
+    widget.connect('leave-notify-event', on_leave)
 
 ICON_MAP = {
     'input-keyboard':   '󰌌',
