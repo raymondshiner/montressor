@@ -13,6 +13,16 @@ import popup_lib
 PID_FILE = '/tmp/bluetooth-popup.pid'
 POPUP_WIDTH = 340 + 16
 
+
+def _set_pointer_cursor(widget):
+    def on_realize(w):
+        win = w.get_window()
+        if win:
+            win.set_cursor(Gdk.Cursor.new_from_name(w.get_display(), 'pointer'))
+    widget.connect('realize', on_realize)
+    if widget.get_realized():
+        on_realize(widget)
+
 ICON_MAP = {
     'input-keyboard':   '󰌌',
     'audio-headphones': '󰋋',
@@ -244,6 +254,7 @@ class BluetoothPopup(Gtk.Window):
         if not powered:
             pwr.get_style_context().add_class('off')
         pwr.connect('clicked', self._on_power, powered)
+        _set_pointer_cursor(pwr)
         hdr_row.pack_start(pwr, False, False, 0)
         self._root.pack_start(hdr_row, False, False, 0)
 
@@ -261,6 +272,7 @@ class BluetoothPopup(Gtk.Window):
         ref.get_style_context().add_class('refresh-btn')
         ref.set_halign(Gtk.Align.END)
         ref.connect('clicked', lambda _b: self._refresh())
+        _set_pointer_cursor(ref)
         self._root.pack_start(ref, False, False, 0)
 
         self._root.show_all()
@@ -304,6 +316,7 @@ class BluetoothPopup(Gtk.Window):
             act = Gtk.Button(label='󰂯  Connect')
             act.get_style_context().add_class('act-btn')
         act.connect('clicked', self._on_act, d)
+        _set_pointer_cursor(act)
         row.pack_start(act, False, False, 0)
 
         return row
