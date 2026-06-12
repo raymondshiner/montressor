@@ -32,6 +32,7 @@ ALL_POPUP_PIDS = (
     '/tmp/bluetooth-popup.pid',
     '/tmp/sound-popup.pid',
     '/tmp/calendar-popup.pid',
+    '/tmp/workspace-popup.pid',
 )
 
 
