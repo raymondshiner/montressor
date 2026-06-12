@@ -96,12 +96,15 @@ def setup_window(window):
     GtkLayerShell.set_keyboard_mode(window, GtkLayerShell.KeyboardMode.ON_DEMAND)
 
 
-def wrap_with_click_outside(window, popup_width):
+def wrap_with_click_outside(window, popup_width, center=False):
     """Add catcher/positioner/blocker chain to `window`. Returns the blocker
     EventBox — caller adds their popup-inner Box to it.
 
     popup_width is the visible width including the .popup-inner CSS margins
     (typically size_request_width + 16).
+
+    If center=True, the popup is centered on the active monitor (both axes)
+    instead of being anchored under the cursor below the bar.
     """
     cursor_x = get_cursor_x()
     monitor = _monitor_for_cursor(cursor_x)
@@ -118,22 +121,26 @@ def wrap_with_click_outside(window, popup_width):
     window.add(catcher)
 
     positioner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-    positioner.set_valign(Gtk.Align.START)
-    # WAYBAR_HEIGHT - 12: positioner sits 12px below bar top, then the
-    # .popup-inner CSS margin (8px) lifts the visible body to y=34, giving
-    # a 4px overlap with the bar so the popup feels attached.
-    positioner.set_margin_top(WAYBAR_HEIGHT - 12)
-
-    if cursor_x is None:
-        positioner.set_halign(Gtk.Align.END)
-        positioner.set_margin_end(2)
+    if center:
+        positioner.set_valign(Gtk.Align.CENTER)
+        positioner.set_halign(Gtk.Align.CENTER)
     else:
-        # Clamp so the popup never spills off the active monitor
-        local_x = cursor_x - screen_x0
-        margin_left = max(2, min(screen_w - popup_width - 2,
-                                  local_x - popup_width // 2))
-        positioner.set_halign(Gtk.Align.START)
-        positioner.set_margin_start(margin_left)
+        positioner.set_valign(Gtk.Align.START)
+        # WAYBAR_HEIGHT - 12: positioner sits 12px below bar top, then the
+        # .popup-inner CSS margin (8px) lifts the visible body to y=34, giving
+        # a 4px overlap with the bar so the popup feels attached.
+        positioner.set_margin_top(WAYBAR_HEIGHT - 12)
+
+        if cursor_x is None:
+            positioner.set_halign(Gtk.Align.END)
+            positioner.set_margin_end(2)
+        else:
+            # Clamp so the popup never spills off the active monitor
+            local_x = cursor_x - screen_x0
+            margin_left = max(2, min(screen_w - popup_width - 2,
+                                      local_x - popup_width // 2))
+            positioner.set_halign(Gtk.Align.START)
+            positioner.set_margin_start(margin_left)
     catcher.add(positioner)
 
     blocker = Gtk.EventBox()

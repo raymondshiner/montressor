@@ -617,7 +617,7 @@ class CalendarPopup(Gtk.Window):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
 
-        blocker = popup_lib.wrap_with_click_outside(self, POPUP_WIDTH)
+        blocker = popup_lib.wrap_with_click_outside(self, POPUP_WIDTH, center=True)
 
         root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         root.get_style_context().add_class('popup-inner')
