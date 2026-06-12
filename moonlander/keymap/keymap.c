@@ -6,40 +6,86 @@
 #define ZSA_SAFE_RANGE SAFE_RANGE
 #endif
 
+/* ─────────────────────────────────────────────────────────────────────────────
+ * SirLexicon Moonlander layout — sirlexicon-laptop
+ * Source of truth: ~/montressor/moonlander/keymap/keymap.c
+ *
+ * LAYERS
+ *   _DEFAULT (0) — Colemak-DH typing
+ *   _OTHER   (1) — F-keys, brackets, arrows, focus-window cluster
+ *                  held via LT(_OTHER, KC_ENTER) on the right thumb enter
+ *   _APPS    (2) — application launchers
+ *                  held via MO(_APPS) on right-hand bottom-row inner
+ *                  also LT(_APPS, KC_DELETE) on left thumb middle
+ *
+ * LABELED KEYS (custom names from Oryx)
+ *
+ *   _DEFAULT:
+ *     Close App    RGUI(KC_C)        left top-outer  (sends right-Cmd+C)
+ *     Watson       LGUI(KC_W)        left row 0 thumb-side  ─ Hyprland: needs bind
+ *     Jeeves       LGUI(KC_J)        right row 0 inner      ─ Hyprland: needs bind
+ *     App Launch   LGUI(KC_R)        right top-outer        ─ Hyprland: needs bind (walker?)
+ *     Friday       LGUI(KC_F)        right row 1 inner      ─ Hyprland: needs bind
+ *     Quit         LCTL(KC_C)        right thumb cluster    ─ Hyprland: already kills focused app
+ *
+ *   _APPS:
+ *     YNAB         KC_LEFT_GUI       (intentionally just Super? — verify) ─ needs wiring
+ *     TODO         LGUI(KC_T)        ─ needs wiring
+ *     Google       LGUI(KC_G)        ─ needs wiring
+ *     Amazon       LGUI(KC_A)        ─ needs wiring
+ *     Msgs         LGUI(LSFT(KC_M))  ─ needs wiring
+ *     Meet         LGUI(LSFT(KC_G))  ─ needs wiring  (below the Google key)
+ *
+ *   _OTHER:
+ *     Focus Left   LGUI(KC_LEFT)     ─ Hyprland binds Super+arrows for focus
+ *     Focus Down   LGUI(KC_DOWN)
+ *     Focus Up     LGUI(KC_UP)
+ *     Focus Right  LGUI(KC_RIGHT)
+ *
+ * "needs wiring" = keyboard sends the combo correctly, but
+ * ~/.config/hypr/hyprland.conf does not yet bind that combo to an exec.
+ * Add bindings as we go — see ~/.claude/skills/moonlander-add-hotkey.md
+ * ───────────────────────────────────────────────────────────────────────── */
+
+enum layers {
+  _DEFAULT = 0,
+  _OTHER   = 1,
+  _APPS    = 2,
+};
+
 enum custom_keycodes {
   RGB_SLD = ZSA_SAFE_RANGE,
 };
 
 
-
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT_moonlander(
-    RGUI(KC_C),     KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           LGUI(KC_W),                                     LGUI(KC_J),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           LGUI(KC_R),     
-    KC_TAB,         KC_Q,           KC_W,           KC_F,           KC_P,           KC_B,           KC_TRANSPARENT,                                 LGUI(KC_F),     KC_J,           KC_L,           KC_U,           KC_Y,           KC_SCLN,        KC_BSLS,        
-    KC_ESCAPE,      KC_A,           KC_R,           KC_S,           KC_T,           KC_G,           KC_EQUAL,                                                                       KC_MINUS,       KC_M,           KC_N,           KC_E,           KC_I,           KC_O,           KC_QUOTE,       
-    KC_LEFT_SHIFT,  KC_Z,           KC_X,           KC_C,           KC_D,           KC_V,                                           KC_K,           KC_H,           KC_COMMA,       KC_DOT,         KC_SLASH,       KC_RIGHT_SHIFT, 
-    KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_PC_CUT,      KC_PC_COPY,     KC_PC_PASTE,    KC_TRANSPARENT,                                                                                                 MO(2),          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_SPACE,       KC_BSPC,        LT(2, KC_DELETE),                LCTL(KC_C),     KC_BSPC,        LT(1, KC_ENTER)
+  [_DEFAULT] = LAYOUT_moonlander(
+    RGUI(KC_C),     KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           LGUI(KC_W),                                     LGUI(KC_J),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           LGUI(KC_R),
+    KC_TAB,         KC_Q,           KC_W,           KC_F,           KC_P,           KC_B,           KC_TRANSPARENT,                                 LGUI(KC_F),     KC_J,           KC_L,           KC_U,           KC_Y,           KC_SCLN,        KC_BSLS,
+    KC_ESCAPE,      KC_A,           KC_R,           KC_S,           KC_T,           KC_G,           KC_EQUAL,                                                                       KC_MINUS,       KC_M,           KC_N,           KC_E,           KC_I,           KC_O,           KC_QUOTE,
+    KC_LEFT_SHIFT,  KC_Z,           KC_X,           KC_C,           KC_D,           KC_V,                                           KC_K,           KC_H,           KC_COMMA,       KC_DOT,         KC_SLASH,       KC_RIGHT_SHIFT,
+    KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_PC_CUT,      KC_PC_COPY,     KC_PC_PASTE,    KC_TRANSPARENT,                                                                                                 MO(_APPS),      KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_SPACE,       KC_BSPC,        LT(_APPS, KC_DELETE),                            LCTL(KC_C),     KC_BSPC,        LT(_OTHER, KC_ENTER)
   ),
-  [1] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_F11,                                         KC_F12,         KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, LGUI(KC_LEFT),  LGUI(KC_DOWN),  LGUI(KC_UP),    LGUI(KC_RIGHT), KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_GRAVE,       KC_LCBR,        KC_LBRC,        KC_LPRN,        KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_RPRN,        KC_RBRC,        KC_RCBR,        KC_PIPE,        KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
+
+  [_OTHER] = LAYOUT_moonlander(
+    KC_TRANSPARENT, KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_F11,                                         KC_F12,         KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, LGUI(KC_LEFT),  LGUI(KC_DOWN),  LGUI(KC_UP),    LGUI(KC_RIGHT), KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_GRAVE,       KC_LCBR,        KC_LBRC,        KC_LPRN,        KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_RPRN,        KC_RBRC,        KC_RCBR,        KC_PIPE,        KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
   ),
-  [2] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT_GUI,    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, LGUI(KC_T),     LGUI(KC_G),     KC_TRANSPARENT, LGUI(KC_A),     LGUI(LSFT(KC_M)),KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_G)),KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
+
+  [_APPS] = LAYOUT_moonlander(
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT_GUI,    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, LGUI(KC_T),     LGUI(KC_G),     KC_TRANSPARENT, LGUI(KC_A),     LGUI(LSFT(KC_M)),KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_G)),KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
   ),
 };
-
 
 
 
@@ -57,11 +103,11 @@ void keyboard_post_init_user(void) {
 }
 
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
-    [0] = { {253,255,255}, {46,255,255}, {253,255,255}, {46,255,255}, {46,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {46,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {200,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {200,255,255}, {96,255,255}, {139,255,255}, {139,255,145}, {139,255,255}, {200,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {0,0,255}, {0,0,0}, {26,255,255}, {46,255,255}, {253,255,255}, {253,255,255}, {0,0,255}, {218,255,255}, {26,255,255}, {26,255,255}, {46,255,255}, {0,0,0}, {96,255,255}, {26,255,255}, {139,255,255}, {26,255,255}, {0,0,0}, {96,255,255}, {139,255,255}, {139,255,255}, {26,255,255}, {0,0,0}, {96,255,255}, {139,255,255}, {139,255,255}, {26,255,255}, {0,0,0}, {96,255,255}, {139,255,255}, {139,255,145}, {139,255,255}, {0,0,0}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {0,0,255}, {0,0,255}, {26,255,255}, {46,255,255}, {253,255,255}, {253,255,255}, {218,255,255} },
+    [_DEFAULT] = { {253,255,255}, {46,255,255}, {253,255,255}, {46,255,255}, {46,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {46,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {200,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {200,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {200,255,255}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {0,0,255}, {0,0,0}, {26,255,255}, {46,255,255}, {253,255,255}, {253,255,255}, {0,0,255}, {218,255,255}, {26,255,255}, {26,255,255}, {46,255,255}, {0,0,0}, {96,255,255}, {26,255,255}, {139,255,255}, {26,255,255}, {0,0,0}, {96,255,255}, {139,255,255}, {139,255,255}, {26,255,255}, {0,0,0}, {96,255,255}, {139,255,255}, {139,255,255}, {26,255,255}, {0,0,0}, {96,255,255}, {139,255,255}, {139,255,145}, {139,255,255}, {0,0,0}, {96,255,255}, {139,255,255}, {139,255,255}, {139,255,255}, {0,0,255}, {0,0,255}, {26,255,255}, {46,255,255}, {253,255,255}, {253,255,255}, {218,255,255} },
 
-    [1] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {0,0,0}, {214,255,255}, {128,255,255}, {0,0,0}, {0,0,0}, {109,255,255}, {0,0,0}, {0,0,0}, {0,0,0} },
+    [_OTHER] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {0,0,0}, {214,255,255}, {128,255,255}, {0,0,0}, {0,0,0}, {109,255,255}, {0,0,0}, {0,0,0}, {0,0,0} },
 
-    [2] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {139,135,212}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {172,255,255}, {40,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {139,243,243}, {23,243,221}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,218,204}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0} },
+    [_APPS] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {139,135,212}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {172,255,255}, {40,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {139,243,243}, {23,243,221}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,218,204}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0} },
 
 };
 
@@ -85,16 +131,16 @@ bool rgb_matrix_indicators_user(void) {
   if (rawhid_state.rgb_control) {
       return false;
   }
-  if (!keyboard_config.disable_layer_led) { 
+  if (!keyboard_config.disable_layer_led) {
     switch (biton32(layer_state)) {
-      case 0:
-        set_layer_color(0);
+      case _DEFAULT:
+        set_layer_color(_DEFAULT);
         break;
-      case 1:
-        set_layer_color(1);
+      case _OTHER:
+        set_layer_color(_OTHER);
         break;
-      case 2:
-        set_layer_color(2);
+      case _APPS:
+        set_layer_color(_APPS);
         break;
      default:
         if (rgb_matrix_get_flags() == LED_FLAG_NONE) {
@@ -127,4 +173,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
-
