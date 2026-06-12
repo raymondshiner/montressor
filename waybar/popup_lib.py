@@ -31,6 +31,7 @@ ALL_POPUP_PIDS = (
     '/tmp/drives-popup.pid',
     '/tmp/bluetooth-popup.pid',
     '/tmp/sound-popup.pid',
+    '/tmp/calendar-popup.pid',
 )
 
 

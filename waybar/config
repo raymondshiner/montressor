@@ -12,7 +12,7 @@
     "modules-right": ["tray", "custom/drives", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware"],
 
     "hyprland/workspaces": {
-        "format": "{id}",
+        "format": "{name}",
         "on-click": "activate",
         "sort-by-number": true
     },
@@ -60,7 +60,8 @@
 
     "clock": {
         "format": "{:%a %b %d   %I:%M %p}",
-        "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
+        "tooltip": false,
+        "on-click": "~/.config/waybar/calendar-popup.py"
     },
 
     "group/hardware": {
