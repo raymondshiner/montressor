@@ -1,0 +1,5 @@
+firmware/*.bin
+firmware/*.hex
+keymap/__pycache__/
+*.elf
+*.o
