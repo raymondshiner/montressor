@@ -20,31 +20,31 @@
  *
  * LABELED KEYS (custom names from Oryx)
  *
+ * All Hyprland binds live in ~/.config/hypr/hyprland.conf (search for the combo).
+ *
  *   _DEFAULT:
- *     Close App    RGUI(KC_C)        left top-outer  (sends right-Cmd+C)
- *     Watson       LGUI(KC_W)        left row 0 thumb-side  ─ Hyprland: needs bind
- *     Jeeves       LGUI(KC_J)        right row 0 inner      ─ Hyprland: needs bind
- *     App Launch   LGUI(KC_R)        right top-outer        ─ Hyprland: needs bind (walker?)
- *     Friday       LGUI(KC_F)        right row 1 inner      ─ Hyprland: needs bind
- *     Quit         LCTL(KC_C)        right thumb cluster    ─ Hyprland: already kills focused app
+ *     Close App    RGUI(KC_C)        sends Cmd+C → Hyprland: smart-close.sh on Super+C
+ *     Watson       LGUI(KC_W)        Super+W → Hyprland runs SMITH terminal (Oryx label is stale)
+ *     Jeeves       LGUI(KC_J)        Super+J → kitty Jeeves
+ *     App Launch   LGUI(KC_R)        Super+R → walker launcher ($menu)
+ *     Friday       LGUI(KC_F)        Super+F → kitty Friday
+ *     Quit         LCTL(KC_C)        Ctrl+C  → universal SIGINT (terminal kill)
  *
  *   _APPS:
- *     YNAB         KC_LEFT_GUI       (intentionally just Super? — verify) ─ needs wiring
- *     TODO         LGUI(KC_T)        ─ needs wiring
- *     Google       LGUI(KC_G)        ─ needs wiring
- *     Amazon       LGUI(KC_A)        ─ needs wiring
- *     Msgs         LGUI(LSFT(KC_M))  ─ needs wiring
- *     Meet         LGUI(LSFT(KC_G))  ─ needs wiring  (below the Google key)
+ *     YNAB         LGUI(KC_B)        Super+B → YNAB Chrome PWA
+ *     TODO         LGUI(KC_T)        Super+T → Todoist
+ *     Google       LGUI(KC_G)        Super+G → google-chrome-stable
+ *     Amazon       LGUI(KC_A)        Super+A → Amazon Chrome PWA
+ *     Msgs         LGUI(LSFT(KC_M))  Super+Shift+M → Google Messages PWA
+ *     Meet         LGUI(LSFT(KC_G))  Super+Shift+G → Google Meet (new meeting) Chrome app
  *
  *   _OTHER:
- *     Focus Left   LGUI(KC_LEFT)     ─ Hyprland binds Super+arrows for focus
+ *     Focus Left   LGUI(KC_LEFT)     Super+arrows → movefocus
  *     Focus Down   LGUI(KC_DOWN)
  *     Focus Up     LGUI(KC_UP)
  *     Focus Right  LGUI(KC_RIGHT)
  *
- * "needs wiring" = keyboard sends the combo correctly, but
- * ~/.config/hypr/hyprland.conf does not yet bind that combo to an exec.
- * Add bindings as we go — see ~/.claude/skills/moonlander-add-hotkey.md
+ * Skill for adding more: ~/.claude/skills/moonlander-add-hotkey.md
  * ───────────────────────────────────────────────────────────────────────── */
 
 enum layers {
@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_APPS] = LAYOUT_moonlander(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_LEFT_GUI,    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, LGUI(KC_B),     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, LGUI(KC_T),     LGUI(KC_G),     KC_TRANSPARENT, LGUI(KC_A),     LGUI(LSFT(KC_M)),KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_G)),KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
