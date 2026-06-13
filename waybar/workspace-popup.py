@@ -358,6 +358,7 @@ class WorkspacePopup(Gtk.Window):
             stderr=subprocess.DEVNULL,
             start_new_session=True,
         )
+        hypr_dispatch('workspace', '1')
         self.destroy()
 
 
