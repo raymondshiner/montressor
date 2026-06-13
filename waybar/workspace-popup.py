@@ -6,6 +6,7 @@ from gi.repository import Gtk, Gdk
 import subprocess
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -130,7 +131,26 @@ combobox menuitem:hover {
     margin-top: 14px;
     margin-bottom: 12px;
 }
+.close-session-btn {
+    background: transparent;
+    background-image: none;
+    color: #EE5D43;
+    border: 1px solid #EE5D43;
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-top: 4px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12px;
+    box-shadow: none;
+    text-shadow: none;
+}
+.close-session-btn:hover {
+    background-color: rgba(238, 93, 67, 0.14);
+}
 """
+
+
+AGENT_TITLE_RE = re.compile(r'^Agent-\d+-')
 
 
 def hyprctl_json(*args):
@@ -254,6 +274,32 @@ class WorkspacePopup(Gtk.Window):
             btn.connect('clicked', self._on_move_monitor, name)
             root.pack_start(btn, False, False, 0)
 
+        # --- Launch session teardown (only on `launch`-spawned workspaces) ---
+        # Detect by: any window on this workspace titled "Agent-N-<slug>"
+        # (kitty windows spawned by ~/.local/bin/launch). The workspace name
+        # IS the project name, which is what `close` expects.
+        clients = hyprctl_json('clients')
+        is_launch_ws = any(
+            c.get('workspace', {}).get('id') == self._ws_id
+            and AGENT_TITLE_RE.match(c.get('title') or '')
+            for c in clients
+        )
+        if is_launch_ws:
+            div3 = Gtk.Box()
+            div3.get_style_context().add_class('divider')
+            root.pack_start(div3, False, False, 0)
+
+            ls_lbl = Gtk.Label(label='Launch session')
+            ls_lbl.get_style_context().add_class('section-label')
+            ls_lbl.set_xalign(0)
+            root.pack_start(ls_lbl, False, False, 0)
+
+            close_btn = Gtk.Button(label=f'  Close session  ({self._ws_name})')
+            close_btn.get_style_context().add_class('close-session-btn')
+            close_btn.set_alignment(0, 0.5)
+            close_btn.connect('clicked', self._on_close_session)
+            root.pack_start(close_btn, False, False, 0)
+
         self.connect('key-press-event', self._on_key)
         self.show_all()
         self.present()
@@ -295,6 +341,23 @@ class WorkspacePopup(Gtk.Window):
             return
         hypr_dispatch('moveworkspacetomonitor',
                       str(self._ws_id), monitor_name)
+        self.destroy()
+
+    def _on_close_session(self, _btn):
+        # Detach so the workspace teardown can't kill this popup mid-snapshot.
+        # `close` snapshots state to .session-state.md, then calls launch-stop
+        # which closes every window on the workspace, kills the dev server,
+        # and drops the chrome user-data-dir.
+        close_bin = os.path.expanduser('~/.local/bin/close')
+        log = f'/tmp/close-{self._ws_name}.log'
+        subprocess.Popen(
+            ['setsid', 'bash', '-c',
+             f"exec '{close_bin}' '{self._ws_name}' >'{log}' 2>&1"],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
         self.destroy()
 
 
