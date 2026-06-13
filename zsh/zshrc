@@ -84,15 +84,9 @@ claude() { ~/.local/bin/claude-wrapped "$@"; }
 
 # ---------- last-project tracker (for resume-project hotkey) ----------
 # Records the most recent project from ~/src/ that you cd into.
-# Handles both real projects (~/src/<name>) and Smith worktrees
-# (~/src/.smiths/smith-N/<name>) — both resolve to <name>.
 _track_last_project() {
   local p="$PWD" rest name=""
-  if [[ "$p" == "$HOME/src/.smiths/"* ]]; then
-    rest="${p#$HOME/src/.smiths/}"   # smith-N/<proj>/...
-    rest="${rest#*/}"                # <proj>/...
-    name="${rest%%/*}"
-  elif [[ "$p" == "$HOME/src/"* ]]; then
+  if [[ "$p" == "$HOME/src/"* ]]; then
     rest="${p#$HOME/src/}"
     name="${rest%%/*}"
   fi
