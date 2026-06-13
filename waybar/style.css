@@ -54,6 +54,7 @@ window#waybar {
     color: #D5CED9;
     font-weight: bold;
     letter-spacing: 0.5px;
+    padding: 0 14px;
 }
 
 #battery,
