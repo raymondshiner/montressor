@@ -152,6 +152,16 @@ combobox menuitem:hover {
 
 AGENT_TITLE_RE = re.compile(r'^Agent-\d+-')
 
+# Friendly monitor labels. eDP-1 is the built-in panel; any external monitor
+# in this setup is the ultrawide.
+MONITOR_LABELS = {
+    'eDP-1': 'Laptop',
+}
+
+
+def monitor_label(name):
+    return MONITOR_LABELS.get(name, 'UW Monitor')
+
 
 def hyprctl_json(*args):
     out = subprocess.check_output(['hyprctl', '-j', *args], text=True)
@@ -197,7 +207,7 @@ class WorkspacePopup(Gtk.Window):
             f'<span foreground="#D5CED9">Workspace </span>'
             f'<span foreground="#B084EB"><b>{self._ws_name}</b></span>'
             f'<span foreground="#677691">  on  </span>'
-            f'<span foreground="#00E8C6">{self._ws_monitor}</span>'
+            f'<span foreground="#00E8C6">{monitor_label(self._ws_monitor)}</span>'
         )
         hdr.get_style_context().add_class('ws-header')
         hdr.set_xalign(0)
@@ -262,10 +272,7 @@ class WorkspacePopup(Gtk.Window):
 
         for m in monitors:
             name = m['name']
-            desc = m.get('description', '') or ''
-            label = f'  {name}'
-            if desc:
-                label += f'   {desc[:30]}'
+            label = f'  {monitor_label(name)}'
             btn = Gtk.Button(label=label)
             btn.get_style_context().add_class('monitor-btn')
             btn.set_alignment(0, 0.5)
@@ -299,6 +306,22 @@ class WorkspacePopup(Gtk.Window):
             close_btn.set_alignment(0, 0.5)
             close_btn.connect('clicked', self._on_close_session)
             root.pack_start(close_btn, False, False, 0)
+
+        # --- Close workspace (kill every window on it) ---
+        div_close = Gtk.Box()
+        div_close.get_style_context().add_class('divider')
+        root.pack_start(div_close, False, False, 0)
+
+        cw_lbl = Gtk.Label(label='Workspace')
+        cw_lbl.get_style_context().add_class('section-label')
+        cw_lbl.set_xalign(0)
+        root.pack_start(cw_lbl, False, False, 0)
+
+        cw_btn = Gtk.Button(label=f'  Close workspace  ({self._ws_name})')
+        cw_btn.get_style_context().add_class('close-session-btn')
+        cw_btn.set_alignment(0, 0.5)
+        cw_btn.connect('clicked', self._on_close_workspace)
+        root.pack_start(cw_btn, False, False, 0)
 
         self.connect('key-press-event', self._on_key)
         self.show_all()
@@ -341,6 +364,18 @@ class WorkspacePopup(Gtk.Window):
             return
         hypr_dispatch('moveworkspacetomonitor',
                       str(self._ws_id), monitor_name)
+        self.destroy()
+
+    def _on_close_workspace(self, _btn):
+        # Close every window on this workspace. Hyprland auto-removes
+        # empty non-persistent workspaces, so the workspace dissolves itself.
+        clients = hyprctl_json('clients')
+        for c in clients:
+            if c.get('workspace', {}).get('id') == self._ws_id:
+                addr = c.get('address')
+                if addr:
+                    hypr_dispatch('closewindow', f'address:{addr}')
+        hypr_dispatch('workspace', 'e-1')
         self.destroy()
 
     def _on_close_session(self, _btn):
