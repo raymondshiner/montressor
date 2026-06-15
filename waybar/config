@@ -3,7 +3,7 @@
     "position": "top",
     "height": 38,
     "spacing": 4,
-    "modules-left": ["hyprland/workspaces", "custom/workspace-menu"],
+    "modules-left": ["custom/workspace-menu", "hyprland/workspaces"],
     "modules-center": [
         "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
         "clock",
