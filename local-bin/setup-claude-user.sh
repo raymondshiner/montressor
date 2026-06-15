@@ -4,8 +4,14 @@
 
 set -euo pipefail
 
-REAL_USER="sirlexicon"
+REAL_USER="${REAL_USER:-$USER}"
 REAL_HOME="/home/$REAL_USER"
+
+if [ "$REAL_USER" = "root" ] || [ "$REAL_USER" = "claude" ]; then
+    echo "Run this as your normal user, not root or claude." >&2
+    echo "Override with: REAL_USER=youruser $0" >&2
+    exit 1
+fi
 CLAUDE_HOME="/home/claude"
 
 echo "==> Creating claude user..."
