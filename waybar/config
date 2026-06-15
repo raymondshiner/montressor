@@ -115,7 +115,8 @@
         "interval": 5,
         "format-disconnected": "󰤭 ",
         "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
-        "tooltip-format-ethernet": "{ifname}\n{ipaddr}"
+        "tooltip-format-ethernet": "{ifname}\n{ipaddr}",
+        "on-click": "python3 ~/.config/waybar/wifi-popup.py"
     },
 
     "swaync": {
