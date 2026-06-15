@@ -14,7 +14,7 @@
     "hyprland/workspaces": {
         "format": "{name}",
         "on-click": "activate",
-        "sort-by-number": true
+        "sort-by": "id"
     },
 
     "custom/workspace-menu": {
