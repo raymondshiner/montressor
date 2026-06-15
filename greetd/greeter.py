@@ -18,7 +18,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk, Gdk
 
-USER = 'sirlexicon'
+USER = os.environ.get('GREETER_USER', 'sirlexicon')
 SESSION_CMD = ['start-hyprland']
 
 BG = '#1C1E26'
