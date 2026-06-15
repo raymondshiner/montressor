@@ -3,15 +3,7 @@
     "position": "top",
     "height": 38,
     "spacing": 4,
-    "modules-left": ["custom/active-project", "hyprland/workspaces", "custom/workspace-menu"],
-
-    "custom/active-project": {
-        "exec": "~/.config/waybar/active-project.sh",
-        "return-type": "json",
-        "interval": 2,
-        "on-click": "~/.config/waybar/workspace-popup.py",
-        "tooltip": true
-    },
+    "modules-left": ["hyprland/workspaces", "custom/workspace-menu"],
     "modules-center": [
         "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
         "clock",
