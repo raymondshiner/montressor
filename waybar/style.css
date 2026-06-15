@@ -50,6 +50,16 @@ window#waybar {
     color: #D5CED9;
 }
 
+#custom-active-project {
+    color: #B084EB;
+    padding: 0 10px;
+    font-weight: bold;
+}
+
+#custom-active-project.none {
+    padding: 0;
+}
+
 #clock {
     color: #D5CED9;
     font-weight: bold;
