@@ -32,6 +32,34 @@ DEFAULT_FAVS = [
     'brave-browser.desktop',
 ]
 
+# Category buckets — first matching key (case-insensitive substring) wins.
+# Order matters: more specific buckets come first.
+CATEGORIES = [
+    ('Web',       ['WebBrowser']),
+    ('Dev',       ['Development', 'IDE', 'Building']),
+    ('Media',     ['AudioVideo', 'Audio', 'Video', 'Player', 'Music', 'TV', 'Mixer']),
+    ('Office',    ['Office', 'Finance', 'Chat']),
+    ('Network',   ['Network', 'FileTransfer', 'P2P']),
+    ('Settings',  ['HardwareSettings', 'DesktopSettings', 'Settings', 'Printing']),
+    ('System',    ['System', 'Filesystem', 'FileManager', 'TerminalEmulator', 'Monitor']),
+    ('Utilities', ['Utility', 'TextEditor', 'Maps']),
+]
+CATEGORY_ORDER = [name for name, _ in CATEGORIES] + ['Other']
+
+
+def categorize(info):
+    cats = info.get_categories() or ''
+    # Chrome PWAs ship with empty categories — bucket them as Web.
+    if not cats.strip() and info.get_id().startswith('chrome-'):
+        return 'Web'
+    parts = [c.strip() for c in cats.split(';') if c.strip()]
+    for bucket, keys in CATEGORIES:
+        for p in parts:
+            if p in keys:
+                return bucket
+    return 'Other'
+
+
 CSS = """
 window { background: transparent; }
 .popup-inner {
@@ -75,6 +103,28 @@ entry.search:focus {
 .fav-btn:hover {
     background-color: rgba(0, 232, 198, 0.10);
     border-color: rgba(0, 232, 198, 0.30);
+}
+.chip {
+    background: transparent;
+    background-image: none;
+    color: #677691;
+    border: 1px solid #2A2D3A;
+    border-radius: 12px;
+    padding: 2px 10px;
+    margin: 0 4px 0 0;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 11px;
+    box-shadow: none;
+    text-shadow: none;
+}
+.chip:hover {
+    color: #D5CED9;
+    border-color: #00E8C6;
+}
+.chip.active {
+    color: #00E8C6;
+    border-color: #00E8C6;
+    background-color: rgba(0, 232, 198, 0.12);
 }
 .app-row {
     background: transparent;
@@ -198,6 +248,12 @@ class AppsMenu(Gtk.Window):
         self._favs = load_favs()
         self._apps = all_apps()
         self._by_id = {a.get_id(): a for a in self._apps}
+        self._cat_of = {a.get_id(): categorize(a) for a in self._apps}
+        # Only show category chips that actually have apps.
+        present_cats = {self._cat_of[a.get_id()] for a in self._apps}
+        self._chip_cats = ['All'] + [c for c in CATEGORY_ORDER if c in present_cats]
+        self._active_chip = 'All'
+        self._chip_buttons = {}
         self._filtered = list(self._apps)
         self._row_widgets = []  # list of (button, info)
 
@@ -229,11 +285,23 @@ class AppsMenu(Gtk.Window):
         div.get_style_context().add_class('divider')
         root.pack_start(div, False, False, 0)
 
-        # --- All apps ---
-        all_lbl = Gtk.Label(label='ALL APPS')
-        all_lbl.get_style_context().add_class('section-label')
-        all_lbl.set_xalign(0)
-        root.pack_start(all_lbl, False, False, 0)
+        # --- Category chips ---
+        chip_scroll = Gtk.ScrolledWindow()
+        chip_scroll.set_policy(Gtk.PolicyType.EXTERNAL, Gtk.PolicyType.NEVER)
+        chip_scroll.set_size_request(-1, 28)
+        chip_scroll.set_margin_top(4)
+        chip_scroll.set_margin_bottom(2)
+        chip_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        for cat in self._chip_cats:
+            btn = Gtk.Button(label=cat)
+            btn.get_style_context().add_class('chip')
+            if cat == self._active_chip:
+                btn.get_style_context().add_class('active')
+            btn.connect('clicked', self._on_chip, cat)
+            self._chip_buttons[cat] = btn
+            chip_row.pack_start(btn, False, False, 0)
+        chip_scroll.add(chip_row)
+        root.pack_start(chip_scroll, False, False, 0)
 
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -303,11 +371,10 @@ class AppsMenu(Gtk.Window):
         self._list_box.show_all()
 
     # ---------- handlers ----------
-    def _on_search_changed(self, entry):
-        q = entry.get_text().strip().lower()
-        if not q:
-            self._filtered = list(self._apps)
-        else:
+    def _recompute_filter(self):
+        q = self._entry.get_text().strip().lower()
+        # Search overrides chip filter (search across all apps).
+        if q:
             scored = []
             for a in self._apps:
                 name = (a.get_display_name() or '').lower()
@@ -315,12 +382,29 @@ class AppsMenu(Gtk.Window):
                 kw = ' '.join(a.get_keywords() or []).lower()
                 hay = f'{name} {gname} {kw}'
                 if q in hay:
-                    # Prefer prefix matches in display name.
                     score = 0 if name.startswith(q) else (1 if q in name else 2)
                     scored.append((score, name, a))
             scored.sort(key=lambda t: (t[0], t[1]))
             self._filtered = [t[2] for t in scored]
+        elif self._active_chip == 'All':
+            self._filtered = list(self._apps)
+        else:
+            self._filtered = [a for a in self._apps
+                              if self._cat_of[a.get_id()] == self._active_chip]
         self._render_app_list()
+
+    def _on_search_changed(self, _entry):
+        self._recompute_filter()
+
+    def _on_chip(self, _btn, cat):
+        self._active_chip = cat
+        for name, b in self._chip_buttons.items():
+            ctx = b.get_style_context()
+            if name == cat:
+                ctx.add_class('active')
+            else:
+                ctx.remove_class('active')
+        self._recompute_filter()
 
     def _on_search_activate(self, _entry):
         if self._filtered:
