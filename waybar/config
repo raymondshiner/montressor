@@ -3,13 +3,13 @@
     "position": "top",
     "height": 38,
     "spacing": 4,
-    "modules-left": ["custom/apps-menu", "hyprland/workspaces", "custom/workspace-menu"],
+    "modules-left": ["hyprland/workspaces", "custom/workspace-menu"],
     "modules-center": [
         "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
         "clock",
         "custom/np-next-m", "custom/np-playpause-m", "custom/np-prev-m", "custom/now-playing-m", "custom/music-ws-m"
     ],
-    "modules-right": ["tray", "custom/drives", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware"],
+    "modules-right": ["tray", "custom/drives", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/apps-menu"],
 
     "hyprland/workspaces": {
         "format": "{name}",
