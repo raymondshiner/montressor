@@ -50,6 +50,16 @@ window#waybar {
     color: #D5CED9;
 }
 
+#custom-apps-menu {
+    color: #00E8C6;
+    padding: 0 10px 0 12px;
+    font-size: 16px;
+}
+
+#custom-apps-menu:hover {
+    color: #D5CED9;
+}
+
 
 #clock {
     color: #D5CED9;

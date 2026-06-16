@@ -3,7 +3,7 @@
     "position": "top",
     "height": 38,
     "spacing": 4,
-    "modules-left": ["hyprland/workspaces", "custom/workspace-menu"],
+    "modules-left": ["custom/apps-menu", "hyprland/workspaces", "custom/workspace-menu"],
     "modules-center": [
         "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
         "clock",
@@ -21,6 +21,12 @@
         "format": "󱂬",
         "tooltip": false,
         "on-click": "~/.config/waybar/workspace-popup.py"
+    },
+
+    "custom/apps-menu": {
+        "format": "󰣘",
+        "tooltip": false,
+        "on-click": "python3 ~/.config/waybar/apps-menu-popup.py"
     },
 
     "custom/music-ws": {
