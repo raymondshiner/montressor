@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Super+R launcher wrapper — ensures walker service is healthy before invoking.
+# Falls back to hyprlauncher if walker fails outright.
+
+set -u
+
+# If a walker window is already up, toggle it closed and exit.
+if pgrep -x walker >/dev/null && hyprctl clients -j 2>/dev/null | grep -q '"class": "walker"'; then
+    pkill -x walker
+    exit 0
+fi
+
+# Ensure the background service is running (idempotent — no-op if active).
+if ! systemctl --user is-active --quiet walker.service; then
+    systemctl --user start walker.service
+    # Give the service a moment to register with the bus.
+    for _ in 1 2 3 4 5; do
+        systemctl --user is-active --quiet walker.service && break
+        sleep 0.1
+    done
+fi
+
+# Invoke walker. If it bails (exit != 0), fall back to hyprlauncher.
+if ! walker; then
+    exec hyprlauncher
+fi
