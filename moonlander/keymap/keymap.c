@@ -24,7 +24,7 @@
  *
  *   _DEFAULT:
  *     Close App    RGUI(KC_C)        sends Cmd+C → Hyprland: smart-close.sh on Super+C
- *     Smith        LGUI(KC_W)        Super+W → kitty Smith (Oryx label says "Watson" — stale, ignore)
+ *     Smith        LGUI(KC_S)        Super+S → kitty Smith (Oryx label says "Watson" — stale, ignore)
  *     Resume       LGUI(LSFT(KC_P))  Super+Shift+P → ~/.local/bin/resume-project (under Smith)
  *     Jarvis       LGUI(KC_J)        Super+J → kitty Jarvis
  *     App Launch   LGUI(KC_R)        Super+R → walker launcher ($menu)
@@ -62,7 +62,7 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DEFAULT] = LAYOUT_moonlander(
-    RGUI(KC_C),     KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           LGUI(KC_W),                                     LGUI(KC_J),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           LGUI(KC_R),
+    RGUI(KC_C),     KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           LGUI(KC_S),                                     LGUI(KC_J),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           LGUI(KC_R),
     KC_TAB,         KC_Q,           KC_W,           KC_F,           KC_P,           KC_B,           LGUI(LSFT(KC_P)),                               LGUI(KC_F),     KC_J,           KC_L,           KC_U,           KC_Y,           KC_SCLN,        KC_BSLS,
     KC_ESCAPE,      KC_A,           KC_R,           KC_S,           KC_T,           KC_G,           KC_EQUAL,                                                                       KC_MINUS,       KC_M,           KC_N,           KC_E,           KC_I,           KC_O,           KC_QUOTE,
     KC_LEFT_SHIFT,  KC_Z,           KC_X,           KC_C,           KC_D,           KC_V,                                           KC_K,           KC_H,           KC_COMMA,       KC_DOT,         KC_SLASH,       KC_RIGHT_SHIFT,
