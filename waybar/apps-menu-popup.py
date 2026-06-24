@@ -30,6 +30,7 @@ DEFAULT_FAVS = [
     'firefox.desktop',
     'org.mozilla.firefox.desktop',
     'brave-browser.desktop',
+    'discord.desktop',
 ]
 
 # Category buckets — first matching key (case-insensitive substring) wins.
@@ -251,7 +252,7 @@ class AppsMenu(Gtk.Window):
         self._cat_of = {a.get_id(): categorize(a) for a in self._apps}
         # Only show category chips that actually have apps.
         present_cats = {self._cat_of[a.get_id()] for a in self._apps}
-        self._chip_cats = ['All'] + [c for c in CATEGORY_ORDER if c in present_cats]
+        self._chip_cats = [c for c in CATEGORY_ORDER if c in present_cats] + ['All']
         self._active_chip = 'All'
         self._chip_buttons = {}
         self._filtered = list(self._apps)
