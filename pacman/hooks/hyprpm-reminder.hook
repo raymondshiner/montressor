@@ -1,0 +1,11 @@
+# Reminds to rebuild hyprpm plugins after a Hyprland upgrade.
+# Header rebuilds need sudo and can't run unattended, so this just nudges.
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = hyprland
+
+[Action]
+Description = hyprpm: Hyprland upgraded — run 'hyprpm update' to rebuild plugins
+When = PostTransaction
+Exec = /usr/bin/echo ">>> Hyprland upgraded. Run: hyprpm update (then hyprpm reload -n)"
