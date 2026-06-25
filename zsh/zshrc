@@ -102,7 +102,7 @@ _track_last_project   # seed on shell start
 # ---------- dots: auto-sync montressor repos to GitHub ----------
 # Two repos:
 #   ~/montressor         (public-able dotfiles)
-#   ~/montressor-private (agent prompts, CLAUDE.md, memory, hooks)
+#   ~/avengers (agent prompts, CLAUDE.md, memory, hooks)
 #
 # `dots` figures out which repo to act on:
 #   - If $PWD is inside one of the two repos → use that one.
@@ -127,12 +127,12 @@ dots() {
   local toplevel repo=~/montressor
   toplevel="$(git rev-parse --show-toplevel 2>/dev/null)"
   case "$toplevel" in
-    "$HOME/montressor"|"$HOME/montressor-private") repo="$toplevel" ;;
+    "$HOME/montressor"|"$HOME/avengers") repo="$toplevel" ;;
   esac
   _dots_commit "$repo" "$1"
 }
 
-dots-private() { _dots_commit ~/montressor-private "$1"; }
+dots-private() { _dots_commit ~/avengers "$1"; }
 
 # Refresh the package snapshots in ~/montressor/packages/ for the current OS,
 # then commit + push via `dots`. No-op if the lists haven't changed.

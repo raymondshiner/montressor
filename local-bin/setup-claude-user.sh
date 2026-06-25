@@ -39,7 +39,7 @@ echo "==> Creating mount-point directories in $CLAUDE_HOME..."
 SHARED_DIRS=(
     "Projects"
     "montressor"
-    "montressor-private"
+    "avengers"
     "Downloads"
     "Media"
     "Music"
@@ -64,7 +64,7 @@ if ! grep -q "$FSTAB_MARK" /etc/fstab; then
 $FSTAB_MARK
 $REAL_HOME/Projects        $CLAUDE_HOME/Projects        none bind 0 0
 $REAL_HOME/montressor        $CLAUDE_HOME/montressor        none bind 0 0
-$REAL_HOME/montressor-private $CLAUDE_HOME/montressor-private none bind 0 0
+$REAL_HOME/avengers $CLAUDE_HOME/avengers none bind 0 0
 $REAL_HOME/Downloads       $CLAUDE_HOME/Downloads       none bind 0 0
 $REAL_HOME/Media           $CLAUDE_HOME/Media           none bind 0 0
 $REAL_HOME/Music           $CLAUDE_HOME/Music           none bind 0 0
@@ -89,7 +89,7 @@ echo "==> Setting group ownership and write perms on shared paths..."
 SHARED_PATHS=(
     "$REAL_HOME/Projects"
     "$REAL_HOME/montressor"
-    "$REAL_HOME/montressor-private"
+    "$REAL_HOME/avengers"
     "$REAL_HOME/Downloads"
     "$REAL_HOME/Media"
     "$REAL_HOME/Music"
