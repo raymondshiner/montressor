@@ -36,12 +36,13 @@
  *     Bambu        LGUI(LSFT(KC_B))  Super+Shift+B → bambu-studio (green glow, right of YNAB)
  *     Netflix      LGUI(LSFT(KC_N))  Super+Shift+N → Netflix Chrome PWA (red glow, T-spot left half)
  *     Letterboxd   LGUI(LSFT(KC_L))  Super+Shift+L → Letterboxd web-app (dark-blue glow, above Netflix)
- *     Serializd    LGUI(LALT(KC_S))  Super+Alt+S → Serializd web-app (cyan glow, below Netflix)
+ *     Serializd    LGUI(LALT(KC_S))  Super+Alt+S → Serializd web-app (yellow glow, right of Letterboxd)
+ *     Disney+      LGUI(LSFT(KC_D))  Super+Shift+D → Disney+ web-app (light-blue glow, below Netflix)
  *     Music        LGUI(KC_M)        Super+M → toggle music overlay (Musicboard+Spotify, green glow, right of Netflix)
  *     TODO         LGUI(KC_T)        Super+T → Todoist
  *     Google       LGUI(KC_G)        Super+G → google-chrome-stable
  *     Obsidian     LGUI(KC_O)        Super+O → obsidian
- *     Amazon       LGUI(KC_A)        Super+A → Amazon Chrome PWA
+ *     Amazon       LGUI(KC_A)        Super+A → Amazon Chrome PWA (left pinky/A column, 3 left of Netflix)
  *     Msgs         LGUI(LSFT(KC_M))  Super+Shift+M → Google Messages PWA
  *     Meet         LGUI(LSFT(KC_G))  Super+Shift+G → Google Meet (new meeting) Chrome app
  *
@@ -95,9 +96,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_APPS] = LAYOUT_moonlander(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_L)), KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, LGUI(KC_B),     LGUI(LSFT(KC_B)), KC_TRANSPARENT, LGUI(LSFT(KC_G)),KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_N)), LGUI(KC_M),     KC_TRANSPARENT,                                                                 KC_TRANSPARENT, LGUI(KC_T),     LGUI(KC_G),     LGUI(KC_O),     LGUI(KC_A),     LGUI(LSFT(KC_M)),KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LALT(KC_S)), KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,  KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_L)), LGUI(LALT(KC_S)), KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, LGUI(KC_B),     LGUI(LSFT(KC_B)), KC_TRANSPARENT, LGUI(LSFT(KC_G)),KC_TRANSPARENT,
+    KC_TRANSPARENT, LGUI(KC_A),     KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_N)), LGUI(KC_M),     KC_TRANSPARENT,                                                                 KC_TRANSPARENT, LGUI(KC_T),     LGUI(KC_G),     LGUI(KC_O),     KC_TRANSPARENT, LGUI(LSFT(KC_M)),KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_D)), KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,  KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
   ),
@@ -123,7 +124,7 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
 
     [_OTHER] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {128,255,255}, {0,0,0}, {10,225,255}, {0,0,0}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {10,225,255}, {214,255,255}, {0,0,0}, {128,255,255}, {141,255,255}, {0,0,0}, {214,255,255}, {128,255,255}, {0,0,0}, {0,0,0}, {109,255,255}, {0,0,0}, {0,0,0}, {0,0,0} },
 
-    [_APPS] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {170,255,200}, {0,255,255}, {121,255,232}, {0,0,0}, {0,0,0}, {0,0,0}, {90,255,150}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {187,113,234}, {0,0,0}, {0,0,0}, {0,0,0}, {40,255,255}, {139,135,212}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {172,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {85,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {139,243,243}, {23,243,221}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,218,204}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0} },
+    [_APPS] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {172,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {170,255,200}, {0,255,255}, {150,170,255}, {0,0,0}, {0,0,0}, {43,255,255}, {90,255,150}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {187,113,234}, {0,0,0}, {0,0,0}, {0,0,0}, {40,255,255}, {139,135,212}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {85,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {139,243,243}, {23,243,221}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,218,204}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0} },
 
 };
 
