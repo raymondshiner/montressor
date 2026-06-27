@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync pepper job-search-log.csv to Google Sheet (6h + on login)
+
+[Timer]
+OnStartupSec=1min
+OnUnitActiveSec=6h
+Persistent=true
+
+[Install]
+WantedBy=timers.target

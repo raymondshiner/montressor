@@ -1,0 +1,8 @@
+[Unit]
+Description=Push pepper job-search-log.csv to Google Sheet
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/pepper-sheet-sync

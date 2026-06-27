@@ -1,0 +1,51 @@
+#!/home/sirlexicon/.local/share/pepper-sync/venv/bin/python
+"""Push ~/pepper/job-search-log.csv to a Google Sheet, replacing all contents.
+
+Idempotent: clears the worksheet and writes the full CSV (header + rows) every run.
+Credentials and the target sheet ID live outside any git repo, in
+~/.local/share/pepper-sync/ (service-account.json + config). Nothing here is secret.
+"""
+import csv
+import os
+import sys
+
+import gspread
+
+BASE = os.path.expanduser("~/.local/share/pepper-sync")
+CRED = os.path.join(BASE, "service-account.json")
+CONF = os.path.join(BASE, "config")
+CSV_PATH = os.path.expanduser("~/pepper/job-search-log.csv")
+
+
+def load_sheet_id():
+    if not os.path.exists(CONF):
+        sys.exit(f"missing config: {CONF} (expected line SHEET_ID=...)")
+    with open(CONF) as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith("SHEET_ID="):
+                return line.split("=", 1)[1].strip()
+    sys.exit(f"SHEET_ID not set in {CONF}")
+
+
+def main():
+    if not os.path.exists(CRED):
+        sys.exit(f"missing credential: {CRED}")
+    if not os.path.exists(CSV_PATH):
+        sys.exit(f"missing csv: {CSV_PATH}")
+
+    with open(CSV_PATH, newline="") as f:
+        rows = list(csv.reader(f))
+    if not rows:
+        sys.exit("csv is empty")
+
+    gc = gspread.service_account(filename=CRED)
+    sh = gc.open_by_key(load_sheet_id())
+    ws = sh.sheet1
+    ws.clear()
+    ws.update(rows, value_input_option="RAW")
+    print(f"pushed {len(rows)} rows ({len(rows) - 1} entries + header) to {sh.title}")
+
+
+if __name__ == "__main__":
+    main()
