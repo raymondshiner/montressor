@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Focus the existing Obsidian window if one's open; otherwise cold-start it.
+# Works around Obsidian's single-instance launcher silently no-op'ing when
+# re-invoked while already running.
+if hyprctl clients -j | grep -q '"class": "obsidian"'; then
+    hyprctl dispatch focuswindow class:obsidian
+else
+    exec /usr/bin/obsidian "$@"
+fi

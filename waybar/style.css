@@ -162,6 +162,21 @@ window#waybar {
     font-weight: normal;
 }
 
+#custom-obsidian, #custom-obsidian-sp {
+    background: #23262E;
+    color: #B084EB;
+    padding: 0 14px;
+    margin: 4px 0;
+    font-size: 14px;
+    border-radius: 12px;
+}
+#custom-obsidian:hover { color: #C9A6F5; }
+/* Left spacer: same box, no visible ink — keeps the clock centered */
+#custom-obsidian-sp {
+    background: transparent;
+    color: transparent;
+}
+
 /* Mirror spacers: same width, no visible ink */
 #custom-music-ws-m,
 #custom-now-playing-m,

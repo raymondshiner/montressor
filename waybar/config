@@ -5,8 +5,10 @@
     "spacing": 4,
     "modules-left": ["hyprland/workspaces", "custom/workspace-menu"],
     "modules-center": [
+        "custom/obsidian-sp",
         "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
         "clock",
+        "custom/obsidian",
         "custom/np-next-m", "custom/np-playpause-m", "custom/np-prev-m", "custom/now-playing-m", "custom/music-ws-m"
     ],
     "modules-right": ["tray", "custom/drives", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/apps-menu"],
@@ -75,6 +77,17 @@
         "format": "{:%a %b %d   %I:%M %p}",
         "tooltip": false,
         "on-click": "~/.config/waybar/calendar-popup.py"
+    },
+
+    "custom/obsidian": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "~/.local/bin/obsidian-raise"
+    },
+
+    "custom/obsidian-sp": {
+        "format": "",
+        "tooltip": false
     },
 
     "group/hardware": {
