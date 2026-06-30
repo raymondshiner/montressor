@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Run-or-raise for Obsidian. Electron forwards a second launch to the running
+# instance but never raises its window, so a bare `obsidian` looks like a no-op
+# when a window is already open. Focus it if present, otherwise launch fresh.
+addr=$(hyprctl clients -j | python3 -c "import json,sys; print(next((c['address'] for c in json.load(sys.stdin) if c['class']=='obsidian'), ''))")
+if [ -n "$addr" ]; then
+    hyprctl dispatch focuswindow "address:$addr"
+else
+    setsid -f /usr/bin/obsidian >/dev/null 2>&1
+fi
