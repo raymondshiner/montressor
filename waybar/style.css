@@ -105,6 +105,7 @@ window#waybar {
 #custom-hardware-toggle.warn { color: #FFE66D; }
 #custom-hardware-toggle.crit { color: #EE5D43; }
 .hardware-child { padding: 0 12px; }
+#custom-displays { color: #00E8C6; padding: 0 12px; }
 #custom-drives { color: #00E8C6; padding: 0 12px; }
 #custom-vpn { color: #677691; padding: 0 12px; }
 #custom-vpn.connected { color: #00E8C6; }

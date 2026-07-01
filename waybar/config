@@ -11,7 +11,7 @@
         "custom/obsidian",
         "custom/np-next-m", "custom/np-playpause-m", "custom/np-prev-m", "custom/now-playing-m", "custom/music-ws-m"
     ],
-    "modules-right": ["tray", "custom/drives", "swaync", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/apps-menu"],
+    "modules-right": ["tray", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/apps-menu"],
 
     "hyprland/workspaces": {
         "format": "{name}",
@@ -168,6 +168,14 @@
         "tooltip-format-connected": "{controller_alias}\n\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}  {device_address}",
         "on-click": "python3 ~/.config/waybar/bluetooth-popup.py"
+    },
+
+    "custom/displays": {
+        "exec": "~/.config/waybar/displays-status.sh",
+        "return-type": "json",
+        "interval": 3,
+        "on-click": "nwg-displays",
+        "tooltip": true
     },
 
     "custom/drives": {
