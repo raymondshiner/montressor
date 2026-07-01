@@ -24,8 +24,8 @@
  *
  *   _DEFAULT:
  *     Close App    RGUI(KC_C)        sends Cmd+C → Hyprland: smart-close.sh on Super+C
- *     Smith        LGUI(KC_S)        Super+S → kitty Smith (Oryx label says "Watson" — stale, ignore)
- *     Resume       LGUI(LSFT(KC_P))  Super+Shift+P → ~/.local/bin/resume-project (under Smith)
+ *     Ultron        LGUI(KC_S)        Super+S → kitty Ultron (Oryx label says "Watson" — stale, ignore)
+ *     Resume       LGUI(LSFT(KC_P))  Super+Shift+P → ~/.local/bin/resume-project (under Ultron)
  *     Jarvis       LGUI(KC_J)        Super+J → kitty Jarvis
  *     App Launch   LGUI(KC_R)        Super+R → walker launcher ($menu)
  *     Friday       TD(TD_FRIDAY_HOGAN)  tap → Super+F (Friday); double-tap → Super+H (Hogan)

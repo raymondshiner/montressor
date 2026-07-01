@@ -113,13 +113,13 @@ link() {
 link "$PRIVATE_REPO_DIR/claude/CLAUDE.md"                  "$HOME/CLAUDE.md"
 link "$PRIVATE_REPO_DIR/claude/agents/jarvis.md"           "$HOME/.claude/agents/jarvis.md"
 link "$PRIVATE_REPO_DIR/claude/agents/friday.md"           "$HOME/.claude/agents/friday.md"
-link "$PRIVATE_REPO_DIR/claude/agents/smith.md"            "$HOME/.claude/agents/smith.md"
+link "$PRIVATE_REPO_DIR/claude/agents/ultron.md"            "$HOME/.claude/agents/ultron.md"
 link "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-linux.sh" "$HOME/.claude/hooks/notify-stop.sh"
 link "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh"       "$HOME/.local/bin/cc-statusline.sh"
 link "$PRIVATE_REPO_DIR/claude/bin/jarvis"                 "$HOME/.local/bin/jarvis"
 link "$PRIVATE_REPO_DIR/claude/bin/friday"                 "$HOME/.local/bin/friday"
-link "$PRIVATE_REPO_DIR/claude/bin/smith"                  "$HOME/.local/bin/smith"
-link "$PRIVATE_REPO_DIR/claude/bin/smith-init"             "$HOME/.local/bin/smith-init"
+link "$PRIVATE_REPO_DIR/claude/bin/ultron"                  "$HOME/.local/bin/ultron"
+link "$PRIVATE_REPO_DIR/claude/bin/ultron-init"             "$HOME/.local/bin/ultron-init"
 link "$PRIVATE_REPO_DIR/claude/bin/launch"                 "$HOME/.local/bin/launch"
 link "$PRIVATE_REPO_DIR/claude/machine.linux.md"           "$HOME/.config/claude/machine.md"
 
@@ -142,8 +142,8 @@ chmod +x "$PRIVATE_REPO_DIR/claude/hooks/notify-stop-linux.sh" \
          "$PRIVATE_REPO_DIR/claude/bin/cc-statusline.sh" \
          "$PRIVATE_REPO_DIR/claude/bin/jarvis" \
          "$PRIVATE_REPO_DIR/claude/bin/friday" \
-         "$PRIVATE_REPO_DIR/claude/bin/smith" \
-         "$PRIVATE_REPO_DIR/claude/bin/smith-init" \
+         "$PRIVATE_REPO_DIR/claude/bin/ultron" \
+         "$PRIVATE_REPO_DIR/claude/bin/ultron-init" \
          "$PRIVATE_REPO_DIR/claude/bin/launch"
 
 # ----------------------------------------------------------------------
@@ -154,7 +154,7 @@ sed "s|__HOME__|$HOME|g" "$PRIVATE_REPO_DIR/claude/settings.template.json" > "$H
 ok "$HOME/.claude/settings.json"
 
 # ----------------------------------------------------------------------
-# 4b. Ensure ~/src exists (Smith's home; per-agent MCPs live in smith.md)
+# 4b. Ensure ~/src exists (Ultron's home; per-agent MCPs live in ultron.md)
 # ----------------------------------------------------------------------
 mkdir -p "$HOME/src"
 link "$PRIVATE_REPO_DIR/claude/SRC.md" "$HOME/src/CLAUDE.md"
