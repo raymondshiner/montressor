@@ -80,13 +80,13 @@
     },
 
     "custom/obsidian": {
-        "format": "",
+        "format": "",
         "tooltip": false,
         "on-click": "~/.local/bin/obsidian-raise"
     },
 
     "custom/obsidian-sp": {
-        "format": "",
+        "format": "",
         "tooltip": false
     },
 
