@@ -67,21 +67,19 @@ enum custom_keycodes {
 };
 
 enum tap_dance_codes {
-  TD_FRIDAY_HOGAN,
+  TD_UNUSED,
 };
 
 // _DEFAULT Friday key: single tap → Super+F (Friday), double tap → Super+H (Hogan)
 /* moonkeys:td BEGIN — generated; edit keys via moonkeys */
-tap_dance_action_t tap_dance_actions[] = {
-  [TD_FRIDAY_HOGAN] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_F), LGUI(KC_H)),
-};
+tap_dance_action_t tap_dance_actions[] = {};
 /* moonkeys:td END */
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DEFAULT] = LAYOUT_moonlander(
     RGUI(KC_C),     KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           LGUI(KC_U),                                     LGUI(KC_J),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           LGUI(KC_R),
-    KC_TAB,         KC_Q,           KC_W,           KC_F,           KC_P,           KC_B,           LGUI(LSFT(KC_P)),                               TD(TD_FRIDAY_HOGAN), KC_J,      KC_L,           KC_U,           KC_Y,           KC_SCLN,        KC_BSLS,
+    KC_TAB,         KC_Q,           KC_W,           KC_F,           KC_P,           KC_B,           LGUI(LSFT(KC_P)),                               LGUI(KC_F), KC_J,      KC_L,           KC_U,           KC_Y,           KC_SCLN,        KC_BSLS,
     KC_ESCAPE,      KC_A,           KC_R,           KC_S,           KC_T,           KC_G,           KC_EQUAL,                                                                       KC_MINUS,       KC_M,           KC_N,           KC_E,           KC_I,           KC_O,           KC_QUOTE,
     KC_LEFT_SHIFT,  KC_Z,           KC_X,           KC_C,           KC_D,           KC_V,                                           KC_K,           KC_H,           KC_COMMA,       KC_DOT,         KC_SLASH,       KC_RIGHT_SHIFT,
     KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_PC_CUT,      KC_PC_COPY,     KC_PC_PASTE,    KC_LEFT_GUI,                                                                                                    MO(_APPS),      KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(KC_Y),
