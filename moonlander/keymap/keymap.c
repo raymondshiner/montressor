@@ -71,9 +71,11 @@ enum tap_dance_codes {
 };
 
 // _DEFAULT Friday key: single tap → Super+F (Friday), double tap → Super+H (Hogan)
+/* moonkeys:td BEGIN — generated; edit keys via moonkeys */
 tap_dance_action_t tap_dance_actions[] = {
   [TD_FRIDAY_HOGAN] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_F), LGUI(KC_H)),
 };
+/* moonkeys:td END */
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
