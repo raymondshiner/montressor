@@ -33,7 +33,7 @@
     },
 
     "custom/tasks": {
-        "format": "",
+        "format": "󰖯",
         "tooltip": false,
         "on-click": "python3 ~/.config/waybar/tasks-popup.py"
     },

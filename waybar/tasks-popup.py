@@ -178,7 +178,7 @@ class TasksPopup(Gtk.Window):
         blocker.add(root)
 
         header = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        title = Gtk.Label(label='  Open Windows')
+        title = Gtk.Label(label='󰖯  Open Windows')
         title.get_style_context().add_class('title-label')
         title.set_xalign(0)
         header.pack_start(title, True, True, 0)
