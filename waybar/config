@@ -11,7 +11,7 @@
         "custom/obsidian",
         "custom/np-next-m", "custom/np-playpause-m", "custom/np-prev-m", "custom/now-playing-m", "custom/music-ws-m"
     ],
-    "modules-right": ["tray", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/apps-menu"],
+    "modules-right": ["tray", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/tasks", "custom/apps-menu"],
 
     "hyprland/workspaces": {
         "format": "{name}",
@@ -30,6 +30,12 @@
         "format": "󰣘",
         "tooltip": false,
         "on-click": "python3 ~/.config/waybar/apps-menu-popup.py"
+    },
+
+    "custom/tasks": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "python3 ~/.config/waybar/tasks-popup.py"
     },
 
     "custom/music-ws": {

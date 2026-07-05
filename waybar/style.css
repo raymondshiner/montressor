@@ -60,6 +60,16 @@ window#waybar {
     color: #D5CED9;
 }
 
+#custom-tasks {
+    color: #B084EB;
+    padding: 0 6px 0 10px;
+    font-size: 15px;
+}
+
+#custom-tasks:hover {
+    color: #D5CED9;
+}
+
 
 #clock {
     color: #D5CED9;

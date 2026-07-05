@@ -35,6 +35,7 @@ ALL_POPUP_PIDS = (
     '/tmp/workspace-popup.pid',
     '/tmp/wifi-popup.pid',
     '/tmp/apps-menu-popup.pid',
+    '/tmp/tasks-popup.pid',
 )
 
 
