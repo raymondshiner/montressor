@@ -202,7 +202,7 @@ window#waybar.top .modules-left {
 #custom-obsidian, #custom-obsidian-sp {
     background: #23262E;
     color: #B084EB;
-    padding: 0 14px;
+    padding: 0 17px 0 11px;
     margin: 4px 0;
     font-size: 14px;
     border-radius: 12px;
