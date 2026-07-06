@@ -213,22 +213,22 @@ class WorkspacePopup(Gtk.Window):
         hdr.set_xalign(0)
         root.pack_start(hdr, False, False, 0)
 
-        # --- Renumber ---
-        ren_lbl = Gtk.Label(label='Renumber')
+        # --- Rename / renumber ---
+        ren_lbl = Gtk.Label(label='Rename (number or name)')
         ren_lbl.get_style_context().add_class('section-label')
         ren_lbl.set_xalign(0)
         root.pack_start(ren_lbl, False, False, 0)
 
         ren_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
         self._entry = Gtk.Entry()
-        self._entry.set_text(str(self._ws_id))
-        self._entry.set_width_chars(6)
-        self._entry.connect('activate', self._on_renumber)
+        self._entry.set_text(self._ws_name)
+        self._entry.set_width_chars(14)
+        self._entry.connect('activate', self._on_rename)
         ren_row.pack_start(self._entry, False, False, 0)
 
         ren_btn = Gtk.Button(label='Apply')
         ren_btn.get_style_context().add_class('action-btn')
-        ren_btn.connect('clicked', self._on_renumber)
+        ren_btn.connect('clicked', self._on_rename)
         ren_row.pack_start(ren_btn, False, False, 0)
         root.pack_start(ren_row, False, False, 0)
 
@@ -331,18 +331,14 @@ class WorkspacePopup(Gtk.Window):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_renumber(self, _w):
+    def _on_rename(self, _w):
         txt = self._entry.get_text().strip()
         if not txt:
             return
-        try:
-            new_id = int(txt)
-        except ValueError:
-            return
-        if new_id == self._ws_id:
+        if txt == self._ws_name:
             self.destroy()
             return
-        hypr_dispatch('renameworkspace', str(self._ws_id), str(new_id))
+        hypr_dispatch('renameworkspace', str(self._ws_id), txt)
         self.destroy()
 
     def _on_move_window(self, combo):
