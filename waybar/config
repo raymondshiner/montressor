@@ -1,4 +1,5 @@
-{
+[{
+    "name": "top",
     "layer": "top",
     "position": "top",
     "height": 38,
@@ -9,13 +10,7 @@
         "custom/ws6", "custom/ws7", "custom/ws8", "custom/ws9", "custom/ws10",
         "custom/workspace-menu"
     ],
-    "modules-center": [
-        "custom/obsidian-sp",
-        "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
-        "clock",
-        "custom/obsidian",
-        "custom/np-next-m", "custom/np-playpause-m", "custom/np-prev-m", "custom/now-playing-m", "custom/music-ws-m"
-    ],
+    "modules-center": ["custom/obsidian-sp", "clock", "custom/obsidian"],
     "modules-right": ["tray", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/tasks", "custom/apps-menu"],
 
     "custom/ws-listener": {
@@ -142,47 +137,6 @@
         "on-click": "python3 ~/.config/waybar/tasks-popup.py"
     },
 
-    "custom/music-ws": {
-        "exec": "~/.config/waybar/music-ws.sh",
-        "return-type": "json",
-        "on-click": "~/.local/bin/music-launch.sh",
-        "tooltip": true
-    },
-
-    "custom/now-playing": {
-        "exec": "~/.config/waybar/now-playing.sh",
-        "return-type": "json",
-        "on-click": "~/.local/bin/music-launch.sh",
-        "tooltip": true
-    },
-
-    "custom/np-prev": {
-        "exec": "~/.config/waybar/np-prev.sh",
-        "return-type": "json",
-        "on-click": "playerctl -p spotify previous",
-        "tooltip": true
-    },
-
-    "custom/np-playpause": {
-        "exec": "~/.config/waybar/np-playpause.sh",
-        "return-type": "json",
-        "on-click": "playerctl -p spotify status >/dev/null 2>&1 && playerctl -p spotify play-pause || setsid spotify >/dev/null 2>&1 < /dev/null &",
-        "tooltip": true
-    },
-
-    "custom/np-next": {
-        "exec": "~/.config/waybar/np-next.sh",
-        "return-type": "json",
-        "on-click": "playerctl -p spotify next",
-        "tooltip": true
-    },
-
-    "custom/music-ws-m":   { "exec": "~/.config/waybar/music-ws.sh",   "return-type": "json", "tooltip": false },
-    "custom/now-playing-m":{ "exec": "~/.config/waybar/now-playing.sh","return-type": "json", "tooltip": false },
-    "custom/np-prev-m":    { "exec": "~/.config/waybar/np-prev.sh",    "return-type": "json", "tooltip": false },
-    "custom/np-playpause-m":{"exec": "~/.config/waybar/np-playpause.sh","return-type": "json", "tooltip": false },
-    "custom/np-next-m":    { "exec": "~/.config/waybar/np-next.sh",    "return-type": "json", "tooltip": false },
-
     "clock": {
         "format": "{:%a %b %d   %I:%M %p}",
         "tooltip": false,
@@ -308,4 +262,49 @@
         "spacing": 8,
         "icon-size": 16
     }
-}
+},
+{
+    "name": "bottom",
+    "layer": "top",
+    "position": "bottom",
+    "height": 38,
+    "spacing": 0,
+    "modules-right": [
+        "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next"
+    ],
+
+    "custom/music-ws": {
+        "exec": "~/.config/waybar/music-ws.sh",
+        "return-type": "json",
+        "on-click": "~/.local/bin/music-launch.sh",
+        "tooltip": true
+    },
+
+    "custom/now-playing": {
+        "exec": "~/.config/waybar/now-playing.sh",
+        "return-type": "json",
+        "on-click": "~/.local/bin/music-launch.sh",
+        "tooltip": true
+    },
+
+    "custom/np-prev": {
+        "exec": "~/.config/waybar/np-prev.sh",
+        "return-type": "json",
+        "on-click": "playerctl -p spotify previous",
+        "tooltip": true
+    },
+
+    "custom/np-playpause": {
+        "exec": "~/.config/waybar/np-playpause.sh",
+        "return-type": "json",
+        "on-click": "playerctl -p spotify status >/dev/null 2>&1 && playerctl -p spotify play-pause || setsid spotify >/dev/null 2>&1 < /dev/null &",
+        "tooltip": true
+    },
+
+    "custom/np-next": {
+        "exec": "~/.config/waybar/np-next.sh",
+        "return-type": "json",
+        "on-click": "playerctl -p spotify next",
+        "tooltip": true
+    }
+}]

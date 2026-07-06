@@ -12,11 +12,12 @@ window#waybar {
     color: #D5CED9;
 }
 
-.modules-left {
+window#waybar.top .modules-left {
     background: #23262E;
     border-radius: 12px;
     margin: 4px 0 4px 6px;
     padding: 0 4px;
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
 }
 
 #custom-ws-listener {
@@ -85,6 +86,7 @@ window#waybar {
     background: #23262E;
     border-radius: 12px;
     margin: 4px 6px;
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
 }
 
 #tray, #custom-drives, #swaync, #custom-displays, #bluetooth,
@@ -93,6 +95,7 @@ window#waybar {
     background: #23262E;
     border-radius: 12px;
     margin: 4px 3px;
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
 }
 
 #custom-apps-menu {
@@ -141,46 +144,48 @@ window#waybar {
 #custom-vpn { color: #677691; padding: 0 12px; }
 #custom-vpn.connected { color: #00E8C6; }
 #custom-vpn.disconnected { color: #EE5D43; }
-#custom-now-playing,   #custom-now-playing-m,
-#custom-np-prev,       #custom-np-prev-m,
-#custom-np-playpause,  #custom-np-playpause-m,
-#custom-np-next,       #custom-np-next-m,
-#custom-music-ws,      #custom-music-ws-m {
+#custom-now-playing,
+#custom-np-prev,
+#custom-np-playpause,
+#custom-np-next,
+#custom-music-ws {
     background: #23262E;
     color: #D5CED9;
     padding: 0 8px;
     margin: 4px 0;
     font-size: 14px;
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
 }
-#custom-music-ws, #custom-music-ws-m {
+#custom-music-ws {
     padding: 0 10px 0 14px;
     border-radius: 12px 0 0 12px;
     color: #00E8C6;
 }
 #custom-music-ws.visible,
 #custom-music-ws.closed  { color: #00E8C6; }
-#custom-now-playing, #custom-now-playing-m {
+#custom-now-playing {
     padding: 0 12px;
     color: #00E8C6;
     font-weight: bold;
 }
 #custom-now-playing.paused { color: #00E8C6; }
-#custom-np-prev, #custom-np-prev-m,
-#custom-np-playpause, #custom-np-playpause-m,
-#custom-np-next, #custom-np-next-m { color: #00E8C6; }
+#custom-np-prev,
+#custom-np-playpause,
+#custom-np-next { color: #00E8C6; }
 #custom-np-playpause.paused { color: #00E8C6; }
 #custom-np-playpause.playing { color: #00E8C6; }
-#custom-np-next, #custom-np-next-m {
+#custom-np-next {
     padding: 0 14px 0 8px;
     border-radius: 0 12px 12px 0;
+    margin-right: 6px;
 }
 
-#custom-now-playing.hidden,   #custom-now-playing-m.hidden,
-#custom-np-prev.hidden,       #custom-np-prev-m.hidden,
-#custom-np-playpause.hidden,  #custom-np-playpause-m.hidden,
-#custom-np-next.hidden,       #custom-np-next-m.hidden,
-#custom-music-ws.hidden,      #custom-music-ws-m.hidden {
-    background: transparent; padding: 0; margin: 0;
+#custom-now-playing.hidden,
+#custom-np-prev.hidden,
+#custom-np-playpause.hidden,
+#custom-np-next.hidden,
+#custom-music-ws.hidden {
+    background: transparent; padding: 0; margin: 0; box-shadow: none;
 }
 
 #custom-music-ws.offline,
@@ -201,22 +206,14 @@ window#waybar {
     margin: 4px 0;
     font-size: 14px;
     border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
 }
 #custom-obsidian:hover { color: #C9A6F5; }
 /* Left spacer: same box, no visible ink — keeps the clock centered */
 #custom-obsidian-sp {
     background: transparent;
     color: transparent;
-}
-
-/* Mirror spacers: same width, no visible ink */
-#custom-music-ws-m,
-#custom-now-playing-m,
-#custom-np-prev-m,
-#custom-np-playpause-m,
-#custom-np-next-m {
-    background: transparent;
-    color: transparent;
+    box-shadow: none;
 }
 #custom-vpn.connecting { color: #FFE66D; }
 #custom-kdeconnect { color: #677691; padding: 0 12px; }
