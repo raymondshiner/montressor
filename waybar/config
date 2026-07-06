@@ -3,7 +3,12 @@
     "position": "top",
     "height": 38,
     "spacing": 4,
-    "modules-left": ["hyprland/workspaces", "custom/workspace-menu"],
+    "modules-left": [
+        "custom/ws-listener",
+        "custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5",
+        "custom/ws6", "custom/ws7", "custom/ws8", "custom/ws9", "custom/ws10",
+        "custom/workspace-menu"
+    ],
     "modules-center": [
         "custom/obsidian-sp",
         "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next",
@@ -13,11 +18,110 @@
     ],
     "modules-right": ["tray", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/tasks", "custom/apps-menu"],
 
-    "hyprland/workspaces": {
-        "format": "{name}",
-        "all-outputs": false,
-        "on-click": "activate",
-        "sort-by": "id"
+    "custom/ws-listener": {
+        "exec": "~/.config/waybar/ws-listen.sh",
+        "format": ""
+    },
+
+    "custom/ws1": {
+        "exec": "~/.config/waybar/ws-button.sh 1",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 1",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 1"
+    },
+    "custom/ws2": {
+        "exec": "~/.config/waybar/ws-button.sh 2",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 2",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 2"
+    },
+    "custom/ws3": {
+        "exec": "~/.config/waybar/ws-button.sh 3",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 3",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 3"
+    },
+    "custom/ws4": {
+        "exec": "~/.config/waybar/ws-button.sh 4",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 4",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 4"
+    },
+    "custom/ws5": {
+        "exec": "~/.config/waybar/ws-button.sh 5",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 5",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 5"
+    },
+    "custom/ws6": {
+        "exec": "~/.config/waybar/ws-button.sh 6",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 6",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 6"
+    },
+    "custom/ws7": {
+        "exec": "~/.config/waybar/ws-button.sh 7",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 7",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 7"
+    },
+    "custom/ws8": {
+        "exec": "~/.config/waybar/ws-button.sh 8",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 8",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 8"
+    },
+    "custom/ws9": {
+        "exec": "~/.config/waybar/ws-button.sh 9",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 9",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 9"
+    },
+    "custom/ws10": {
+        "exec": "~/.config/waybar/ws-button.sh 10",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch workspace 10",
+        "on-click-right": "~/.config/waybar/ws-open-popup.sh 10"
     },
 
     "custom/workspace-menu": {

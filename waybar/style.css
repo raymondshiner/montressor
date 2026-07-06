@@ -13,11 +13,13 @@ window#waybar {
     border-bottom: 2px solid rgba(220, 220, 220, 0.35);
 }
 
-#workspaces {
-    margin: 0 4px;
+#custom-ws-listener {
+    padding: 0;
+    margin: 0;
 }
 
-#workspaces button {
+#custom-ws1, #custom-ws2, #custom-ws3, #custom-ws4, #custom-ws5,
+#custom-ws6, #custom-ws7, #custom-ws8, #custom-ws9, #custom-ws10 {
     padding: 0 10px;
     color: #677691;
     background: transparent;
@@ -25,17 +27,14 @@ window#waybar {
     transition: all 0.2s ease;
 }
 
-#workspaces button.active {
+#custom-ws1.active, #custom-ws2.active, #custom-ws3.active, #custom-ws4.active, #custom-ws5.active,
+#custom-ws6.active, #custom-ws7.active, #custom-ws8.active, #custom-ws9.active, #custom-ws10.active {
     color: #00E8C6;
     border-bottom: 2px solid #00E8C6;
 }
 
-#workspaces button.urgent {
-    color: #EE5D43;
-    border-bottom: 2px solid #EE5D43;
-}
-
-#workspaces button:hover {
+#custom-ws1:hover, #custom-ws2:hover, #custom-ws3:hover, #custom-ws4:hover, #custom-ws5:hover,
+#custom-ws6:hover, #custom-ws7:hover, #custom-ws8:hover, #custom-ws9:hover, #custom-ws10:hover {
     background: rgba(0, 232, 198, 0.08);
     color: #D5CED9;
 }
