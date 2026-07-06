@@ -2,7 +2,7 @@
     "layer": "top",
     "position": "top",
     "height": 38,
-    "spacing": 4,
+    "spacing": 0,
     "modules-left": [
         "custom/ws-listener",
         "custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5",

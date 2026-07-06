@@ -8,9 +8,15 @@
 
 
 window#waybar {
-    background-color: rgba(28, 30, 38, 0.92);
+    background-color: transparent;
     color: #D5CED9;
-    border-bottom: 2px solid rgba(220, 220, 220, 0.35);
+}
+
+.modules-left {
+    background: #23262E;
+    border-radius: 12px;
+    margin: 4px 0 4px 6px;
+    padding: 0 4px;
 }
 
 #custom-ws-listener {
@@ -21,16 +27,17 @@ window#waybar {
 #custom-ws1, #custom-ws2, #custom-ws3, #custom-ws4, #custom-ws5,
 #custom-ws6, #custom-ws7, #custom-ws8, #custom-ws9, #custom-ws10 {
     padding: 0 10px;
+    margin: 5px 1px;
     color: #677691;
     background: transparent;
-    border-bottom: 2px solid transparent;
+    border-radius: 8px;
     transition: all 0.2s ease;
 }
 
 #custom-ws1.active, #custom-ws2.active, #custom-ws3.active, #custom-ws4.active, #custom-ws5.active,
 #custom-ws6.active, #custom-ws7.active, #custom-ws8.active, #custom-ws9.active, #custom-ws10.active {
     color: #00E8C6;
-    border-bottom: 2px solid #00E8C6;
+    background: rgba(0, 232, 198, 0.12);
 }
 
 #custom-ws1:hover, #custom-ws2:hover, #custom-ws3:hover, #custom-ws4:hover, #custom-ws5:hover,
@@ -74,7 +81,22 @@ window#waybar {
     color: #D5CED9;
     font-weight: bold;
     letter-spacing: 0.5px;
-    padding: 0 14px;
+    padding: 0 16px;
+    background: #23262E;
+    border-radius: 12px;
+    margin: 4px 6px;
+}
+
+#tray, #custom-drives, #swaync, #custom-displays, #bluetooth,
+#pulseaudio, #battery, #network, #custom-vpn, #hardware,
+#custom-tasks, #custom-apps-menu {
+    background: #23262E;
+    border-radius: 12px;
+    margin: 4px 3px;
+}
+
+#custom-apps-menu {
+    margin-right: 6px;
 }
 
 #battery,
