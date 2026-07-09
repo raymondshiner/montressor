@@ -18,10 +18,14 @@ export WINEDEBUG=-all
 export WINEFSYNC=1
 export WINEESYNC=1
 
-# Optimus: the Intel iGPU drives the display. Pin DXVK to the Intel Vulkan device
-# so it renders AND presents on the same GPU — a dGPU render would need a
-# cross-GPU PRIME copy that goes black-until-damaged under XWayland (Hyprland #6375).
-export DXVK_FILTER_DEVICE_NAME="Intel"
+# Render on the NVIDIA RTX 4060 via PRIME offload (the Intel iGPU is hardwired to
+# the display, so the dGPU frame is presented through it). This is the supported
+# offload path — with driver 610 + explicit-sync XWayland it presents correctly
+# instead of the black-until-damage reverse-PRIME breakage.
+export __NV_PRIME_RENDER_OFFLOAD=1
+export __VK_LAYER_NV_optimus=NVIDIA_only
+export __GLX_VENDOR_LIBRARY_NAME=nvidia
+export DXVK_FILTER_DEVICE_NAME="NVIDIA"
 
 MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
 
