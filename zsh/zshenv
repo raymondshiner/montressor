@@ -1,0 +1,62 @@
+# ~/.zshenv — sourced by EVERY zsh invocation (interactive, non-interactive, scripts).
+# Keep this file fast and side-effect-free. Functions defined here are visible to
+# `zsh -c "..."` calls (e.g. Claude Code's Bash tool), which `.zshrc` is not.
+# Real file: ~/montressor/zsh/zshenv (symlinked to ~/.zshenv by bootstrap-linux.sh).
+
+# ---------- OS identity (dual-boot: cachyos | ubuntu; mac: darwin) ----------
+# Agents and scripts branch on this — CLAUDE.md edit-scope rules key off it.
+if [[ -r /etc/os-release ]]; then
+  export JARVIS_OS="$(. /etc/os-release && echo "$ID")"
+else
+  export JARVIS_OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+fi
+
+# ---------- PATH ----------
+# Must be here (not .zshrc) so agent bins (log-op, jarvis, launch, dots-private…)
+# are reachable from non-interactive `zsh -c` shells like Claude Code's Bash tool.
+[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"
+
+# dots / dots-private are real bins (~/jarvis/claude/bin/dots, symlinked into
+# ~/.local/bin) so they work from ANY shell, not just zsh (2026-07-08).
+
+# Refresh the package snapshots in ~/montressor/packages/ for the current OS,
+# then commit + push via `dots`. No-op if the lists haven't changed.
+# NOTE (ubuntu): this refreshes the same ubuntu-apt.txt / ubuntu-snap.txt that
+# bootstrap-linux.sh installs from — snapshot and install list are one file
+# (see packages/ubuntu-manual.md).
+dots-sync-pkgs() {
+  local pkgdir=~/montressor/packages
+  mkdir -p "$pkgdir"
+  case "$JARVIS_OS" in
+    ubuntu)
+      apt-mark showmanual | sort > "$pkgdir/ubuntu-apt.txt"
+      snap list 2>/dev/null | awk 'NR>1 {print $1}' | sort > "$pkgdir/ubuntu-snap.txt"
+      echo "dots-sync-pkgs: $(wc -l < $pkgdir/ubuntu-apt.txt) apt (manual), $(wc -l < $pkgdir/ubuntu-snap.txt) snap"
+      ;;
+    darwin)
+      command -v brew >/dev/null || { echo "dots-sync-pkgs: brew not found"; return 1; }
+      brew leaves > "$pkgdir/mac-brew.txt"
+      brew list --cask > "$pkgdir/mac-cask.txt"
+      echo "dots-sync-pkgs: $(wc -l < $pkgdir/mac-brew.txt) brew, $(wc -l < $pkgdir/mac-cask.txt) cask"
+      ;;
+    *)
+      command -v pacman >/dev/null || { echo "dots-sync-pkgs: no pacman on $JARVIS_OS"; return 1; }
+      pacman -Qqen > "$pkgdir/pacman.txt"
+      pacman -Qqem > "$pkgdir/aur.txt"
+      echo "dots-sync-pkgs: $(wc -l < $pkgdir/pacman.txt) native, $(wc -l < $pkgdir/aur.txt) AUR"
+      ;;
+  esac
+  dots "sync package snapshot ($JARVIS_OS)"
+}
+
+# Android SDK
+export ANDROID_HOME="$HOME/Android/Sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+
+# GUI askpass for sudo from non-interactive/agent shells (rofi prompt).
+# Agents must call `sudo -A`; without -A, sudo in a TTY-less shell fails silently
+# and burns pam_faillock attempts (see machine.md SYSTEM > sudo).
+export SUDO_ASKPASS="$HOME/.local/bin/sudo-askpass"
+
+[[ -f ~/.config/ynab/.env ]] && source ~/.config/ynab/.env

@@ -13,7 +13,8 @@ COMPLETION_WAITING_DOTS="true"
 [[ -n "$ZSH" && -f "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
 # ---------- PATH ----------
-[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"
+# Moved to ~/.zshenv so non-interactive shells (Claude Code's Bash tool, scripts)
+# also see ~/.local/bin. Keep this block out of .zshrc.
 
 # ---------- history ----------
 export HISTCONTROL=ignoreboth
@@ -42,25 +43,47 @@ SPACESHIP_CHAR_SUFFIX=" "
 # ---------- OS-specific: plugins, prompt, package aliases ----------
 case "$(uname -s)" in
   Linux)
-    alias rmpkg="sudo pacman -Rsn"
-    alias cleanch="sudo pacman -Scc"
-    alias fixpacman="sudo rm /var/lib/pacman/db.lck"
-    alias update="sudo pacman -Syu"
-    alias apt="man pacman"
-    alias jctl="journalctl -p 3 -xb"
-    alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
+    # Dual-boot: cachyos/arch vs ubuntu — $JARVIS_OS exported by ~/.zshenv.
+    case "${JARVIS_OS:-$(. /etc/os-release 2>/dev/null && echo "$ID")}" in
+      ubuntu)
+        alias update="sudo apt update && sudo apt full-upgrade"
+        alias rmpkg="sudo apt remove --purge"
+        alias cleanch="sudo apt autoremove --purge"
+        alias jctl="journalctl -p 3 -xb"
 
-    [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
-      source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    [[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
-      source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    [[ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ]] && \
-      source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-    [[ -f /usr/share/doc/pkgfile/command-not-found.zsh ]] && \
-      source /usr/share/doc/pkgfile/command-not-found.zsh
-    export FZF_BASE=/usr/share/fzf
-    [[ -f /usr/lib/spaceship-prompt/spaceship.zsh ]] && \
-      source /usr/lib/spaceship-prompt/spaceship.zsh
+        [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+          source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+        [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+          source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+        [[ -n "$ZSH" && -f "$ZSH/plugins/history-substring-search/history-substring-search.plugin.zsh" ]] && \
+          source "$ZSH/plugins/history-substring-search/history-substring-search.plugin.zsh"
+        [[ -f /etc/zsh_command_not_found ]] && source /etc/zsh_command_not_found
+        export FZF_BASE=/usr/share/doc/fzf/examples
+        [[ -n "$ZSH" && -f "${ZSH_CUSTOM:-$ZSH/custom}/themes/spaceship-prompt/spaceship.zsh" ]] && \
+          source "${ZSH_CUSTOM:-$ZSH/custom}/themes/spaceship-prompt/spaceship.zsh"
+        ;;
+      *)  # cachyos / arch
+        alias rmpkg="sudo pacman -Rsn"
+        alias cleanch="sudo pacman -Scc"
+        alias fixpacman="sudo rm /var/lib/pacman/db.lck"
+        alias update="sudo pacman -Syu"
+        alias apt="man pacman"
+        alias jctl="journalctl -p 3 -xb"
+        alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
+
+        [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+          source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+        [[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+          source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+        [[ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ]] && \
+          source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+        [[ -f /usr/share/doc/pkgfile/command-not-found.zsh ]] && \
+          source /usr/share/doc/pkgfile/command-not-found.zsh
+        export FZF_BASE=/usr/share/fzf
+        [[ -f /usr/lib/spaceship-prompt/spaceship.zsh ]] && \
+          source /usr/lib/spaceship-prompt/spaceship.zsh
+        ;;
+    esac
     ;;
   Darwin)
     BREW_PREFIX="$(brew --prefix 2>/dev/null)"
@@ -82,77 +105,15 @@ esac
 # ---------- claude wrapper ----------
 claude() { ~/.local/bin/claude-wrapped "$@"; }
 
-# ---------- last-project tracker (for resume-project hotkey) ----------
-# Records the most recent project from ~/src/ that you cd into.
-_track_last_project() {
-  local p="$PWD" rest name=""
-  if [[ "$p" == "$HOME/src/"* ]]; then
-    rest="${p#$HOME/src/}"
-    name="${rest%%/*}"
-  fi
-  [[ -z "$name" || "$name" == .* ]] && return
-  [[ -d "$HOME/src/$name" ]] || return
-  mkdir -p "$HOME/.cache/jarvis"
-  print -r -- "$name" > "$HOME/.cache/jarvis/last-project"
-}
-autoload -Uz add-zsh-hook
-add-zsh-hook chpwd _track_last_project
-_track_last_project   # seed on shell start
+# ---------- current project (manual) ----------
+# The "current project" is set explicitly, not auto-tracked from cd.
+# You change projects in seasons — use:
+#   current-project <name>   # set
+#   current-project          # read
+# State: ~/.cache/jarvis/current-project
+# Used by: resume-project, pause-project, smith agent on session start.
 
-# ---------- dots: auto-sync montressor repos to GitHub ----------
-# Two repos:
-#   ~/montressor         (public-able dotfiles)
-#   ~/jarvis (agent prompts, CLAUDE.md, memory, hooks)
-#
-# `dots` figures out which repo to act on:
-#   - If $PWD is inside one of the two repos → use that one.
-#   - Otherwise → default to ~/montressor.
-# Override explicitly: `dots-private "msg"` always hits the private repo.
-#
-# Usage: `dots` or `dots "fix waybar padding"`.
-_dots_commit() {
-  local repo="$1" msg="$2"
-  ( cd "$repo" || return 1
-    git add -A
-    if git diff --cached --quiet; then
-      echo "$(basename "$repo"): clean, nothing to commit"
-      return 0
-    fi
-    git commit -m "${msg:-update: $(date +%Y-%m-%d\ %H:%M)}"
-    git push
-  )
-}
-
-dots() {
-  local toplevel repo=~/montressor
-  toplevel="$(git rev-parse --show-toplevel 2>/dev/null)"
-  case "$toplevel" in
-    "$HOME/montressor"|"$HOME/jarvis") repo="$toplevel" ;;
-  esac
-  _dots_commit "$repo" "$1"
-}
-
-dots-private() { _dots_commit ~/jarvis "$1"; }
-
-# Refresh the package snapshots in ~/montressor/packages/ for the current OS,
-# then commit + push via `dots`. No-op if the lists haven't changed.
-dots-sync-pkgs() {
-  local pkgdir=~/montressor/packages
-  mkdir -p "$pkgdir"
-  case "$(uname -s)" in
-    Linux)
-      command -v pacman >/dev/null || { echo "dots-sync-pkgs: pacman not found"; return 1; }
-      pacman -Qqen > "$pkgdir/pacman.txt"
-      pacman -Qqem > "$pkgdir/aur.txt"
-      echo "dots-sync-pkgs: $(wc -l < $pkgdir/pacman.txt) native, $(wc -l < $pkgdir/aur.txt) AUR"
-      ;;
-    Darwin)
-      command -v brew >/dev/null || { echo "dots-sync-pkgs: brew not found"; return 1; }
-      brew leaves > "$pkgdir/mac-brew.txt"
-      brew list --cask > "$pkgdir/mac-cask.txt"
-      echo "dots-sync-pkgs: $(wc -l < $pkgdir/mac-brew.txt) brew, $(wc -l < $pkgdir/mac-cask.txt) cask"
-      ;;
-    *) echo "dots-sync-pkgs: unsupported OS"; return 1 ;;
-  esac
-  dots "sync package snapshot ($(uname -s | tr '[:upper:]' '[:lower:]'))"
-}
+# ---------- dots / dots-sync-pkgs ----------
+# `dots` / `dots-private` are real bins (~/jarvis/claude/bin/dots → ~/.local/bin)
+# so they work from any shell. `dots-sync-pkgs` (per-OS package snapshots)
+# lives in ~/.zshenv so agent `zsh -c` shells see it too.

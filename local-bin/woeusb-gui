@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# woeusb-ng GUI must run as root (core.main hard-requires uid 0). pkexec strips
+# the environment, so we pass the Wayland/X display vars through `env` explicitly,
+# otherwise the elevated GUI can't connect to the compositor and exits silently.
+exec pkexec env \
+    DISPLAY="${DISPLAY:-:0}" \
+    WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-1}" \
+    XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}" \
+    XAUTHORITY="${XAUTHORITY}" \
+    GDK_BACKEND=wayland,x11 \
+    /usr/bin/woeusbgui "$@"

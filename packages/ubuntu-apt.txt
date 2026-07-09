@@ -1,0 +1,114 @@
+# Curated Ubuntu 26.04 set for the hand-built Hyprland desktop.
+# bootstrap-linux.sh installs from this file (comments stripped; unknown names
+# degrade to per-package warnings). After first boot, `dots-sync-pkgs` replaces
+# this curation with the live `apt-mark showmanual` snapshot — expected
+# (see ubuntu-manual.md).
+
+# --- hyprland desktop stack (universe) ---
+hyprland
+hypridle
+hyprlock
+hyprpaper
+hyprpolkitagent
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+waybar
+sway-notification-center
+swayosd
+grim
+slurp
+swappy
+wl-clipboard
+xwayland
+rofi
+nwg-displays
+kitty
+
+# --- GTK popups (waybar Python popups) ---
+python3-gi
+gir1.2-gtk-3.0
+gir1.2-gtklayershell-0.1
+
+# --- desktop plumbing ---
+pavucontrol
+playerctl
+blueman
+network-manager-gnome
+network-manager-openvpn
+udiskie
+udisks2
+switcheroo-control
+power-profiles-daemon
+ddcutil
+gnome-keyring
+xdg-user-dirs
+qt5ct
+qt6ct
+adw-gtk3-theme
+mesa-utils
+
+# --- shell & CLI ---
+zsh
+zsh-syntax-highlighting
+zsh-autosuggestions
+git
+gh
+jq
+fzf
+ripgrep
+fd-find
+btop
+duf
+fastfetch
+glances
+micro
+vim
+nano
+meld
+plocate
+rsync
+wget
+curl
+unzip
+unrar
+pv
+strace
+socat
+libnotify-bin
+
+# --- dev toolchain ---
+build-essential
+nodejs
+npm
+python3
+python3-pip
+pipx
+default-jdk
+
+# --- media & apps ---
+mpv
+vlc
+kodi
+qbittorrent
+thunar
+ffmpegthumbnailer
+baobab
+
+# --- printing ---
+cups
+system-config-printer
+printer-driver-escpr
+
+# --- fonts (JetBrains Mono Nerd = bootstrap download, no deb exists) ---
+fonts-noto
+fonts-noto-cjk
+fonts-noto-color-emoji
+fonts-dejavu
+fonts-liberation
+fonts-font-awesome
+
+# --- vendor apt repos (configured by bootstrap-linux.sh) ---
+google-chrome-stable
+code
+mullvad-vpn
+brave-browser

@@ -1,0 +1,3 @@
+# Snaps installed by bootstrap-linux.sh (one per line; flags allowed after name).
+# firefox ships preinstalled as a snap on Ubuntu — not listed.
+spotify
