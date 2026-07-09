@@ -6,9 +6,9 @@
     "spacing": 0,
     "modules-left": [
         "custom/ws-listener",
+        "custom/wsn1", "custom/wsn2",
         "custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5",
         "custom/ws6", "custom/ws7", "custom/ws8", "custom/ws9", "custom/ws10",
-        "custom/wsn1", "custom/wsn2",
         "custom/workspace-menu"
     ],
     "modules-center": ["custom/obsidian-sp", "clock", "custom/obsidian"],
