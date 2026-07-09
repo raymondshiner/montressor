@@ -354,12 +354,21 @@ class WorkspacePopup(Gtk.Window):
         hypr_dispatch('movetoworkspace', str(target))
         self.destroy()
 
+    def _ws_ref(self):
+        # Named workspaces (e.g. `launch` project workspaces) get negative IDs;
+        # a bare negative number reads as a *relative* selector to Hyprland, so
+        # reference them by name. Numeric workspaces reference cleanly by ID.
+        if self._ws_name.lstrip('-').isdigit():
+            return str(self._ws_id)
+        return f'name:{self._ws_name}'
+
     def _on_move_monitor(self, _btn, monitor_name):
         if monitor_name == self._ws_monitor:
             self.destroy()
             return
+        # moveworkspacetomonitor takes a single "<ws> <mon>" argument string.
         hypr_dispatch('moveworkspacetomonitor',
-                      str(self._ws_id), monitor_name)
+                      f'{self._ws_ref()} {monitor_name}')
         self.destroy()
 
     def _on_close_workspace(self, _btn):
