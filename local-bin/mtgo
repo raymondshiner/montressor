@@ -18,13 +18,9 @@ export WINEDEBUG=-all
 export WINEFSYNC=1
 export WINEESYNC=1
 
-# Render on the NVIDIA RTX 4060 via PRIME offload (the Intel iGPU is hardwired to
-# the display, so the dGPU frame is presented through it). This is the supported
-# offload path — with driver 610 + explicit-sync XWayland it presents correctly
-# instead of the black-until-damage reverse-PRIME breakage.
-export __NV_PRIME_RENDER_OFFLOAD=1
-export __VK_LAYER_NV_optimus=NVIDIA_only
-export __GLX_VENDOR_LIBRARY_NAME=nvidia
+# The whole Hyprland desktop renders on the NVIDIA 4060 (AQ_DRM_DEVICES in
+# hyprland.conf), so DXVK lands on NVIDIA by default and presents without the
+# cross-GPU reverse-PRIME hop. Pin it explicitly as a belt-and-suspenders.
 export DXVK_FILTER_DEVICE_NAME="NVIDIA"
 
 MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
