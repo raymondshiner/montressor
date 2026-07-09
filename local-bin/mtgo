@@ -1,20 +1,24 @@
 #!/usr/bin/env bash
 # Launch Magic: The Gathering Online under Wine.
-# ClickOnce relocates MTGO.exe into a hashed AppData/Local/Apps/2.0 path that
-# changes on every client patch, so resolve the exe fresh on each launch.
+#
+# MTGO is a ClickOnce "networked deployed" app. It refuses to start from the
+# raw MTGO.exe ("must be started from the shortcut created by the installation
+# process"), and Wine's ClickOnce shortcut activation (the .appref-ms via
+# dfshim ShOpenVerbShortcut) fails with "application cannot be started, contact
+# the vendor". The reliable path is to force a fresh ONLINE activation against
+# MTGO's deployment manifest URL with dfshim's ShOpenVerbApplication verb — this
+# revalidates/patches the client and launches it correctly every time.
 
 export WINEPREFIX="$HOME/Games/mtgo-wine"
 export WINEARCH=win64
 export WINEDEBUG=-all
 
-APPS="$WINEPREFIX/drive_c/users/$USER/AppData/Local/Apps/2.0"
-EXE=$(find "$APPS" -name MTGO.exe -path '*mtgo..tion*' 2>/dev/null | head -1)
-[ -z "$EXE" ] && EXE=$(find "$APPS" -name MTGO.exe 2>/dev/null | grep -iv 'none_' | head -1)
+MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
 
-if [ -z "$EXE" ]; then
-    notify-send -u critical "MTGO" "MTGO.exe not found — the client may need reinstalling via setup.exe"
-    exit 1
+# If MTGO is already running, just focus-launch a no-op instead of a second copy.
+if pgrep -x MTGO.exe >/dev/null 2>&1; then
+    notify-send "MTGO" "Magic: The Gathering Online is already running." 2>/dev/null
+    exit 0
 fi
 
-cd "$(dirname "$EXE")" || exit 1
-exec wine "$EXE" "$@"
+exec wine rundll32.exe dfshim.dll,ShOpenVerbApplication "$MANIFEST_URL"
