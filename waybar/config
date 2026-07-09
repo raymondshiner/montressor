@@ -289,9 +289,72 @@
     "position": "bottom",
     "height": 38,
     "spacing": 0,
+    "modules-left": [
+        "custom/dock-anchor",
+        "custom/dock1", "custom/dock2", "custom/dock3",
+        "custom/dock4", "custom/dock5", "custom/dock6"
+    ],
     "modules-right": [
         "custom/music-ws", "custom/now-playing", "custom/np-prev", "custom/np-playpause", "custom/np-next"
     ],
+
+    "custom/dock-anchor": {
+        "exec": "~/.config/waybar/dock-anchor.sh",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 9,
+        "hide-empty-text": true,
+        "tooltip": true
+    },
+
+    "custom/dock1": {
+        "exec": "~/.config/waybar/dock-slot.sh 1",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 9,
+        "hide-empty-text": true,
+        "on-click": "~/.config/waybar/dock-resume.sh 1"
+    },
+    "custom/dock2": {
+        "exec": "~/.config/waybar/dock-slot.sh 2",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 9,
+        "hide-empty-text": true,
+        "on-click": "~/.config/waybar/dock-resume.sh 2"
+    },
+    "custom/dock3": {
+        "exec": "~/.config/waybar/dock-slot.sh 3",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 9,
+        "hide-empty-text": true,
+        "on-click": "~/.config/waybar/dock-resume.sh 3"
+    },
+    "custom/dock4": {
+        "exec": "~/.config/waybar/dock-slot.sh 4",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 9,
+        "hide-empty-text": true,
+        "on-click": "~/.config/waybar/dock-resume.sh 4"
+    },
+    "custom/dock5": {
+        "exec": "~/.config/waybar/dock-slot.sh 5",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 9,
+        "hide-empty-text": true,
+        "on-click": "~/.config/waybar/dock-resume.sh 5"
+    },
+    "custom/dock6": {
+        "exec": "~/.config/waybar/dock-slot.sh 6",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 9,
+        "hide-empty-text": true,
+        "on-click": "~/.config/waybar/dock-resume.sh 6"
+    },
 
     "custom/music-ws": {
         "exec": "~/.config/waybar/music-ws.sh",
