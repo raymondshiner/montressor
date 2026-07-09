@@ -47,6 +47,26 @@ window#waybar.top .modules-left {
     color: #D5CED9;
 }
 
+/* Named launch/project workspaces — purple base to signal "project" */
+#custom-wsn1, #custom-wsn2 {
+    padding: 0 10px;
+    margin: 5px 1px;
+    color: #B084EB;
+    background: transparent;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+#custom-wsn1.active, #custom-wsn2.active {
+    color: #00E8C6;
+    background: rgba(0, 232, 198, 0.12);
+}
+
+#custom-wsn1:hover, #custom-wsn2:hover {
+    background: rgba(176, 132, 235, 0.1);
+    color: #D5CED9;
+}
+
 #custom-workspace-menu {
     color: #B084EB;
     padding: 0 10px;

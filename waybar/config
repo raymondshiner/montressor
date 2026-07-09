@@ -8,6 +8,7 @@
         "custom/ws-listener",
         "custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5",
         "custom/ws6", "custom/ws7", "custom/ws8", "custom/ws9", "custom/ws10",
+        "custom/wsn1", "custom/wsn2",
         "custom/workspace-menu"
     ],
     "modules-center": ["custom/obsidian-sp", "clock", "custom/obsidian"],
@@ -117,6 +118,25 @@
         "tooltip": false,
         "on-click": "hyprctl dispatch workspace 10",
         "on-click-right": "~/.config/waybar/ws-open-popup.sh 10"
+    },
+
+    "custom/wsn1": {
+        "exec": "~/.config/waybar/ws-button-named.sh 1",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "~/.config/waybar/ws-switch-named.sh 1"
+    },
+    "custom/wsn2": {
+        "exec": "~/.config/waybar/ws-button-named.sh 2",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "~/.config/waybar/ws-switch-named.sh 2"
     },
 
     "custom/workspace-menu": {
