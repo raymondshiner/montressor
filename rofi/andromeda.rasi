@@ -1,0 +1,81 @@
+* {
+    bg-dark:   #1C1E26;
+    bg:        #23262E;
+    fg:        #D5CED9;
+    muted:     #677691;
+    cyan:      #00E8C6;
+    background-color: transparent;
+    text-color: @fg;
+}
+
+window {
+    location: center;
+    width: 640px;
+    background-color: @bg-dark;
+    border: 2px;
+    border-color: @cyan;
+    border-radius: 12px;
+    padding: 0;
+}
+
+mainbox {
+    children: [ inputbar, listview ];
+    padding: 12px;
+    spacing: 10px;
+}
+
+inputbar {
+    children: [ prompt, entry ];
+    background-color: @bg;
+    border-radius: 8px;
+    padding: 10px 14px;
+    spacing: 10px;
+}
+
+prompt {
+    text-color: @cyan;
+}
+
+entry {
+    placeholder: "search apps…";
+    placeholder-color: @muted;
+    cursor: text;
+}
+
+listview {
+    lines: 8;
+    fixed-height: false;
+    scrollbar: false;
+    spacing: 4px;
+    cursor: default;
+}
+
+element {
+    padding: 8px 10px;
+    border-radius: 8px;
+    spacing: 10px;
+    cursor: pointer;
+}
+
+element-icon {
+    size: 24px;
+    cursor: inherit;
+}
+
+element-text {
+    cursor: inherit;
+    vertical-align: 0.5;
+}
+
+element normal.normal, element alternate.normal {
+    text-color: @fg;
+}
+
+element normal.active, element alternate.active {
+    text-color: @cyan;
+}
+
+element selected.normal, element selected.active {
+    background-color: @bg;
+    text-color: @cyan;
+}
