@@ -74,8 +74,8 @@ if [[ "$SHARED_MODE" == 1 ]]; then
   for d in jarvis montressor src Documents Pictures Media; do
     link_shared "/shared/$d" "$HOME/$d"
   done
+  # transcripts/session state (memory + plans ride INSIDE ~/jarvis instead)
   link_shared /shared/claude/projects "$HOME/.claude/projects"
-  link_shared /shared/claude/plans    "$HOME/.claude/plans"
 fi
 
 # ----------------------------------------------------------------------
@@ -223,7 +223,7 @@ fi
 # ----------------------------------------------------------------------
 say "Creating config directories..."
 mkdir -p "$HOME/.claude/agents" "$HOME/.claude/hooks" "$HOME/.claude/skills" \
-         "$HOME/.claude/commands" "$HOME/.claude/plans" \
+         "$HOME/.claude/commands" \
          "$HOME/.local/bin" "$HOME/.local/share/fonts" \
          "$HOME/.config/claude" "$HOME/.config/kitty" "$HOME/.config/hypr" \
          "$HOME/.config/waybar" "$HOME/.config/swaync" "$HOME/.config/dunst" \
@@ -317,15 +317,15 @@ ok "symlink manifest applied"
 # greetd (Arch login manager) is system config — not linked here. Ubuntu uses GDM.
 
 # ----------------------------------------------------------------------
-# 6. Seed memory files (first run only — cp -n never overwrites)
+# 6. Claude memory + plans — live in the private repo (GitHub-backed).
+#    Raw transcripts (*.jsonl in projects/) deliberately stay OUT of git.
 # ----------------------------------------------------------------------
-say "Seeding Claude memory..."
-MEM_DIR="$HOME/.claude/projects/$(echo "$HOME" | sed 's|/|-|g')/memory"
-mkdir -p "$MEM_DIR"
-for f in "$PRIVATE_REPO_DIR"/claude/memory/*.md; do
-  cp -n "$f" "$MEM_DIR/" 2>/dev/null || true
-done
-ok "$MEM_DIR"
+say "Linking Claude memory + plans (private repo)..."
+MEM_PARENT="$HOME/.claude/projects/$(echo "$HOME" | sed 's|/|-|g')"
+mkdir -p "$MEM_PARENT"
+link "$PRIVATE_REPO_DIR/claude/memory" "$MEM_PARENT/memory"
+link "$PRIVATE_REPO_DIR/claude/plans"  "$HOME/.claude/plans"
+ok "memory + plans → $PRIVATE_REPO_DIR"
 
 # ----------------------------------------------------------------------
 # 7. Default shell
