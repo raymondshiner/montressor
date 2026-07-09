@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Launch Magic: The Gathering Online under Wine.
+# ClickOnce relocates MTGO.exe into a hashed AppData/Local/Apps/2.0 path that
+# changes on every client patch, so resolve the exe fresh on each launch.
+
+export WINEPREFIX="$HOME/Games/mtgo-wine"
+export WINEARCH=win64
+export WINEDEBUG=-all
+
+APPS="$WINEPREFIX/drive_c/users/$USER/AppData/Local/Apps/2.0"
+EXE=$(find "$APPS" -name MTGO.exe -path '*mtgo..tion*' 2>/dev/null | head -1)
+[ -z "$EXE" ] && EXE=$(find "$APPS" -name MTGO.exe 2>/dev/null | grep -iv 'none_' | head -1)
+
+if [ -z "$EXE" ]; then
+    notify-send -u critical "MTGO" "MTGO.exe not found — the client may need reinstalling via setup.exe"
+    exit 1
+fi
+
+cd "$(dirname "$EXE")" || exit 1
+exec wine "$EXE" "$@"

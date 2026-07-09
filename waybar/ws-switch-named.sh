@@ -6,7 +6,7 @@ IDX="$1"
 name=$(hyprctl -j workspaces | jq -r \
     --arg mon "${WAYBAR_OUTPUT_NAME:-}" --argjson i "$IDX" '
     [ .[]
-      | select((.name | test("^[0-9]+$")) | not)
+      | select(.id < 0)
       | select(.name | startswith("special") | not)
       | select($mon == "" or .monitor == $mon)
     ] | sort_by(.id) | reverse | .[$i-1].name // empty')

@@ -5,11 +5,12 @@
 # workspaces on this monitor.
 IDX="$1"
 
-# Named = name is not purely numeric and not a special workspace.
+# Launch/project workspaces get negative ids from Hyprland. Renamed numeric
+# workspaces keep their positive id, so filtering on id<0 avoids doubling them.
 named=$(hyprctl -j workspaces | jq -c \
     --arg mon "${WAYBAR_OUTPUT_NAME:-}" '
     [ .[]
-      | select((.name | test("^[0-9]+$")) | not)
+      | select(.id < 0)
       | select(.name | startswith("special") | not)
       | select($mon == "" or .monitor == $mon)
     ] | sort_by(.id) | reverse')
