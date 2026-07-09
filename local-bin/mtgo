@@ -13,6 +13,11 @@ export WINEPREFIX="$HOME/Games/mtgo-wine"
 export WINEARCH=win64
 export WINEDEBUG=-all
 
+# Responsiveness: CachyOS kernel ships futex2/fsync — use it (falls back to
+# esync if fsync is unavailable). Big win for Wine's thread scheduling / input lag.
+export WINEFSYNC=1
+export WINEESYNC=1
+
 MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
 
 # If MTGO is already running, just focus-launch a no-op instead of a second copy.
