@@ -70,7 +70,8 @@ link_shared() {
 }
 if [[ "$SHARED_MODE" == 1 ]]; then
   say "Linking shared ecosystem into \$HOME..."
-  for d in jarvis montressor src research lore gear comms Documents Pictures Media; do
+  # research/lore/gear/comms/ledger ride INSIDE ~/jarvis (linked in the manifest)
+  for d in jarvis montressor src Documents Pictures Media; do
     link_shared "/shared/$d" "$HOME/$d"
   done
   link_shared /shared/claude/projects "$HOME/.claude/projects"
@@ -257,8 +258,11 @@ for f in "$PRIVATE_REPO_DIR"/claude/bin/*; do
   link "$f" "$HOME/.local/bin/$base"
 done
 link "$PRIVATE_REPO_DIR/claude/bin/dots"   "$HOME/.local/bin/dots-private"
-link "$PRIVATE_REPO_DIR/claude/ledger"     "$HOME/ledger"
 link "$PRIVATE_REPO_DIR/claude/SRC.md"     "$HOME/src/CLAUDE.md"
+# domain data lives inside the private repo (GitHub-backed) — ledger pattern
+for d in ledger research lore gear comms; do
+  link "$PRIVATE_REPO_DIR/claude/$d" "$HOME/$d"
+done
 chmod +x "$PRIVATE_REPO_DIR"/claude/hooks/*.sh
 
 # per-OS: machine.md + Claude settings (one settings file serves both Linux
