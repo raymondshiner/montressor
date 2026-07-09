@@ -18,6 +18,11 @@ export WINEDEBUG=-all
 export WINEFSYNC=1
 export WINEESYNC=1
 
+# Optimus: the Intel iGPU drives the display. Pin DXVK to the Intel Vulkan device
+# so it renders AND presents on the same GPU — a dGPU render would need a
+# cross-GPU PRIME copy that goes black-until-damaged under XWayland (Hyprland #6375).
+export DXVK_FILTER_DEVICE_NAME="Intel"
+
 MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
 
 # If MTGO is already running, just focus-launch a no-op instead of a second copy.
