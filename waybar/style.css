@@ -99,13 +99,6 @@ window#waybar.bottom .modules-left {
     transition: all 0.2s ease;
 }
 
-#custom-dock1.active, #custom-dock2.active, #custom-dock3.active,
-#custom-dock4.active, #custom-dock5.active, #custom-dock6.active {
-    color: #00E8C6;
-    background: rgba(0, 232, 198, 0.12);
-    box-shadow: 0 0 4px rgba(0, 232, 198, 0.35);
-}
-
 #custom-dock1:hover, #custom-dock2:hover, #custom-dock3:hover,
 #custom-dock4:hover, #custom-dock5:hover, #custom-dock6:hover {
     background: rgba(176, 132, 235, 0.1);

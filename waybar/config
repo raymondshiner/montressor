@@ -313,7 +313,8 @@
         "interval": 5,
         "signal": 9,
         "hide-empty-text": true,
-        "on-click": "~/.config/waybar/dock-resume.sh 1"
+        "on-click": "~/.config/waybar/dock-resume.sh 1",
+        "on-click-right": "~/.config/waybar/dock-undock.sh 1"
     },
     "custom/dock2": {
         "exec": "~/.config/waybar/dock-slot.sh 2",
@@ -321,7 +322,8 @@
         "interval": 5,
         "signal": 9,
         "hide-empty-text": true,
-        "on-click": "~/.config/waybar/dock-resume.sh 2"
+        "on-click": "~/.config/waybar/dock-resume.sh 2",
+        "on-click-right": "~/.config/waybar/dock-undock.sh 2"
     },
     "custom/dock3": {
         "exec": "~/.config/waybar/dock-slot.sh 3",
@@ -329,7 +331,8 @@
         "interval": 5,
         "signal": 9,
         "hide-empty-text": true,
-        "on-click": "~/.config/waybar/dock-resume.sh 3"
+        "on-click": "~/.config/waybar/dock-resume.sh 3",
+        "on-click-right": "~/.config/waybar/dock-undock.sh 3"
     },
     "custom/dock4": {
         "exec": "~/.config/waybar/dock-slot.sh 4",
@@ -337,7 +340,8 @@
         "interval": 5,
         "signal": 9,
         "hide-empty-text": true,
-        "on-click": "~/.config/waybar/dock-resume.sh 4"
+        "on-click": "~/.config/waybar/dock-resume.sh 4",
+        "on-click-right": "~/.config/waybar/dock-undock.sh 4"
     },
     "custom/dock5": {
         "exec": "~/.config/waybar/dock-slot.sh 5",
@@ -345,7 +349,8 @@
         "interval": 5,
         "signal": 9,
         "hide-empty-text": true,
-        "on-click": "~/.config/waybar/dock-resume.sh 5"
+        "on-click": "~/.config/waybar/dock-resume.sh 5",
+        "on-click-right": "~/.config/waybar/dock-undock.sh 5"
     },
     "custom/dock6": {
         "exec": "~/.config/waybar/dock-slot.sh 6",
@@ -353,7 +358,8 @@
         "interval": 5,
         "signal": 9,
         "hide-empty-text": true,
-        "on-click": "~/.config/waybar/dock-resume.sh 6"
+        "on-click": "~/.config/waybar/dock-resume.sh 6",
+        "on-click-right": "~/.config/waybar/dock-undock.sh 6"
     },
 
     "custom/music-ws": {
