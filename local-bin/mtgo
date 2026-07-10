@@ -18,12 +18,11 @@ export WINEDEBUG=-all
 export WINEFSYNC=1
 export WINEESYNC=1
 
-# Render via DXVK on the Intel iGPU — the same GPU that drives the display, so
-# frames present natively with NO reverse-PRIME hop and NO black-until-damage bug.
-# This is real Vulkan/GPU acceleration (not software WPF), plenty for a card game.
-# NVIDIA can't present to the built-in panel (muxless: all outputs are on Intel);
-# to run MTGO on the dGPU, plug in an external HDMI monitor and drop this pin.
-export DXVK_FILTER_DEVICE_NAME="Intel"
+# WPF renders in SOFTWARE (HKCU\...\Avalon.Graphics\DisableHWAcceleration=1 in the
+# prefix). Proven 2026-07-09: WPF's *hardware* path renders offscreen (DXVK confirmed
+# a dummy 1x1 D3D9 swapchain) and never presents the window through Direct3D — Wine's
+# HW-WPF->window blit goes black under XWayland regardless of GPU or DXVK. Software is
+# the only mode that displays. DXVK stays installed but inert unless HW accel returns.
 
 MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
 

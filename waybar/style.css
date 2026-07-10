@@ -73,38 +73,6 @@ window#waybar.top .modules-left {
     font-size: 14px;
 }
 
-/* Docked Jarvis sessions — bottom-left rail */
-window#waybar.bottom .modules-left {
-    background: #23262E;
-    border-radius: 12px;
-    margin: 4px 0 4px 6px;
-    padding: 0 4px;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
-}
-
-#custom-dock-anchor {
-    color: #677691;
-    padding: 0 8px 0 10px;
-    margin: 5px 1px;
-    font-size: 12px;
-}
-
-#custom-dock1, #custom-dock2, #custom-dock3,
-#custom-dock4, #custom-dock5, #custom-dock6 {
-    padding: 0 10px;
-    margin: 5px 1px;
-    color: #B084EB;
-    background: transparent;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-}
-
-#custom-dock1:hover, #custom-dock2:hover, #custom-dock3:hover,
-#custom-dock4:hover, #custom-dock5:hover, #custom-dock6:hover {
-    background: rgba(176, 132, 235, 0.1);
-    color: #D5CED9;
-}
-
 #custom-workspace-menu:hover {
     color: #D5CED9;
 }
