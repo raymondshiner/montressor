@@ -1,24 +1,29 @@
 #!/usr/bin/env bash
-# Launch Magic: The Gathering Online under Proton (UMU-Proton via umu-launcher).
-#
-# WHY PROTON (2026-07-09): MTGO is a WPF app. Under plain Wine its hardware render
-# path blits to the window in a way that goes BLACK on XWayland, forcing a choice
-# between slow software WPF (laggy) or Wine's Wayland driver (fast but broken
-# clipboard). Proton's patched Wine + DXVK render WPF hardware-accelerated AND
-# present correctly under XWayland — all three at once: not black, fast, clipboard.
+# Launch Magic: The Gathering Online under Wine.
 #
 # MTGO is a ClickOnce "networked deployed" app: launch it by forcing a fresh ONLINE
 # activation against its deployment manifest via dfshim's ShOpenVerbApplication verb.
 #
-# Prefix ~/Games/mtgo-proton was cloned from the old Wine prefix (keeps the real
-# .NET Framework 4.8 that MTGO needs) and adopted by Proton. Full history +
-# fallback configs: ~/.claude/.../memory/project_mtgo_proton.md.
+# RENDERING — software WPF on XWayland (stable + clipboard, but page-switch lag).
+# The full trilemma (proven 2026-07-09; details in memory/project_mtgo_proton.md):
+#   - Software WPF + XWayland   -> stable, not black, CLIPBOARD works, but laggy  <-- here
+#   - Wine Wayland driver + HW  -> stable, not black, fast, but CLIPBOARD BREAKS
+#   - plain Wine XWayland + HW  -> BLACK window (WPF HW blit fails on XWayland)
+#   - Proton + HW               -> CRASHES ~15s (WPF PresentationCore D3D9 exception)
+# There is no config with all three (not-black + fast + clipboard); HW-accelerated
+# WPF is unstable/broken on this Wayland + hybrid-GPU machine. Clipboard is required,
+# so software is the pick. To trade clipboard for speed, use the Wayland driver:
+#   wine reg add 'HKCU\Software\Wine\Drivers' /v Graphics /d 'wayland,x11' /f
+#   wine reg delete 'HKCU\Software\Microsoft\Avalon.Graphics' /v DisableHWAcceleration /f
+#   and add `unset DISPLAY` below.
 
-export WINEPREFIX="$HOME/Games/mtgo-proton"
-export GAMEID="umu-mtgo"
-export PROTONPATH="$HOME/.local/share/Steam/compatibilitytools.d/UMU-Proton-10.0-4"
-export PROTON_VERB="run"
+export WINEPREFIX="$HOME/Games/mtgo-wine"
+export WINEARCH=win64
 export WINEDEBUG=-all
+
+# Responsiveness: CachyOS kernel ships futex2/fsync — use it (falls back to esync).
+export WINEFSYNC=1
+export WINEESYNC=1
 
 MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
 
@@ -29,19 +34,18 @@ if pgrep -x MTGO.exe >/dev/null 2>&1; then
 fi
 
 # Bump the CPU to the "performance" power profile ONLY while MTGO runs, then restore
-# the previous profile on exit. power-profiles-daemon otherwise idles this laptop at
-# powersave/balanced. Uses powerprofilesctl (user-level, no sudo). A detached watcher
-# waits for MTGO to appear (Proton staging can be slow), holds performance for its
-# lifetime, and reverts when it closes.
+# the previous profile on exit (powerprofilesctl, user-level, no sudo). Helps the
+# CPU-bound software WPF page compositing. A detached watcher waits for MTGO to
+# appear, holds performance for its lifetime, and reverts when it closes.
 if command -v powerprofilesctl >/dev/null 2>&1; then
     PREV_PROFILE="$(powerprofilesctl get 2>/dev/null || echo balanced)"
     powerprofilesctl set performance 2>/dev/null
     (
-        for _ in $(seq 1 120); do pgrep -x MTGO.exe >/dev/null 2>&1 && break; sleep 1; done
+        for _ in $(seq 1 90); do pgrep -x MTGO.exe >/dev/null 2>&1 && break; sleep 1; done
         while pgrep -x MTGO.exe >/dev/null 2>&1; do sleep 5; done
         powerprofilesctl set "$PREV_PROFILE" 2>/dev/null
     ) >/dev/null 2>&1 &
     disown 2>/dev/null
 fi
 
-exec umu-run rundll32.exe "dfshim.dll,ShOpenVerbApplication" "$MANIFEST_URL"
+exec wine rundll32.exe dfshim.dll,ShOpenVerbApplication "$MANIFEST_URL"
