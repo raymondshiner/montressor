@@ -32,4 +32,20 @@ if pgrep -x MTGO.exe >/dev/null 2>&1; then
     exit 0
 fi
 
+# Responsiveness: bump the CPU to the "performance" power profile ONLY while MTGO
+# runs, then restore the previous profile on exit. Software WPF is CPU-bound, and
+# power-profiles-daemon otherwise idles this laptop at powersave/balanced. Uses
+# powerprofilesctl (user-level, no sudo). A detached watcher waits for MTGO to
+# appear, holds performance for its lifetime, and reverts when it closes.
+if command -v powerprofilesctl >/dev/null 2>&1; then
+    PREV_PROFILE="$(powerprofilesctl get 2>/dev/null || echo balanced)"
+    powerprofilesctl set performance 2>/dev/null
+    (
+        for _ in $(seq 1 90); do pgrep -x MTGO.exe >/dev/null 2>&1 && break; sleep 1; done
+        while pgrep -x MTGO.exe >/dev/null 2>&1; do sleep 5; done
+        powerprofilesctl set "$PREV_PROFILE" 2>/dev/null
+    ) >/dev/null 2>&1 &
+    disown 2>/dev/null
+fi
+
 exec wine rundll32.exe dfshim.dll,ShOpenVerbApplication "$MANIFEST_URL"
