@@ -18,18 +18,16 @@ export WINEDEBUG=-all
 export WINEFSYNC=1
 export WINEESYNC=1
 
-# HARDWARE WPF via Wine's native Wayland driver.
-# Background (2026-07-09): WPF's hardware path renders correctly but its blit to the
-# window goes BLACK under XWayland (proven: black regardless of GPU/DXVK). The fix is
-# to bypass XWayland — the prefix sets HKCU\Software\Wine\Drivers\Graphics="wayland,x11"
-# and HW acceleration is re-enabled (Avalon.Graphics\DisableHWAcceleration removed).
-# Unsetting DISPLAY makes Wine prefer the Wayland driver so the previously-black HW
-# render displays AND page-switching is GPU-accelerated (no CPU software rasterization).
-# REVERT to the safe software path if anything regresses:
-#   WINEPREFIX=~/Games/mtgo-wine wine reg add 'HKCU\Software\Microsoft\Avalon.Graphics' \
-#     /v DisableHWAcceleration /t REG_DWORD /d 1 /f
-export DXVK_FILTER_DEVICE_NAME="Intel"   # keep DXVK on the display GPU (no cross-GPU hop)
-unset DISPLAY                            # prefer winewayland.drv over XWayland
+# SOFTWARE WPF on XWayland — the combo that keeps the clipboard working.
+# The tradeoff map (2026-07-09):
+#   - HW WPF on XWayland      -> BLACK window (WPF's HW blit fails under XWayland)
+#   - HW WPF on Wine-Wayland  -> fast + not black, but CLIPBOARD BREAKS (immature
+#                                winewayland.drv clipboard)
+#   - SW WPF on XWayland      -> not black + clipboard works, but page-switch lag  <-- here
+# The prefix is set to software (Avalon.Graphics\DisableHWAcceleration=1) and default
+# X11 graphics driver. The "have it all" answer (HW + clipboard) is the Proton prefix
+# at ~/Games/mtgo-proton (renders under XWayland via Proton's DXVK) — pending: MTGO's
+# ClickOnce launcher stalls in Proton's sandbox; finish that to switch this launcher over.
 
 MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
 
