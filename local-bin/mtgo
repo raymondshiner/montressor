@@ -18,10 +18,12 @@ export WINEDEBUG=-all
 export WINEFSYNC=1
 export WINEESYNC=1
 
-# The whole Hyprland desktop renders on the NVIDIA 4060 (AQ_DRM_DEVICES in
-# hyprland.conf), so DXVK lands on NVIDIA by default and presents without the
-# cross-GPU reverse-PRIME hop. Pin it explicitly as a belt-and-suspenders.
-export DXVK_FILTER_DEVICE_NAME="NVIDIA"
+# Render via DXVK on the Intel iGPU — the same GPU that drives the display, so
+# frames present natively with NO reverse-PRIME hop and NO black-until-damage bug.
+# This is real Vulkan/GPU acceleration (not software WPF), plenty for a card game.
+# NVIDIA can't present to the built-in panel (muxless: all outputs are on Intel);
+# to run MTGO on the dGPU, plug in an external HDMI monitor and drop this pin.
+export DXVK_FILTER_DEVICE_NAME="Intel"
 
 MANIFEST_URL="http://mtgo.patch.daybreakgames.com/patch/mtg/live/client/MTGO.application"
 
