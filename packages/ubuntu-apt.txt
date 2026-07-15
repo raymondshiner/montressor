@@ -112,3 +112,4 @@ google-chrome-stable
 code
 mullvad-vpn
 brave-browser
+# marktext — NOT in apt; install .deb from github.com/marktext/marktext releases (md viewer for jarvis research delivery)
