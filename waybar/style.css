@@ -47,23 +47,26 @@ window#waybar.top .modules-left {
     color: #D5CED9;
 }
 
-/* Named launch/project workspaces — purple base to signal "project" */
+/* Named launch/project workspaces — bottom-left pills, purple = "project" */
 #custom-wsn1, #custom-wsn2 {
-    padding: 0 10px;
-    margin: 5px 1px;
+    padding: 0 14px;
+    margin: 4px 0;
     color: #B084EB;
-    background: transparent;
-    border-radius: 8px;
+    background: #23262E;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(176, 132, 235, 0.18), 0 0 4px rgba(176, 132, 235, 0.30);
     transition: all 0.2s ease;
 }
 
+#custom-wsn1 { margin-left: 6px; }
+#custom-wsn2 { margin-left: 4px; }
+
 #custom-wsn1.active, #custom-wsn2.active {
     color: #00E8C6;
-    background: rgba(0, 232, 198, 0.12);
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
 }
 
 #custom-wsn1:hover, #custom-wsn2:hover {
-    background: rgba(176, 132, 235, 0.1);
     color: #D5CED9;
 }
 
