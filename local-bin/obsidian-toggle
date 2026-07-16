@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
-# Run-or-raise for Obsidian. Electron forwards a second launch to the running
-# instance but never raises its window, so a bare `obsidian` looks like a no-op
-# when a window is already open. Focus it if present, otherwise launch fresh.
+# Obsidian lives minimized on the special:obsidian workspace (autostarted hidden
+# so Obsidian Sync runs in the background — see os-arch.conf). This toggle shows/
+# hides that workspace; if Obsidian isn't running yet, launch it (the windowrule
+# drops it onto the special workspace) and reveal it.
 addr=$(hyprctl clients -j | python3 -c "import json,sys; print(next((c['address'] for c in json.load(sys.stdin) if c['class']=='obsidian'), ''))")
-if [ -n "$addr" ]; then
-    hyprctl dispatch focuswindow "address:$addr"
-else
+if [ -z "$addr" ]; then
     setsid -f /usr/bin/obsidian >/dev/null 2>&1
+    for _ in 1 2 3 4 5 6 7 8 9 10; do
+        sleep 0.3
+        hyprctl clients -j | grep -q '"class": *"obsidian"' && break
+    done
 fi
+hyprctl dispatch togglespecialworkspace obsidian
