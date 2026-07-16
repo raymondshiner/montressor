@@ -47,9 +47,8 @@ echo "todoist addr: $TD"
 if [ -n "$JV" ]; then
     hyprctl dispatch movetoworkspacesilent "$WS,address:$JV"
 else
-    TF=$(mktemp /tmp/agent-task.XXXXXX)
-    printf '%s' "Todoist overlay session. You have the Todoist MCP wired up. Start with a quick inventory: list projects with open task counts, then today + overdue grouped by project. Plain output, tables. Then wait for instructions." > "$TF"
-    hyprctl dispatch exec "[workspace $WS silent; tile] kitty --class=jarvis-todoist --title=JarvisTodoist -e env AGENT_TASK_FILE=$TF JARVIS_MCP=todoist AGENT_ALLOWED_TOOLS=mcp__todoist__* $HOME/.local/bin/jarvis"
+    # No seed prompt — just a ready Todoist-wired jarvis waiting for instructions.
+    hyprctl dispatch exec "[workspace $WS silent; tile] kitty --class=jarvis-todoist --title=JarvisTodoist -e env JARVIS_MCP=todoist AGENT_ALLOWED_TOOLS=mcp__todoist__* $HOME/.local/bin/jarvis"
     for _ in $(seq 1 100); do JV=$(jv_addr); [ -n "$JV" ] && break; sleep 0.1; done
 fi
 echo "jarvis addr: $JV"
