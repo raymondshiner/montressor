@@ -3,7 +3,7 @@
 # Cyan when the Todoist overlay is shown, purple when hidden. Click toggles special:todoist.
 # Streaming module — reacts to Hyprland special-workspace events, no polling interval.
 
-ICON="󰝕"   # nf-md-format_list_checks
+ICON=""   # nf-fa-check_circle
 
 emit() {
     if hyprctl -j monitors 2>/dev/null | jq -e '.[] | select(.specialWorkspace.name == "special:todoist")' >/dev/null; then

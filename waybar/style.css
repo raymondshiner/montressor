@@ -222,7 +222,7 @@ window#waybar.top .modules-left {
     font-weight: normal;
 }
 
-#custom-obsidian, #custom-todoist {
+#custom-obsidian {
     background: #23262E;
     color: #B084EB;
     padding: 0 17px 0 11px;
@@ -232,14 +232,23 @@ window#waybar.top .modules-left {
     box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
 }
 #custom-obsidian:hover { color: #C9A6F5; }
-/* Todoist gem, left of clock — mirrors the obsidian gem on the right.
-   Padding flipped (more on the left) so the pair frames the clock symmetrically. */
-#custom-todoist { padding: 0 11px 0 17px; }
-#custom-todoist:hover { color: #C9A6F5; }
-/* Overlay shown → brighten to cyan + stronger glow (active state). */
+/* Todoist gem, left of clock — red check, mirrors the obsidian gem geometry.
+   Padding flipped (more on the left) so the pair frames the clock symmetrically.
+   Glow matches the icon color (red) per the design rule. */
+#custom-todoist {
+    background: #23262E;
+    color: #EE5D43;
+    padding: 0 11px 0 17px;
+    margin: 4px 0;
+    font-size: 14px;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(238, 93, 67, 0.18), 0 0 4px rgba(238, 93, 67, 0.30);
+}
+#custom-todoist:hover { color: #F27E68; }
+/* Overlay shown → brighter red + stronger glow (active state). */
 #custom-todoist.visible {
-    color: #00E8C6;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.55);
+    color: #FF6E52;
+    box-shadow: 0 0 0 1px rgba(238, 93, 67, 0.40), 0 0 6px rgba(238, 93, 67, 0.55);
 }
 #custom-vpn.connecting { color: #FFE66D; }
 #custom-kdeconnect { color: #677691; padding: 0 12px; }
