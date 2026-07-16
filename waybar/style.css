@@ -17,7 +17,7 @@ window#waybar.top .modules-left {
     border-radius: 12px;
     margin: 4px 0 4px 6px;
     padding: 0 4px;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
 }
 
 #custom-ws-listener {
@@ -54,7 +54,7 @@ window#waybar.top .modules-left {
     color: #B084EB;
     background: #23262E;
     border-radius: 12px;
-    box-shadow: 0 0 0 1px rgba(176, 132, 235, 0.18), 0 0 4px rgba(176, 132, 235, 0.30);
+    box-shadow: 0 0 0 1px rgba(176, 132, 235, 0.40), 0 0 6px rgba(176, 132, 235, 0.45);
     transition: all 0.2s ease;
 }
 
@@ -63,7 +63,7 @@ window#waybar.top .modules-left {
 
 #custom-wsn1.active, #custom-wsn2.active {
     color: #00E8C6;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
 }
 
 #custom-wsn1:hover, #custom-wsn2:hover {
@@ -109,7 +109,7 @@ window#waybar.top .modules-left {
     background: #23262E;
     border-radius: 12px;
     margin: 4px 6px;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
 }
 
 #tray, #custom-drives, #swaync, #custom-displays, #bluetooth,
@@ -118,7 +118,7 @@ window#waybar.top .modules-left {
     background: #23262E;
     border-radius: 12px;
     margin: 4px 3px;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
 }
 
 #custom-apps-menu {
@@ -177,7 +177,7 @@ window#waybar.top .modules-left {
     padding: 0 8px;
     margin: 4px 0;
     font-size: 14px;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
 }
 #custom-music-ws {
     padding: 0 10px 0 14px;
@@ -229,26 +229,24 @@ window#waybar.top .modules-left {
     margin: 4px 0;
     font-size: 14px;
     border-radius: 12px;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
 }
 #custom-obsidian:hover { color: #C9A6F5; }
-/* Todoist gem, left of clock — red check, mirrors the obsidian gem geometry.
-   Padding flipped (more on the left) so the pair frames the clock symmetrically.
-   Glow matches the icon color (red) per the design rule. */
+/* Todoist gem, left of clock. Only the icon is red — the pill outline/spacing
+   matches every other waybar pill (cyan ring). Symmetric padding centers the glyph. */
 #custom-todoist {
     background: #23262E;
     color: #EE5D43;
-    padding: 0 11px 0 17px;
+    padding: 0 14px;
     margin: 4px 0;
     font-size: 14px;
     border-radius: 12px;
-    box-shadow: 0 0 0 1px rgba(238, 93, 67, 0.18), 0 0 4px rgba(238, 93, 67, 0.30);
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
 }
 #custom-todoist:hover { color: #F27E68; }
-/* Overlay shown → brighter red + stronger glow (active state). */
+/* Overlay shown → brighter red icon (outline stays the shared cyan). */
 #custom-todoist.visible {
     color: #FF6E52;
-    box-shadow: 0 0 0 1px rgba(238, 93, 67, 0.40), 0 0 6px rgba(238, 93, 67, 0.55);
 }
 #custom-vpn.connecting { color: #FFE66D; }
 #custom-kdeconnect { color: #677691; padding: 0 12px; }
