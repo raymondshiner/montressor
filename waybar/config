@@ -10,7 +10,7 @@
         "custom/ws6", "custom/ws7", "custom/ws8", "custom/ws9", "custom/ws10",
         "custom/workspace-menu"
     ],
-    "modules-center": ["custom/obsidian-sp", "clock", "custom/obsidian"],
+    "modules-center": ["custom/todoist", "clock", "custom/obsidian"],
     "modules-right": ["tray", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/tasks", "custom/apps-menu"],
 
     "custom/ws-listener": {
@@ -149,9 +149,11 @@
         "on-click": "~/.local/bin/obsidian-raise"
     },
 
-    "custom/obsidian-sp": {
-        "format": "",
-        "tooltip": false
+    "custom/todoist": {
+        "exec": "~/.config/waybar/todoist-ws.sh",
+        "return-type": "json",
+        "on-click": "~/.local/bin/todoist-launch.sh",
+        "tooltip": true
     },
 
     "group/hardware": {

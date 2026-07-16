@@ -222,7 +222,7 @@ window#waybar.top .modules-left {
     font-weight: normal;
 }
 
-#custom-obsidian, #custom-obsidian-sp {
+#custom-obsidian, #custom-todoist {
     background: #23262E;
     color: #B084EB;
     padding: 0 17px 0 11px;
@@ -232,11 +232,14 @@ window#waybar.top .modules-left {
     box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.18), 0 0 4px rgba(0, 232, 198, 0.30);
 }
 #custom-obsidian:hover { color: #C9A6F5; }
-/* Left spacer: same box, no visible ink — keeps the clock centered */
-#custom-obsidian-sp {
-    background: transparent;
-    color: transparent;
-    box-shadow: none;
+/* Todoist gem, left of clock — mirrors the obsidian gem on the right.
+   Padding flipped (more on the left) so the pair frames the clock symmetrically. */
+#custom-todoist { padding: 0 11px 0 17px; }
+#custom-todoist:hover { color: #C9A6F5; }
+/* Overlay shown → brighten to cyan + stronger glow (active state). */
+#custom-todoist.visible {
+    color: #00E8C6;
+    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.55);
 }
 #custom-vpn.connecting { color: #FFE66D; }
 #custom-kdeconnect { color: #677691; padding: 0 12px; }
