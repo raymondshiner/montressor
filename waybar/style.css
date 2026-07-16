@@ -225,11 +225,12 @@ window#waybar.top .modules-left {
 #custom-obsidian {
     background: #23262E;
     color: #B084EB;
-    padding: 0 17px 0 11px;
+    padding: 0 16px 0 10px;
     margin: 4px 0;
     font-size: 14px;
+    border: 1px solid rgba(0, 232, 198, 0.40);
     border-radius: 12px;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
+    box-shadow: 0 0 6px rgba(0, 232, 198, 0.45);
 }
 #custom-obsidian:hover { color: #C9A6F5; }
 /* Todoist gem, left of clock. Only the icon is red — the pill outline/spacing
