@@ -1,7 +1,7 @@
 #!/bin/bash
 # Super+T: Todoist overlay on special:todoist.
-#   left 2/3  = Todoist GUI app (class "todoist")
-#   right 1/3 = dedicated jarvis instance wired to the Todoist MCP (class "jarvis-todoist")
+#   left half  = Todoist GUI app (class "todoist")
+#   right half = dedicated jarvis instance wired to the Todoist MCP (class "jarvis-todoist")
 # Mirrors music-launch.sh: special workspace + dwindle tiling. First launch builds
 # and shows the overlay; afterwards Super+T just toggles it. A stray Todoist window
 # already open elsewhere is captured into the overlay rather than duplicated.
@@ -75,8 +75,8 @@ if [ -n "$TD_X" ] && [ -n "$JV_X" ] && [ "$TD_X" -gt "$JV_X" ]; then
     hyprctl dispatch focuswindow "address:$TD"; sleep 0.15
 fi
 
-# Todoist (active) -> 66% width; jarvis expands to fill the remaining ~1/3.
-hyprctl dispatch resizeactive exact 66% 100%
+# Todoist (active) -> 50% width; jarvis expands to fill the other half.
+hyprctl dispatch resizeactive exact 50% 100%
 sleep 0.2
 
 echo "--- final ---"
