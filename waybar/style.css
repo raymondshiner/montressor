@@ -237,11 +237,12 @@ window#waybar.top .modules-left {
 #custom-todoist {
     background: #23262E;
     color: #EE5D43;
-    padding: 0 17px 0 11px;
+    padding: 0 16px 0 10px;
     margin: 4px 0;
     font-size: 14px;
+    border: 1px solid rgba(0, 232, 198, 0.40);
     border-radius: 12px;
-    box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
+    box-shadow: 0 0 6px rgba(0, 232, 198, 0.45);
 }
 #custom-todoist:hover { color: #F27E68; }
 /* Overlay shown → brighter red icon (outline stays the shared cyan). */

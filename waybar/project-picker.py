@@ -171,7 +171,7 @@ class ProjectPicker(Gtk.Window):
         # ── Search bar (matches rofi inputbar) ──
         bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         bar.get_style_context().add_class('inputbar')
-        prompt = Gtk.Label(label='')
+        prompt = Gtk.Label(label='')
         prompt.get_style_context().add_class('prompt')
         bar.pack_start(prompt, False, False, 0)
         self.entry = Gtk.Entry()
