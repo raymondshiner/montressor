@@ -1,9 +1,45 @@
 #!/usr/bin/env bash
-# Focus the existing Obsidian window if one's open; otherwise cold-start it.
-# Works around Obsidian's single-instance launcher silently no-op'ing when
-# re-invoked while already running.
-if hyprctl clients -j | grep -q '"class": "obsidian"'; then
-    hyprctl dispatch focuswindow class:obsidian
+# Waybar Obsidian button: minimize/restore toggle.
+# Obsidian autostarts hidden on the special:obsidian workspace (background Sync).
+# Click when hidden  -> pull all Obsidian windows into the CURRENT workspace as
+#                       normal, focused windows.
+# Click when visible -> send them back to the background special workspace.
+
+get_addrs() {
+    hyprctl clients -j | python3 -c "import json,sys; [print(c['address']) for c in json.load(sys.stdin) if c['class']=='obsidian']"
+}
+
+mapfile -t addrs < <(get_addrs)
+
+# Cold-start if not running; the windowrule drops it on special:obsidian.
+if [ ${#addrs[@]} -eq 0 ]; then
+    setsid -f /usr/bin/obsidian >/dev/null 2>&1
+    for _ in $(seq 25); do
+        sleep 0.2
+        mapfile -t addrs < <(get_addrs)
+        [ ${#addrs[@]} -gt 0 ] && break
+    done
+    [ ${#addrs[@]} -eq 0 ] && exit 0
+fi
+
+active=$(hyprctl activeworkspace -j | python3 -c "import json,sys; print(json.load(sys.stdin)['name'])")
+
+# Is any Obsidian window currently on a NON-special workspace (i.e. visible)?
+visible=$(hyprctl clients -j | python3 -c "import json,sys; print('yes' if any(c['class']=='obsidian' and not c['workspace']['name'].startswith('special') for c in json.load(sys.stdin)) else 'no')")
+
+if [ "$visible" = "yes" ]; then
+    # minimize: park every Obsidian window back on the special workspace
+    for a in "${addrs[@]}"; do
+        hyprctl dispatch movetoworkspacesilent "special:obsidian,address:$a"
+    done
 else
-    exec /usr/bin/obsidian "$@"
+    # restore: bring every Obsidian window to the current workspace, focus the main one
+    for a in "${addrs[@]}"; do
+        hyprctl dispatch movetoworkspacesilent "$active,address:$a"
+    done
+    main=$(hyprctl clients -j | python3 -c "import json,sys
+w=[c for c in json.load(sys.stdin) if c['class']=='obsidian']
+w.sort(key=lambda c: ('Obsidian'==c['title'], c['title']))  # prefer the vault window over the bare 'Obsidian' helper
+print(w[0]['address'] if w else '')")
+    [ -n "$main" ] && hyprctl dispatch focuswindow "address:$main"
 fi

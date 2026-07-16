@@ -219,7 +219,16 @@
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-muted": "󰝟 ",
-        "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
+        "format-bluetooth": "󰥰 {volume}%",
+        "format-bluetooth-muted": "󰟎 ",
+        "format-icons": {
+            "headphone": "󰋋",
+            "headset": "󰋎",
+            "hands-free": "󰋎",
+            "bluetooth": "󰥰",
+            "bluetooth-muted": "󰟎",
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
         "on-click": "python3 ~/.config/waybar/sound-popup.py",
         "scroll-step": 5
     },
