@@ -238,7 +238,7 @@ window#waybar.top .modules-left {
     background: #23262E;
     color: #EE5D43;
     padding: 0 17px 0 11px;
-    margin: 4px 6px 4px 0;
+    margin: 4px 0;
     font-size: 14px;
     border-radius: 12px;
     box-shadow: 0 0 0 1px rgba(0, 232, 198, 0.40), 0 0 6px rgba(0, 232, 198, 0.45);
