@@ -197,6 +197,25 @@ window { background: transparent; }
     color: #00E8C6;
     border-color: #00E8C6;
 }
+.settings-btn {
+    background: transparent;
+    background-image: none;
+    color: #677691;
+    border: 1px solid #2A2D3A;
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-top: 10px;
+    margin-left: 6px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 11px;
+    box-shadow: none;
+    text-shadow: none;
+}
+.settings-btn:hover {
+    color: #D5CED9;
+    border-color: #B084EB;
+    background-color: rgba(176, 132, 235, 0.10);
+}
 .section-label {
     color: #677691;
     font-family: "JetBrainsMono Nerd Font";
@@ -414,6 +433,13 @@ class BluetoothPopup(Gtk.Window):
         _set_pointer_cursor(ref)
         footer.pack_start(ref, True, True, 0)
 
+        settings = Gtk.Button(label='󰒓  Settings')
+        settings.get_style_context().add_class('settings-btn')
+        settings.set_halign(Gtk.Align.END)
+        settings.connect('clicked', lambda _b: self._open_settings())
+        _set_pointer_cursor(settings)
+        footer.pack_start(settings, False, False, 0)
+
         self._root.pack_start(footer, False, False, 0)
 
         self._root.show_all()
@@ -580,6 +606,11 @@ class BluetoothPopup(Gtk.Window):
             subprocess.Popen(['bluetoothctl', 'scan', 'off'],
                              start_new_session=True)
         self._scanning = False
+
+    def _open_settings(self):
+        self._stop_scan()
+        subprocess.Popen(['blueman-manager'], start_new_session=True)
+        self.destroy()
 
     def _on_key(self, _w, event):
         if event.keyval == Gdk.KEY_Escape:
