@@ -151,6 +151,76 @@ window { background: transparent; }
     border-color: #00E8C6;
     background-color: rgba(0, 232, 198, 0.10);
 }
+.forget-btn {
+    background: transparent;
+    background-image: none;
+    color: #677691;
+    border: 1px solid #2A2D3A;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-left: 6px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12px;
+    box-shadow: none;
+    text-shadow: none;
+}
+.forget-btn:hover {
+    color: #EE5D43;
+    border-color: #EE5D43;
+    background-color: rgba(238, 93, 67, 0.10);
+}
+.forget-btn.confirm {
+    color: #EE5D43;
+    border-color: #EE5D43;
+    font-size: 11px;
+    font-weight: bold;
+}
+.scan-btn {
+    background: transparent;
+    background-image: none;
+    color: #677691;
+    border: 1px solid #2A2D3A;
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-top: 10px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 11px;
+    box-shadow: none;
+    text-shadow: none;
+}
+.scan-btn:hover {
+    color: #D5CED9;
+    border-color: #00E8C6;
+    background-color: rgba(0, 232, 198, 0.10);
+}
+.scan-btn.active {
+    color: #00E8C6;
+    border-color: #00E8C6;
+}
+.section-label {
+    color: #677691;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 2px;
+}
+.pair-btn {
+    background: transparent;
+    background-image: none;
+    color: #B084EB;
+    border: 1px solid #B084EB;
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-left: 6px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 11px;
+    box-shadow: none;
+    text-shadow: none;
+}
+.pair-btn:hover {
+    background-color: rgba(176, 132, 235, 0.10);
+}
 """
 
 
@@ -203,9 +273,45 @@ def disconnect_device(mac):
     subprocess.Popen(['bluetoothctl', 'disconnect', mac], start_new_session=True)
 
 
+def forget_device(mac):
+    subprocess.Popen(['bluetoothctl', 'remove', mac], start_new_session=True)
+
+
+def pair_device(mac):
+    # Pair + trust only; connect is left to the row action.
+    subprocess.Popen(
+        ['bash', '-c', f'bluetoothctl pair {mac}; bluetoothctl trust {mac}'],
+        start_new_session=True,
+    )
+
+
+def get_discovered_devices(paired_macs):
+    """All known devices minus the ones already paired."""
+    devs = []
+    for line in bt('devices').splitlines():
+        parts = line.strip().split(' ', 2)
+        if len(parts) >= 3 and parts[0] == 'Device' and parts[1] not in paired_macs:
+            mac, name = parts[1], parts[2]
+            icon = 'computer'
+            for info_line in bt('info', mac).splitlines():
+                il = info_line.strip()
+                if il.startswith('Icon:'):
+                    icon = il.split(':', 1)[1].strip()
+                    break
+            # Named devices float above bare-MAC entries
+            named = name.replace('-', ':').upper() != mac.upper()
+            devs.append({'mac': mac, 'name': name, 'icon': icon, 'named': named})
+    devs.sort(key=lambda d: (not d['named'], d['name'].lower()))
+    return devs
+
+
 class BluetoothPopup(Gtk.Window):
     def __init__(self):
         super().__init__()
+
+        self._scanning = False
+        self._scan_proc = None
+        self._confirm_mac = None   # mac pending a forget confirmation
 
         popup_lib.setup_window(self)
 
@@ -225,6 +331,7 @@ class BluetoothPopup(Gtk.Window):
 
         self._render()
         self.connect('key-press-event', self._on_key)
+        self.connect('destroy', lambda _w: self._stop_scan())
         self.show_all()
         self.present()
 
@@ -261,7 +368,7 @@ class BluetoothPopup(Gtk.Window):
         hdr_row.pack_start(pwr, False, False, 0)
         self._root.pack_start(hdr_row, False, False, 0)
 
-        # Devices
+        # Paired devices
         if not powered:
             self._add_empty('Bluetooth is off')
         elif not devs:
@@ -270,13 +377,44 @@ class BluetoothPopup(Gtk.Window):
             for d in devs:
                 self._root.pack_start(self._row(d), False, False, 0)
 
-        # Refresh
+        # Discovered (unpaired) devices — only while scanning
+        if powered and self._scanning:
+            paired_macs = {d['mac'] for d in devs}
+            found = get_discovered_devices(paired_macs)
+
+            lbl = Gtk.Label(label='── Available ──')
+            lbl.get_style_context().add_class('section-label')
+            lbl.set_xalign(0)
+            self._root.pack_start(lbl, False, False, 0)
+
+            if not found:
+                self._add_empty('Scanning…')
+            else:
+                for d in found:
+                    self._root.pack_start(self._discovered_row(d), False, False, 0)
+
+        # Footer: Scan + Refresh
+        footer = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        footer.set_margin_top(4)
+
+        scan = Gtk.Button(
+            label='󰂰  Stop scan' if self._scanning else '󰂰  Scan')
+        scan.get_style_context().add_class('scan-btn')
+        if self._scanning:
+            scan.get_style_context().add_class('active')
+        scan.set_sensitive(powered)
+        scan.connect('clicked', lambda _b: self._toggle_scan())
+        _set_pointer_cursor(scan)
+        footer.pack_start(scan, False, False, 0)
+
         ref = Gtk.Button(label='󰑐  Refresh')
         ref.get_style_context().add_class('refresh-btn')
         ref.set_halign(Gtk.Align.END)
         ref.connect('clicked', lambda _b: self._refresh())
         _set_pointer_cursor(ref)
-        self._root.pack_start(ref, False, False, 0)
+        footer.pack_start(ref, True, True, 0)
+
+        self._root.pack_start(footer, False, False, 0)
 
         self._root.show_all()
 
@@ -322,13 +460,57 @@ class BluetoothPopup(Gtk.Window):
         _set_pointer_cursor(act)
         row.pack_start(act, False, False, 0)
 
+        confirming = self._confirm_mac == d['mac']
+        forget = Gtk.Button(label='Sure?' if confirming else '󰩹')
+        forget.get_style_context().add_class('forget-btn')
+        if confirming:
+            forget.get_style_context().add_class('confirm')
+        forget.set_tooltip_text('Forget this device')
+        forget.connect('clicked', self._on_forget, d)
+        _set_pointer_cursor(forget)
+        row.pack_start(forget, False, False, 0)
+
+        return row
+
+    def _discovered_row(self, d):
+        row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        row.get_style_context().add_class('dev-row')
+
+        glyph = Gtk.Label(label=ICON_MAP.get(d['icon'], '󰂯'))
+        glyph.get_style_context().add_class('dev-glyph')
+        row.pack_start(glyph, False, False, 0)
+
+        info = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        info.set_hexpand(True)
+        name = Gtk.Label(label=d['name'])
+        name.get_style_context().add_class('dev-name')
+        name.set_xalign(0)
+        name.set_ellipsize(3)
+        info.pack_start(name, False, False, 0)
+
+        mac = Gtk.Label(label=d['mac'])
+        mac.get_style_context().add_class('dev-mac')
+        mac.set_xalign(0)
+        info.pack_start(mac, False, False, 0)
+
+        row.pack_start(info, True, True, 0)
+
+        pair = Gtk.Button(label='󰂯  Pair')
+        pair.get_style_context().add_class('pair-btn')
+        pair.connect('clicked', self._on_pair, d)
+        _set_pointer_cursor(pair)
+        row.pack_start(pair, False, False, 0)
+
         return row
 
     def _refresh(self):
+        self._confirm_mac = None
         self._render()
         self.show_all()
 
     def _on_power(self, _btn, was_on):
+        if was_on:
+            self._stop_scan()
         set_powered(not was_on)
         GLib.timeout_add(800, lambda: (self._refresh(), False)[1])
 
@@ -338,6 +520,66 @@ class BluetoothPopup(Gtk.Window):
         else:
             connect_device(d['mac'])
         GLib.timeout_add(1800, lambda: (self._refresh(), False)[1])
+
+    def _on_forget(self, _btn, d):
+        if self._confirm_mac == d['mac']:
+            self._confirm_mac = None
+            if d['connected']:
+                disconnect_device(d['mac'])
+            forget_device(d['mac'])
+            GLib.timeout_add(1200, lambda: (self._refresh(), False)[1])
+        else:
+            # First click — arm the confirmation without wiping scan state
+            self._confirm_mac = d['mac']
+            self._render()
+            self.show_all()
+
+    def _on_pair(self, _btn, d):
+        pair_device(d['mac'])
+        # Pairing prompts can take a moment; refresh to move it into Paired
+        GLib.timeout_add(3500, lambda: (self._refresh(), False)[1])
+
+    # --- scan lifecycle ---
+
+    def _toggle_scan(self):
+        if self._scanning:
+            self._stop_scan()
+        else:
+            self._start_scan()
+        self._refresh()
+
+    def _start_scan(self):
+        if self._scanning:
+            return
+        try:
+            self._scan_proc = subprocess.Popen(
+                ['bluetoothctl', 'scan', 'on'],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                start_new_session=True,
+            )
+        except Exception:
+            self._scan_proc = None
+        self._scanning = True
+        GLib.timeout_add(2500, self._scan_tick)
+
+    def _scan_tick(self):
+        if not self._scanning:
+            return False
+        self._render()
+        self.show_all()
+        return True   # keep polling while scanning
+
+    def _stop_scan(self):
+        if self._scan_proc is not None:
+            try:
+                self._scan_proc.terminate()
+            except Exception:
+                pass
+            self._scan_proc = None
+        if self._scanning:
+            subprocess.Popen(['bluetoothctl', 'scan', 'off'],
+                             start_new_session=True)
+        self._scanning = False
 
     def _on_key(self, _w, event):
         if event.keyval == Gdk.KEY_Escape:
