@@ -24,7 +24,7 @@
  *
  *   _DEFAULT:
  *     Close App    RGUI(KC_C)        sends Cmd+C → Hyprland: smart-close.sh on Super+C
- *     Jarvis       LGUI(KC_J)        Super+J → kitty Jarvis (THE agent — full merge 2026-07-02)
+ *     Jarvis       TD(TD_JARVIS)     tap → Super+J (jarvis-live); double-tap → Super+Shift+J (jarvis-connected)
  *     App Search   LGUI(KC_SPACE)    Super+Space → walker launcher ($menu) — below Jarvis, white
  *     App Launch   LGUI(KC_R)        Super+R → walker launcher ($menu)
  *     Quit         LCTL(KC_C)        Ctrl+C  → universal SIGINT (terminal kill)
@@ -76,16 +76,20 @@ enum custom_keycodes {
 
 enum tap_dance_codes {
   TD_UNUSED,
+  TD_JARVIS,
 };
 
 /* moonkeys:td BEGIN — generated; edit keys via moonkeys */
-tap_dance_action_t tap_dance_actions[] = {};
+tap_dance_action_t tap_dance_actions[] = {
+  // Jarvis key: single tap → Super+J (jarvis-live), double tap → Super+Shift+J (jarvis-connected)
+  [TD_JARVIS] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_J), LGUI(LSFT(KC_J))),
+};
 /* moonkeys:td END */
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DEFAULT] = LAYOUT_moonlander(
-    RGUI(KC_C),     KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           LGUI(LSFT(KC_P)),                               LGUI(KC_J),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           TG(_MC),
+    RGUI(KC_C),     KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           LGUI(LSFT(KC_P)),                               TD(TD_JARVIS),  KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           TG(_MC),
     KC_TAB,         KC_Q,           KC_W,           KC_F,           KC_P,           KC_B,           KC_TRANSPARENT,                                 LGUI(KC_SPACE), KC_J,           KC_L,           KC_U,           KC_Y,           KC_SCLN,        KC_BSLS,
     KC_ESCAPE,      KC_A,           KC_R,           KC_S,           KC_T,           KC_G,           KC_EQUAL,                                                                       KC_MINUS,       KC_M,           KC_N,           KC_E,           KC_I,           KC_O,           KC_QUOTE,
     KC_LEFT_SHIFT,  KC_Z,           KC_X,           KC_C,           KC_D,           KC_V,                                           KC_K,           KC_H,           KC_COMMA,       KC_DOT,         KC_SLASH,       KC_RIGHT_SHIFT,
