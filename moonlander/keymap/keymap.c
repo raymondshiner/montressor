@@ -38,7 +38,7 @@
  *     Bambu        LGUI(LSFT(KC_B))  Super+Shift+B → bambu-studio (green glow, right of YNAB)
  *     Letterboxd   LGUI(LSFT(KC_L))  Super+Shift+L → Letterboxd web-app (dark-blue glow, above Disney+)
  *     Serializd    LGUI(LALT(KC_S))  Super+Alt+S → Serializd web-app (yellow glow, right of Letterboxd)
- *     Disney+      LGUI(LSFT(KC_D))  Super+Shift+D → Disney+ web-app (light-blue glow, T-spot left half; replaced Netflix 2026-07-18)
+ *     Disney+      LGUI(KC_D)        Super+D → Disney+ web-app (light-blue glow, T-spot left half; replaced Netflix 2026-07-18)
  *     Music        LGUI(KC_M)        Super+M → toggle music overlay (Musicboard+Spotify, green glow, right of Disney+)
  *     TODO         LGUI(KC_T)        Super+T → Todoist
  *     Google       LGUI(KC_G)        Super+G → google-chrome-stable
@@ -109,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_APPS] = LAYOUT_moonlander(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_L)), LGUI(LALT(KC_S)), KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, LGUI(KC_B),     LGUI(LSFT(KC_B)), KC_TRANSPARENT, LGUI(LSFT(KC_G)),KC_TRANSPARENT,
-    KC_TRANSPARENT, LGUI(KC_A),     KC_TRANSPARENT, KC_TRANSPARENT, LGUI(LSFT(KC_D)), LGUI(KC_M),     KC_TRANSPARENT,                                                                 KC_TRANSPARENT, LGUI(KC_T),     LGUI(KC_G),     LGUI(KC_O),     KC_TRANSPARENT, LGUI(LSFT(KC_M)),KC_TRANSPARENT,
+    KC_TRANSPARENT, LGUI(KC_A),     KC_TRANSPARENT, KC_TRANSPARENT, LGUI(KC_D),     LGUI(KC_M),     KC_TRANSPARENT,                                                                 KC_TRANSPARENT, LGUI(KC_T),     LGUI(KC_G),     LGUI(KC_O),     KC_TRANSPARENT, LGUI(LSFT(KC_M)),KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,  KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
