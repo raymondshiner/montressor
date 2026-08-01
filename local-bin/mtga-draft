@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# MTGA Draft Tool — 17Lands-powered draft pick overlay (source install, venv)
+cd ~/.local/opt/mtga-draft-17lands && exec .venv/bin/python main.py "$@"

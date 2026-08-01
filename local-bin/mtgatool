@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# MTG Arena Tool — deck tracker / overlay / collection manager
+# APPIMAGELAUNCHER_DISABLE: appimagelauncher intercepts and swallows the launch
+export APPIMAGELAUNCHER_DISABLE=1
+cd ~/.local/opt/mtgatool || exit 1
+exec ./"$(ls mtgatool-desktop-*.AppImage | sort -V | tail -1)" "$@"
