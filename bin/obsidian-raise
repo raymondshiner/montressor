@@ -11,7 +11,9 @@ get_addrs() {
 
 mapfile -t addrs < <(get_addrs)
 
-# Cold-start if not running; the windowrule drops it on special:obsidian.
+# Cold-start if not running: the window opens on the current workspace already
+# visible, so just focus it and stop — falling through would toggle it straight
+# back into hiding.
 if [ ${#addrs[@]} -eq 0 ]; then
     setsid -f /usr/bin/obsidian >/dev/null 2>&1
     for _ in $(seq 25); do
@@ -20,6 +22,8 @@ if [ ${#addrs[@]} -eq 0 ]; then
         [ ${#addrs[@]} -gt 0 ] && break
     done
     [ ${#addrs[@]} -eq 0 ] && exit 0
+    hyprctl dispatch focuswindow "address:${addrs[0]}"
+    exit 0
 fi
 
 active=$(hyprctl activeworkspace -j | python3 -c "import json,sys; print(json.load(sys.stdin)['name'])")
