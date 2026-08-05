@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 # Waybar module: Todoist gem left of the center clock (mirrors the Obsidian gem on the right).
-# Cyan when the Todoist overlay is shown, purple when hidden. Click toggles special:todoist.
-# Streaming module — reacts to Hyprland special-workspace events, no polling interval.
+# Brighter when a Todoist window is visible on a normal workspace, dim when parked/hidden.
+# Click = minimize/restore into the current workspace (todoist-raise).
+# Streaming module — reacts to Hyprland window events, no polling interval.
 
 ICON=""   # nf-fa-check_circle
 
 emit() {
-    if hyprctl -j monitors 2>/dev/null | jq -e '.[] | select(.specialWorkspace.name == "special:todoist")' >/dev/null; then
-        echo "{\"text\": \"$ICON\", \"class\": \"visible\", \"tooltip\": \"Hide Todoist overlay\"}"
+    if hyprctl clients -j 2>/dev/null | jq -e '.[] | select((.class|ascii_downcase)=="todoist" and ((.workspace.name|startswith("special"))|not))' >/dev/null; then
+        echo "{\"text\": \"$ICON\", \"class\": \"visible\", \"tooltip\": \"Hide Todoist\"}"
     else
-        echo "{\"text\": \"$ICON\", \"class\": \"closed\", \"tooltip\": \"Todoist overlay (Super+T)\"}"
+        echo "{\"text\": \"$ICON\", \"class\": \"closed\", \"tooltip\": \"Todoist (Super+T)\"}"
     fi
 }
 

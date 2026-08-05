@@ -152,7 +152,7 @@
     "custom/todoist": {
         "exec": "~/.config/waybar/todoist-ws.sh",
         "return-type": "json",
-        "on-click": "~/.local/bin/todoist-launch.sh",
+        "on-click": "~/.local/bin/todoist-raise",
         "tooltip": true
     },
 

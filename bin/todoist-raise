@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Waybar Todoist button: minimize/restore toggle (mirrors obsidian-raise).
+# Click when hidden  -> pull all Todoist windows into the CURRENT workspace as
+#                       normal, focused windows.
+# Click when visible -> park them on the background special:todoist workspace.
+
+get_addrs() {
+    hyprctl clients -j | python3 -c "import json,sys; [print(c['address']) for c in json.load(sys.stdin) if c['class'].lower()=='todoist']"
+}
+
+mapfile -t addrs < <(get_addrs)
+
+# Cold-start if not running: window opens on the current workspace already
+# visible, so focus it and stop — falling through would toggle it back to hidden.
+if [ ${#addrs[@]} -eq 0 ]; then
+    setsid -f env DESKTOPINTEGRATION=false /usr/bin/todoist --ozone-platform=x11 >/dev/null 2>&1
+    for _ in $(seq 40); do
+        sleep 0.2
+        mapfile -t addrs < <(get_addrs)
+        [ ${#addrs[@]} -gt 0 ] && break
+    done
+    [ ${#addrs[@]} -eq 0 ] && exit 0
+    hyprctl dispatch focuswindow "address:${addrs[0]}"
+    exit 0
+fi
+
+active=$(hyprctl activeworkspace -j | python3 -c "import json,sys; print(json.load(sys.stdin)['name'])")
+
+visible=$(hyprctl clients -j | python3 -c "import json,sys; print('yes' if any(c['class'].lower()=='todoist' and not c['workspace']['name'].startswith('special') for c in json.load(sys.stdin)) else 'no')")
+
+if [ "$visible" = "yes" ]; then
+    for a in "${addrs[@]}"; do
+        hyprctl dispatch movetoworkspacesilent "special:todoist,address:$a"
+    done
+else
+    for a in "${addrs[@]}"; do
+        hyprctl dispatch movetoworkspacesilent "$active,address:$a"
+    done
+    hyprctl dispatch focuswindow "address:${addrs[0]}"
+fi
