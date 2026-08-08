@@ -16,7 +16,6 @@ deliberate manual steps.
 | balenaEtcher | AppImage → `~/.local/share/balenaEtcher/` | github.com/balena-io/etcher |
 | qmk CLI | `pipx install qmk` | Moonlander firmware flow (`build-reference.md`); run `pipx ensurepath` once |
 | Epson ESC/P-R 2 | Epson `.deb` | `epson-inkjet-printer-escpr2` from epson.sn; base `printer-driver-escpr` comes via apt |
-| MTG Arena | `sudo apt install wine` | reuses the existing wine prefix `~/.local/share/mtgarena` (`mtgarena` bin) |
 | woeusb-ng | `pipx install WoeUSB-ng` | `woeusb-gui` bin execs `/usr/bin/woeusbgui` — adjust path to the pipx shim on Ubuntu |
 | nativefier | `npm install -g nativefier` | |
 | gmailctl | GitHub release binary | |
