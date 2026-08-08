@@ -2,5 +2,18 @@
 # MTG Arena Tool — deck tracker / overlay / collection manager
 # APPIMAGELAUNCHER_DISABLE: appimagelauncher intercepts and swallows the launch
 export APPIMAGELAUNCHER_DISABLE=1
+
+# After a self-update the old AppImage's process tree survives headlessly on a
+# /tmp mount that no longer exists. It keeps the Electron singleton lock, so
+# every later launch is handed off to a windowless zombie and appears to do
+# nothing. Reap any process whose squashfs mount is gone, then clear the lock.
+for pid in $(pgrep -f '/tmp/\.mount_mtgato'); do
+  exe=$(readlink "/proc/$pid/exe" 2>/dev/null) || continue
+  case "$exe" in *" (deleted)") kill "$pid" 2>/dev/null ;; esac
+done
+sleep 1
+pgrep -f '/tmp/\.mount_mtgato' >/dev/null || rm -f \
+  ~/.config/mtgatool-desktop/Singleton{Lock,Socket,Cookie}
+
 cd ~/.local/opt/mtgatool || exit 1
 exec ./"$(ls mtgatool-desktop-*.AppImage | sort -V | tail -1)" "$@"
