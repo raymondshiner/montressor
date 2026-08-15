@@ -53,7 +53,7 @@ echo "$TOR" | jq -e 'type=="array"' >/dev/null 2>&1 || TOR='[]'
 CJ='{}'
 GSTART=$(date -d "$(sudo docker inspect -f '{{.State.StartedAt}}' gluetun 2>/dev/null)" +%s 2>/dev/null || echo 0)
 STALE=""
-for c in gluetun qbittorrent prowlarr flaresolverr; do
+for c in gluetun qbittorrent prowlarr flaresolverr sonarr radarr; do
   S=$(sudo docker inspect -f '{{.State.Status}}' "$c" 2>/dev/null || echo missing)
   H=$(sudo docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{end}}' "$c" 2>/dev/null)
   CJ=$(echo "$CJ" | jq -c --arg c "$c" --arg s "${S:-missing}" --arg h "$H" '. + {($c): {status:$s, health:$h}}')
