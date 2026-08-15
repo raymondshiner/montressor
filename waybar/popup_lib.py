@@ -37,6 +37,8 @@ ALL_POPUP_PIDS = (
     '/tmp/apps-menu-popup.pid',
     '/tmp/tasks-popup.pid',
     '/tmp/project-picker.pid',
+    '/tmp/tower-mc-popup.pid',
+    '/tmp/tower-dl-popup.pid',
 )
 
 

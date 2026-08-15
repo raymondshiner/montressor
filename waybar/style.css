@@ -114,7 +114,7 @@ window#waybar.top .modules-left {
 
 #tray, #custom-drives, #swaync, #custom-displays, #bluetooth,
 #pulseaudio, #battery, #network, #custom-vpn, #hardware,
-#custom-tasks, #custom-apps-menu {
+#custom-tasks, #custom-apps-menu, #custom-tower-mc, #custom-tower-dl {
     background: #23262E;
     border-radius: 12px;
     margin: 4px 3px;
@@ -250,6 +250,24 @@ window#waybar.top .modules-left {
 #custom-todoist.visible {
     color: #FF6E52;
 }
+/* tower — home server. Same state vocabulary in both modules:
+   green healthy · cyan actively doing something · yellow needs attention
+   · red critical (server off / traffic unprotected) · muted unknown. */
+#custom-tower-mc, #custom-tower-dl { color: #677691; padding: 0 12px; }
+#custom-tower-mc.ok,      #custom-tower-dl.ok      { color: #A8FF60; }
+#custom-tower-mc.active,  #custom-tower-dl.active  { color: #00E8C6; }
+#custom-tower-mc.off { color: #EE5D43; }
+#custom-tower-mc.unknown, #custom-tower-dl.unknown,
+#custom-tower-dl.down { color: #677691; }
+#custom-tower-dl.warn { color: #FFE66D; }
+/* Unprotected traffic is the one thing that should be impossible to miss. */
+#custom-tower-dl.leak {
+    color: #1C1E26;
+    background: #EE5D43;
+    font-weight: bold;
+    box-shadow: 0 0 0 1px rgba(238, 93, 67, 0.6), 0 0 10px rgba(238, 93, 67, 0.7);
+}
+
 #custom-vpn.connecting { color: #FFE66D; }
 #custom-kdeconnect { color: #677691; padding: 0 12px; }
 #custom-kdeconnect.connected { color: #00E8C6; }
