@@ -25,6 +25,8 @@ QBIT = 'http://192.168.86.31:8080'
 PROWLARR = 'http://192.168.86.31:9696'
 SONARR = 'http://192.168.86.31:8989'
 RADARR = 'http://192.168.86.31:7878'
+# Not part of this stack (standalone, never behind gluetun) — link only, no status coupling.
+ABS = 'http://192.168.86.31:13378'
 ICON = '󰇚'
 CONTAINERS = ('gluetun', 'qbittorrent', 'prowlarr', 'flaresolverr', 'sonarr', 'radarr')
 
@@ -128,7 +130,7 @@ class DlPopup(Gtk.Window):
 
         arrs = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         arrs.set_margin_top(6)
-        for label, url in (('Sonarr', SONARR), ('Radarr', RADARR)):
+        for label, url in (('Sonarr', SONARR), ('Radarr', RADARR), ('Audiobooks', ABS)):
             b = ui.button(label, 'btn-open')
             b.connect('clicked', self._on_open, url)
             arrs.pack_start(b, True, True, 0)
