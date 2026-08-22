@@ -11,7 +11,7 @@
         "custom/workspace-menu"
     ],
     "modules-center": ["custom/todoist", "clock", "custom/obsidian"],
-    "modules-right": ["tray", "custom/tower-mc", "custom/tower-dl", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/tasks", "custom/apps-menu"],
+    "modules-right": ["tray", "custom/printer", "custom/tower-mc", "custom/tower-dl", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/tasks", "custom/apps-menu"],
 
     "custom/ws-listener": {
         "exec": "~/.config/waybar/ws-listen.sh",
@@ -250,6 +250,14 @@
         "return-type": "json",
         "interval": 3,
         "on-click": "nwg-displays",
+        "tooltip": true
+    },
+
+    "custom/printer": {
+        "exec": "~/.config/waybar/printer-status.py",
+        "return-type": "json",
+        "interval": 3,
+        "on-click": "python3 ~/.config/waybar/printer-popup.py",
         "tooltip": true
     },
 

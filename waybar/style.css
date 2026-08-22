@@ -114,7 +114,8 @@ window#waybar.top .modules-left {
 
 #tray, #custom-drives, #swaync, #custom-displays, #bluetooth,
 #pulseaudio, #battery, #network, #custom-vpn, #hardware,
-#custom-tasks, #custom-apps-menu, #custom-tower-mc, #custom-tower-dl {
+#custom-tasks, #custom-apps-menu, #custom-tower-mc, #custom-tower-dl,
+#custom-printer {
     background: #23262E;
     border-radius: 12px;
     margin: 4px 3px;
@@ -267,6 +268,12 @@ window#waybar.top .modules-left {
     font-weight: bold;
     box-shadow: 0 0 0 1px rgba(238, 93, 67, 0.6), 0 0 10px rgba(238, 93, 67, 0.7);
 }
+
+#custom-printer { color: #677691; padding: 0 12px; }
+#custom-printer.idle    { color: #677691; }
+#custom-printer.active  { color: #00E8C6; }
+#custom-printer.off     { color: #EE5D43; }
+#custom-printer.unknown { color: #677691; }
 
 #custom-vpn.connecting { color: #FFE66D; }
 #custom-kdeconnect { color: #677691; padding: 0 12px; }

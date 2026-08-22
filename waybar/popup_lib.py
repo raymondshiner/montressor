@@ -39,6 +39,7 @@ ALL_POPUP_PIDS = (
     '/tmp/project-picker.pid',
     '/tmp/tower-mc-popup.pid',
     '/tmp/tower-dl-popup.pid',
+    '/tmp/printer-popup.pid',
 )
 
 
