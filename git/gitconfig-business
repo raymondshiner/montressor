@@ -1,0 +1,5 @@
+# Business git identity — Shiner Solutions, LLC projects.
+# Pulled in by includeIf rules in gitconfig; add a rule per business repo.
+[user]
+	email = raymond@shinersolutions.com
+	name = Raymond Shiner

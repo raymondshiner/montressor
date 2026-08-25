@@ -7,3 +7,7 @@
 [user]
 	email = raymondshiner@gmail.com
 	name = Raymond Shiner
+[includeIf "gitdir:~/src/shiner-software/"]
+	path = ~/montressor/git/gitconfig-business
+[includeIf "gitdir:~/src/shinersolutions/"]
+	path = ~/montressor/git/gitconfig-business
