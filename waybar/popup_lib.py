@@ -33,6 +33,7 @@ ALL_POPUP_PIDS = (
     '/tmp/sound-popup.pid',
     '/tmp/calendar-popup.pid',
     '/tmp/workspace-popup.pid',
+    '/tmp/layout-popup.pid',
     '/tmp/wifi-popup.pid',
     '/tmp/apps-menu-popup.pid',
     '/tmp/tasks-popup.pid',

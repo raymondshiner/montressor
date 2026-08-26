@@ -8,7 +8,8 @@
         "custom/ws-listener",
         "custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5",
         "custom/ws6", "custom/ws7", "custom/ws8", "custom/ws9", "custom/ws10",
-        "custom/workspace-menu"
+        "custom/workspace-menu",
+        "custom/layout-menu"
     ],
     "modules-center": ["custom/todoist", "clock", "custom/obsidian"],
     "modules-right": ["tray", "custom/printer", "custom/tower-mc", "custom/tower-dl", "custom/drives", "swaync", "custom/displays", "bluetooth", "pulseaudio", "battery", "network", "custom/vpn", "group/hardware", "custom/tasks", "custom/apps-menu"],
@@ -123,6 +124,12 @@
         "format": "󱂬",
         "tooltip": false,
         "on-click": "~/.config/waybar/workspace-popup.py"
+    },
+
+    "custom/layout-menu": {
+        "format": "󰕰",
+        "tooltip": false,
+        "on-click": "~/.config/waybar/layout-popup.py"
     },
 
     "custom/apps-menu": {

@@ -80,6 +80,16 @@ window#waybar.top .modules-left {
     color: #D5CED9;
 }
 
+#custom-layout-menu {
+    color: #B084EB;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+#custom-layout-menu:hover {
+    color: #D5CED9;
+}
+
 #custom-apps-menu {
     color: #00E8C6;
     padding: 0 12px 0 10px;
