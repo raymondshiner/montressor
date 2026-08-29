@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# SSH_ASKPASS helper — mirrors sudo-askpass, but for SSH key passphrases.
+# ssh calls this with the prompt as $1 when there is no TTY (agent shells,
+# Claude Code's Bash tool, hotkey-launched scripts) or when SSH_ASKPASS_REQUIRE=force.
+# Prints the passphrase to stdout; cancel -> empty -> ssh fails cleanly.
+exec rofi -dmenu -password -lines 0 -p "ssh key" -mesg "${1:-SSH key passphrase}"

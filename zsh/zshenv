@@ -59,4 +59,14 @@ export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
 # and burns pam_faillock attempts (see machine.md SYSTEM > sudo).
 export SUDO_ASKPASS="$HOME/.local/bin/sudo-askpass"
 
+# ---------- SSH agent ----------
+# The tower key carries a passphrase (added 2026-08-28), so it must be cached in an
+# agent or every `ssh homeserver` from a script would prompt. systemd's user
+# ssh-agent.socket owns the agent; this just points every shell at it.
+[[ -S "$XDG_RUNTIME_DIR/ssh-agent.socket" ]] && export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+# GUI passphrase prompt for TTY-less shells (Claude Code's Bash tool, hotkey scripts).
+# Without this, the first ssh of a boot fails with "no passphrase supplied" instead of asking.
+export SSH_ASKPASS="$HOME/.local/bin/ssh-askpass-rofi"
+
 [[ -f ~/.config/ynab/.env ]] && source ~/.config/ynab/.env
