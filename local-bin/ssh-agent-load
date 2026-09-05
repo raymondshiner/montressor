@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Load the laptop's ed25519 key into ssh-agent once per boot.
+#
+# WHY: the key carries a passphrase (added 2026-08-28). ssh-agent is socket-activated
+# and starts empty, so every non-interactive consumer — waybar's tower-mc/tower-dl
+# modules, the mc/jf/abs/fac bins, Claude's Bash tool — fails at
+# "Permission denied (publickey)" until a human types the passphrase somewhere.
+# Run from hyprland exec-once so that happens once, at login, via the rofi askpass.
+
+set -u
+
+KEY="$HOME/.ssh/id_ed25519"
+export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-$XDG_RUNTIME_DIR/ssh-agent.socket}"
+export SSH_ASKPASS="$HOME/.local/bin/ssh-askpass-rofi"
+export SSH_ASKPASS_REQUIRE=force
+
+for _ in $(seq 1 20); do
+    [[ -S "$SSH_AUTH_SOCK" ]] && break
+    sleep 0.5
+done
+
+if ! [[ -S "$SSH_AUTH_SOCK" ]]; then
+    notify-send -u critical "ssh-agent" "socket never appeared — tower modules will be dark"
+    exit 1
+fi
+
+# Already loaded (e.g. re-running after a hyprctl reload) — nothing to do.
+if ssh-add -l 2>/dev/null | grep -q "$(ssh-keygen -lf "$KEY.pub" | awk '{print $2}')"; then
+    exit 0
+fi
+
+# rofi needs the compositor settled before it can map a window.
+sleep 2
+
+if ssh-add "$KEY" </dev/null 2>/dev/null; then
+    notify-send "ssh-agent" "tower key loaded"
+else
+    notify-send -u normal "ssh-agent" "key not loaded — tower modules will show ?\nRun: ssh-add"
+fi
