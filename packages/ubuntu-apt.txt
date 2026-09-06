@@ -91,6 +91,10 @@ vlc
 kodi
 qbittorrent
 thunar
+tumbler
+tumbler-plugins-extra
+webp-pixbuf-loader
+gvfs
 ffmpegthumbnailer
 baobab
 
