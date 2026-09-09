@@ -117,3 +117,10 @@ claude() { ~/.local/bin/claude-wrapped "$@"; }
 # `dots` / `dots-private` are real bins (~/jarvis/claude/bin/dots → ~/.local/bin)
 # so they work from any shell. `dots-sync-pkgs` (per-OS package snapshots)
 # lives in ~/.zshenv so agent `zsh -c` shells see it too.
+# >>> retcomm-toolchain (cmake-clang-v1) >>>
+# Managed by psxrecomp / RetComM — remove via uninstall.sh
+if [ -f "/home/sirlexicon/.local/share/retcomm/toolchains/cmake-clang-v1/path.sh" ]; then
+  # shellcheck disable=SC1091
+  . "/home/sirlexicon/.local/share/retcomm/toolchains/cmake-clang-v1/path.sh"
+fi
+# <<< retcomm-toolchain (cmake-clang-v1) <<<
