@@ -69,7 +69,10 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("GTK_THEME", "adw-gtk3-dark")
 hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
 hl.env("COLORTERM", "truecolor")
-hl.env("PATH", "$HOME/.local/bin:$PATH")
+-- NOTE: hyprlang expanded $HOME/$PATH; Lua does NOT. A literal "$HOME/..." here sets
+-- PATH to garbage and every exec_cmd in the config silently fails to spawn — which
+-- presents as a black screen with a fully-working compositor. Always use os.getenv.
+hl.env("PATH", os.getenv("HOME") .. "/.local/bin:" .. os.getenv("PATH"))
 -- waybar/popups are Hyprland children, not shell children — without this they can't
 -- reach ssh-agent, and every tower module dies at "Permission denied (publickey)".
 hl.env("SSH_AUTH_SOCK", "/run/user/1000/ssh-agent.socket")
